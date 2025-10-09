@@ -9,9 +9,9 @@ AI_PLAYER = "O"
 HUMAN_PLAYER = "X"
 
 TEST_BOARD: list[list[str]] = [
-    ["X", "O", "X"],
-    ["X", "O", "O"],
-    ["O", "X", "X"],
+    ["X", "", "X"],
+    ["X", "O", ""],
+    ["O", "", ""],
 ]
 TOTAL_CELLS = sum(len(row) for row in TEST_BOARD)
 
@@ -64,7 +64,7 @@ def minimax_ttt(
         for i, j in moves:
             # Make a move and call minimax recursively, then undo the move
             board[i][j] = AI_PLAYER
-            score = minimax_ttt(board, depth + 1, False, alpha, beta)
+            score = minimax_ttt(board, depth + 1, False, alpha, beta, limited)
             board[i][j] = ""
             # Update to the highest score found so far
             if score > highest_score:
@@ -80,7 +80,7 @@ def minimax_ttt(
         for i, j in moves:
             # Make a move and call minimax recursively, then undo the move
             board[i][j] = HUMAN_PLAYER
-            score = minimax_ttt(board, depth + 1, True, alpha, beta)
+            score = minimax_ttt(board, depth + 1, True, alpha, beta, limited)
             board[i][j] = ""
             # Update to the lowest score found so far
             if score < lowest_score:
