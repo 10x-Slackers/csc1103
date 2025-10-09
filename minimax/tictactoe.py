@@ -9,9 +9,9 @@ AI_PLAYER = "O"
 HUMAN_PLAYER = "X"
 
 TEST_BOARD: list[list[str]] = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
+    ["X", "O", "X"],
+    ["X", "O", "O"],
+    ["O", "X", "X"],
 ]
 TOTAL_CELLS = sum(len(row) for row in TEST_BOARD)
 
@@ -115,7 +115,7 @@ def ai_move(board: list[list[str]], limited: bool = False) -> tuple[int, int]:
     Args:
         board: NxN Tic-Tac-Toe board (list of lists of str)
         limited: if True, only compute for 2 moves to improve performance
-            performance and introduce some inaccuracy
+            and introduce some inaccuracy
     Returns:
         tuple[int, int]: coordinates of the best move
     """
