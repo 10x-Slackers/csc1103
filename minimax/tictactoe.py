@@ -114,7 +114,7 @@ def ai_move(board: list[list[str]], limited: bool = False) -> tuple[int, int]:
 
     Args:
         board: NxN Tic-Tac-Toe board (list of lists of str)
-        limited: if True, only compute for 2 moves to improve performance
+        limited: if True, randomly sample 2 moves to improve performance
             and introduce some inaccuracy
     Returns:
         tuple[int, int]: coordinates of the best move
