@@ -22,7 +22,7 @@ def minimax_ttt(
     is_max: bool = True,
     alpha: int = MIN_SCORE,
     beta: int = MAX_SCORE,
-    limited: bool = False,
+    handicap: bool = False,
 ) -> int:
     """
     Minimax evaluation for Tic-Tac-Toe with alpha-beta pruning.
@@ -36,14 +36,14 @@ def minimax_ttt(
         is_max: True when it's the AI player's turn
         alpha: best found option for the AI player
         beta:  best found option for the human player
-        limited: if True, limit depth to MAX_DEPTH to improve performance
+        handicap: if True, limit depth to MAX_DEPTH to improve performance
             and introduce some inaccuracy
 
     Returns:
         int: minimax score for the current board state
     """
     # Limit search depth to improve performance if specified
-    if limited and depth >= MAX_DEPTH:
+    if handicap and depth >= MAX_DEPTH:
         return 0
 
     winner = check_winner(board)
@@ -64,7 +64,7 @@ def minimax_ttt(
         for i, j in moves:
             # Make a move and call minimax recursively, then undo the move
             board[i][j] = AI_PLAYER
-            score = minimax_ttt(board, depth + 1, False, alpha, beta, limited)
+            score = minimax_ttt(board, depth + 1, False, alpha, beta, handicap)
             board[i][j] = ""
             # Update to the highest score found so far
             if score > highest_score:
@@ -80,7 +80,7 @@ def minimax_ttt(
         for i, j in moves:
             # Make a move and call minimax recursively, then undo the move
             board[i][j] = HUMAN_PLAYER
-            score = minimax_ttt(board, depth + 1, True, alpha, beta, limited)
+            score = minimax_ttt(board, depth + 1, True, alpha, beta, handicap)
             board[i][j] = ""
             # Update to the lowest score found so far
             if score < lowest_score:
@@ -108,13 +108,13 @@ def random_move(board: list[list[str]]) -> tuple[int, int]:
     return random.choice(empty_cells)
 
 
-def ai_move(board: list[list[str]], limited: bool = False) -> tuple[int, int]:
+def ai_move(board: list[list[str]], handicap: bool = False) -> tuple[int, int]:
     """
     Selects a move for the AI player using the minimax algorithm.
 
     Args:
         board: NxN Tic-Tac-Toe board (list of lists of str)
-        limited: if True, randomly sample 2 moves to improve performance
+        handicap: if True, randomly sample 2 moves to improve performance
             and introduce some inaccuracy
     Returns:
         tuple[int, int]: coordinates of the best move
@@ -130,7 +130,7 @@ def ai_move(board: list[list[str]], limited: bool = False) -> tuple[int, int]:
         # Return the only available move
         return moves[0]
 
-    if limited:
+    if handicap:
         moves = random.sample(moves, 2)
 
     # Try all possible moves and choose the one with the best score
@@ -139,7 +139,7 @@ def ai_move(board: list[list[str]], limited: bool = False) -> tuple[int, int]:
         sim_board = [row[:] for row in board]
         sim_board[i][j] = AI_PLAYER
         # Get the minimax score for this move
-        score = minimax_ttt(sim_board, 0, False, limited=limited)
+        score = minimax_ttt(sim_board, 0, False, handicap)
         # Update to the best score found so far
         if score > best_score:
             best_score = score
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     TEST_BOARD[move[0]][move[1]] = ""
 
     print(f"Minimax move (player {AI_PLAYER}):")
-    move = ai_move(TEST_BOARD, limited=True)
+    move = ai_move(TEST_BOARD, handicap=True)
     TEST_BOARD[move[0]][move[1]] = AI_PLAYER
     print_board(TEST_BOARD)
     TEST_BOARD[move[0]][move[1]] = ""
