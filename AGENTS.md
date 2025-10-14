@@ -7,7 +7,7 @@ This project is a university computer science assignment to develop a tic-tac-to
 - `gui/`
   - Code for GUI (GTK 4.0 based)
 - `logic/`
-  - Code for base tic-tae-toe game logic and 2-player mode
+  - Code for base tic-tac-toe game logic and 2-player mode
 - `minimax/`
   - Code for the minimax algorithm tuned for tic-tac-toe
 - `ml/`

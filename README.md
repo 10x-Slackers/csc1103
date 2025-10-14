@@ -29,7 +29,7 @@ AI-enhanced tic-tac-toe minigame
   - [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
 
 > [!WARNING]  
-> Do not use Github Desktop! All interactions (files, git, runtime, etc.) should be done through the Dev Container within VS Code.
+> Do not use GitHub Desktop! All interactions (files, git, runtime, etc.) should be done through the Dev Container within VS Code.
 
 ### Installation
 
