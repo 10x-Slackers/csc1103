@@ -1,15 +1,21 @@
 # Project Overview
 
-This project is a university computer science assignment to [scope]. The goal is to [objective]. The code should be well-documented and follow best practices for each language.
+This project is a university computer science assignment to develop a tic-tac-toe minigame enhanced with rudimentary machine learning (minimax, reinforcement learning, naive bayes) with C and GTK. The goal is to have both two-player and one-player mode, with a user-friendly GUI. The code should be well-documented and follow best practices for each language. Python will be used for easier prototyping.
 
 ## Project Structure
 
-- `folder/`
-  - folder_description
+- `gui/`
+  - Code for GUI (GTK 4.0 based)
+- `logic/`
+  - Code for base tic-tae-toe game logic and 2-player mode
+- `minimax/`
+  - Code for the minimax algorithm tuned for tic-tac-toe
+- `ml/`
+  - Code for the machine learning training and algorithm
 
 ## Libraries and Frameworks
 
-- No external libraries or frameworks are used, or should be used.
+- GTK 4.0
 
 ## Coding Standards
 
