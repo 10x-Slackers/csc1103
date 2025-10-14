@@ -143,7 +143,7 @@ def check_winner(board: list[list[str]]) -> int | None:
     if board[0][2] == board[1][1] == board[2][0] != "":
         return 1 if board[0][2] == "X" else 2
 
-    # Draw (board full and no winner)
+    # Draw
     if all(cell != "" for row in board for cell in row):
         return 0
 
