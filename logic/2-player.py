@@ -4,15 +4,12 @@ Tic-Tac-Toe game for two players.
 Author: kaiwenteoo
 Date: 2025-10-15
 Version: 1
-
 """
 
 
 def main():
     """
     Main entry point for the Tic-Tac-Toe game.
-
-    Starts the game loop for two players.
     """
     play_game()
 
@@ -20,9 +17,6 @@ def main():
 def play_game():
     """
     Run a command-line Tic-Tac-Toe game for two players.
-
-    Handles the main game loop, alternating turns between players,
-    updating the board, and checking for a winner or draw.
     """
     board = [["" for _ in range(3)] for _ in range(3)]
     current_player = "X"
@@ -70,8 +64,6 @@ def get_valid_move(current_player: str, board: list[list[str]]) -> tuple[int, in
     """
     Prompt the current player to enter a valid move.
 
-    Continuously prompts until a valid, unoccupied cell is selected.
-
     Args:
         current_player: "X" or "O"
         board: Current state of the game board
@@ -99,24 +91,6 @@ def get_valid_move(current_player: str, board: list[list[str]]) -> tuple[int, in
         return row, col
 
 
-def find_empty_cells(board: list[list[str]]) -> list[tuple[int, int]]:
-    """
-    Find all empty cells in the Tic-Tac-Toe board.
-
-    Args:
-        board: 3x3 Tic-Tac-Toe board (list of lists of str)
-
-    Returns:
-        List of tuples representing the coordinates of empty cells
-    """
-    empty_cells = []
-    for i in range(3):
-        for j in range(3):
-            if board[i][j] == "":
-                empty_cells.append((i, j))
-    return empty_cells
-
-
 def check_winner(board: list[list[str]]) -> int | None:
     """
     Check the Tic-Tac-Toe board for a winner or a draw.
@@ -127,7 +101,7 @@ def check_winner(board: list[list[str]]) -> int | None:
     Returns:
         1 if player X wins,
         2 if player O wins,
-        0 if it's a draw (board is full and no winner),
+        0 if it's a draw,
         None if the game is ongoing
     """
     # Rows and Columns
@@ -143,8 +117,8 @@ def check_winner(board: list[list[str]]) -> int | None:
     if board[0][2] == board[1][1] == board[2][0] != "":
         return 1 if board[0][2] == "X" else 2
 
-    # Draw
-    if all(cell != "" for row in board for cell in row):
+    # Draw: no empty cells left
+    if all(board[i][j] != "" for i in range(3) for j in range(3)):
         return 0
 
     return None
