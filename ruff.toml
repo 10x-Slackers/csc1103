@@ -1,0 +1,28 @@
+[lint]
+# As recommended per: https://docs.astral.sh/ruff/linter/#__tabbed_2_2
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+# As recommended per: https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+ignore = [
+    # indentation-with-invalid-multiple
+    "E111",
+    # indentation-with-invalid-multiple-comment
+    "E114",
+    # over-indented
+    "E117",
+]
+
+[format]
+docstring-code-format = true
