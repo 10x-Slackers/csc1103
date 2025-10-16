@@ -6,7 +6,7 @@ from logic.board import print_board
 DATASET_PATH = "dataset/tic-tac-toe.data"
 
 
-class Entry(TypedDict):
+class DataEntry(TypedDict):
     """
     Represents a single entry in the Tic Tac Toe dataset.
 
@@ -24,8 +24,8 @@ def main() -> None:
     Main function to demonstrate dataset parsing. Prints the first 5 entries.
     """
     for entry in parse(DATASET_PATH)[:5]:
-        print_board(entry.get("board"))
-        print("Outcome:", entry.get("outcome"))
+        print_board(entry["board"])
+        print("Outcome:", entry["outcome"])
         print()
 
 
@@ -59,7 +59,7 @@ def convert_ttt_matrix(ttt: list[str], formatted: bool = False) -> list[list[str
     return [ttt[i : i + 3] for i in range(0, 9, 3)]
 
 
-def parse(file_path: str) -> list[Entry]:
+def parse(file_path: str) -> list[DataEntry]:
     """
     Read and parse the dataset file and convert it into our Entry format.
 
@@ -68,13 +68,14 @@ def parse(file_path: str) -> list[Entry]:
     Returns:
         List of Entry objects containing the board and outcome
     """
-    dataset: list[Entry] = []
+    dataset: list[DataEntry] = []
 
     for row in read(file_path):
         ttt = row[:-1]
         outcome = row[-1]
         board = convert_ttt_matrix(ttt, formatted=True)
-        dataset.append({"board": board, "outcome": outcome})
+        entry: DataEntry = {"board": board, "outcome": outcome}
+        dataset.append(entry)
 
     return dataset
 
