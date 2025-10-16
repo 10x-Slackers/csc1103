@@ -38,8 +38,8 @@ def read(file_path: str) -> list[list[str]]:
     Returns:
         List of rows, where each row is a list of strings
     """
-    with open(file_path) as file:
-        return [row.strip().split(",") for row in file.readlines()]
+    with open(file_path, encoding="utf-8") as file:
+        return [row.strip().split(",") for row in file]
 
 
 def convert_ttt_matrix(ttt: list[str], formatted: bool = False) -> list[list[str]]:
