@@ -23,13 +23,13 @@ def main() -> None:
     """
     Main function to demonstrate dataset parsing. Prints the first 5 entries.
     """
-    for entry in parse_dataset(DATASET_PATH)[:5]:
+    for entry in parse(DATASET_PATH)[:5]:
         print_board(entry.get("board"))
         print("Outcome:", entry.get("outcome"))
         print()
 
 
-def read_dataset(file_path: str) -> list[list[str]]:
+def read(file_path: str) -> list[list[str]]:
     """
     Read the provided dataset file and return its contents as a list of rows.
 
@@ -59,7 +59,7 @@ def convert_ttt_matrix(ttt: list[str], formatted: bool = False) -> list[list[str
     return [ttt[i : i + 3] for i in range(0, 9, 3)]
 
 
-def parse_dataset(file_path: str) -> list[Entry]:
+def parse(file_path: str) -> list[Entry]:
     """
     Read and parse the dataset file and convert it into our Entry format.
 
@@ -70,7 +70,7 @@ def parse_dataset(file_path: str) -> list[Entry]:
     """
     dataset: list[Entry] = []
 
-    for row in read_dataset(file_path):
+    for row in read(file_path):
         ttt = row[:-1]
         outcome = row[-1]
         board = convert_ttt_matrix(ttt, formatted=True)
