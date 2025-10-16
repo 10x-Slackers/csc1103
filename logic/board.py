@@ -23,7 +23,7 @@ def find_empty_cells(board: list[list[str]]) -> list[tuple[int, int]]:
     # Look through the board and find empty cells
     for i in range(len(board)):
         for j in range(len(board[i])):
-            if board[i][j] == "":
+            if board[i][j] == "" or board[i][j] == " ":
                 empty_cells.append((i, j))
 
     return empty_cells
