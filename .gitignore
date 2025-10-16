@@ -220,3 +220,6 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+
+# Dataset files
+dataset/
