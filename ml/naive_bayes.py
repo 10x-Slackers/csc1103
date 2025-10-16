@@ -213,6 +213,7 @@ def normalize_to_x(board: list[list[str]], ai_player: str) -> list[list[str]]:
 
     Args:
         board: 3x3 Tic-Tac-Toe board
+        ai_player: str - The current AI player symbol ("X" or "O")
     Returns:
         Normalized board with 'X' as the AI player
     """
