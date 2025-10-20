@@ -83,6 +83,7 @@ int find_empty_cells(char board[SIZE][SIZE], Cell empty_cells[], int max_cells)
  *
  * Checks all rows, columns, and diagonals for a winner.
  * If no winner and no empty cells remain, it's a draw.
+ * Empty cells are now checked inline without using a helper function.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
  * @return const char* Returns:
@@ -118,12 +119,17 @@ const char *check_winner(char board[SIZE][SIZE])
         return (board[0][2] == 'X') ? "X" : "O";
     }
 
-    // Check for draw
-    Cell empty_cells[SIZE * SIZE];
-    if (find_empty_cells(board, empty_cells, SIZE * SIZE) == 0)
+    // Inline check for any empty cells (faster than using find_empty_cells)
+    for (int i = 0; i < SIZE; i++)
     {
-        return "Draw";
+        for (int j = 0; j < SIZE; j++)
+        {
+            if (board[i][j] == ' ')
+            {
+                return NULL;
+            }
+        }
     }
 
-    return NULL;
+    return "Draw";
 }

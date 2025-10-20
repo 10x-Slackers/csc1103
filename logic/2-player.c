@@ -69,13 +69,9 @@ void play_game()
             {
                 printf("It's a draw!\n");
             }
-            else if (strcmp(winner, "X") == 0)
+            else
             {
-                printf("Player X wins!\n");
-            }
-            else if (strcmp(winner, "O") == 0)
-            {
-                printf("Player O wins!\n");
+                printf("Player %s wins!\n", winner);
             }
             break;
         }
