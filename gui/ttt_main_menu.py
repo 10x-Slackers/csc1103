@@ -49,7 +49,7 @@ def main_menu(application):
     # CSS Styling
     css = b"""
     label#welcome {
-        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-family: sans-serif, cursive, "Comic Sans MS";
         font-size: 28px;
         font-weight: bold;
         color: #ff6600;
@@ -75,7 +75,7 @@ def main_menu(application):
     welcome_label = Gtk.Label(label="Welcome to Tic Tac Toe!")
     welcome_label.set_halign(Gtk.Align.CENTER)
     welcome_label.set_valign(Gtk.Align.START)
-    welcome_label.set_name("welcome")  # Set widget ID for CSS
+    welcome_label.set_name("welcome")
     vbox.append(welcome_label)
 
     # Button box (1P, 2P)
