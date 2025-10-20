@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define SIZE 3
 
@@ -18,8 +19,9 @@ typedef struct
 /**
  * @brief Print the Tic-Tac-Toe board in a readable format.
  *
- * Displays 'X', 'O', or '_' for empty cells.
- * Cells in a row are separated by '|'.
+ * Empty cells are displayed as their numbers (1-9).
+ * Occupied cells display 'X' or 'O'.
+ * Cells in a row are separated by " | " and rows are separated by lines.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
  */
@@ -30,23 +32,31 @@ void print_board(char board[SIZE][SIZE])
         for (int j = 0; j < SIZE; j++)
         {
             char cell = board[i][j];
-            printf("%c", (cell == ' ' || cell == '\0') ? '_' : cell);
+            int cell_num = i * SIZE + j + 1;
+
+            if (cell == ' ')
+                printf("%d", cell_num);
+            else
+                printf("%c", cell);
+
             if (j < SIZE - 1)
-                printf("|");
+                printf(" | ");
         }
         printf("\n");
+        if (i < SIZE - 1)
+            printf("---------\n");
     }
 }
 
 /**
  * @brief Find all empty cells on the Tic-Tac-Toe board.
  *
- * An empty cell contains either a space (' ') or null character ('\0').
- * Stores found empty cells in the provided array.
+ * An empty cell is one containing a space (' ').
+ * Stores the coordinates of empty cells in the provided array.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
- * @param empty_cells Output array to hold empty cell positions.
- * @param max_cells Maximum number of cells the empty_cells array can hold.
+ * @param empty_cells Output array to store empty cell positions.
+ * @param max_cells Maximum number of cells the array can hold.
  * @return int The number of empty cells found.
  */
 int find_empty_cells(char board[SIZE][SIZE], Cell empty_cells[], int max_cells)
@@ -56,7 +66,7 @@ int find_empty_cells(char board[SIZE][SIZE], Cell empty_cells[], int max_cells)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            if (board[i][j] == ' ' || board[i][j] == '\0')
+            if (board[i][j] == ' ')
             {
                 if (count < max_cells)
                 {
@@ -71,34 +81,39 @@ int find_empty_cells(char board[SIZE][SIZE], Cell empty_cells[], int max_cells)
 /**
  * @brief Check if there is a winner or if the game is a draw.
  *
- * Checks rows, columns, and diagonals for a winner.
- * Checks for draw if no empty cells remain.
+ * Checks all rows, columns, and diagonals for a winner.
+ * If no winner and no empty cells remain, it's a draw.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
- * @return const char* "X" if X wins, "O" if O wins, "Draw" if draw,
- *         or NULL if game is ongoing.
+ * @return const char* Returns:
+ *         - "X" if player X wins,
+ *         - "O" if player O wins,
+ *         - "Draw" if the board is full with no winner,
+ *         - NULL if the game is still ongoing.
  */
 const char *check_winner(char board[SIZE][SIZE])
 {
-    // Check rows and columns for a win
+    // Check rows and columns
     for (int i = 0; i < SIZE; i++)
     {
-        if (board[i][0] != ' ' && board[i][0] != '\0' && board[i][0] == board[i][1] && board[i][1] == board[i][2])
+        if (board[i][0] != ' ' && board[i][0] == board[i][1] && board[i][1] == board[i][2])
         {
             return (board[i][0] == 'X') ? "X" : "O";
         }
-        if (board[0][i] != ' ' && board[0][i] != '\0' && board[0][i] == board[1][i] && board[1][i] == board[2][i])
+
+        if (board[0][i] != ' ' && board[0][i] == board[1][i] && board[1][i] == board[2][i])
         {
             return (board[0][i] == 'X') ? "X" : "O";
         }
     }
 
-    // Check diagonals for a win
-    if (board[0][0] != ' ' && board[0][0] != '\0' && board[0][0] == board[1][1] && board[1][1] == board[2][2])
+    // Check diagonals
+    if (board[0][0] != ' ' && board[0][0] == board[1][1] && board[1][1] == board[2][2])
     {
         return (board[0][0] == 'X') ? "X" : "O";
     }
-    if (board[0][2] != ' ' && board[0][2] != '\0' && board[0][2] == board[1][1] && board[1][1] == board[2][0])
+
+    if (board[0][2] != ' ' && board[0][2] == board[1][1] && board[1][1] == board[2][0])
     {
         return (board[0][2] == 'X') ? "X" : "O";
     }

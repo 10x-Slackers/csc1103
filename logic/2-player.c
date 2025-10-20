@@ -2,13 +2,14 @@
  * Tic-Tac-Toe game for two players.
  *
  * Author: kaiwenteoo
- * Date: 2025-10-19
+ * Date: 2025-10-20
  * Version: 1
  */
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define SIZE 3
 
@@ -119,7 +120,8 @@ void print_board(char board[SIZE][SIZE])
 /**
  * @brief Prompts the current player to make a valid move.
  *
- * Validates the input to ensure it's within range and not already occupied.
+ * Validates the input to ensure it's a non-empty, numeric input within range
+ * and not already occupied.
  *
  * @param current_player The character representing the current player ('X' or 'O').
  * @param board The current game board.
@@ -128,15 +130,34 @@ void print_board(char board[SIZE][SIZE])
  */
 void get_valid_move(char current_player, char board[SIZE][SIZE], int *out_row, int *out_col)
 {
+    char buffer[100];
     int move;
+
     while (true)
     {
         printf("Player %c, choose your box (1-9): ", current_player);
-        int result = scanf("%d", &move);
-        while (getchar() != '\n')
-            ; // clear input buffer
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+        {
+            printf("Please enter a valid number.\n");
+            continue;
+        }
 
-        if (result != 1 || move < 1 || move > 9)
+        // Remove trailing newline if present
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        // Check for empty input
+        if (strlen(buffer) == 0)
+        {
+            printf("Please enter a valid number.\n");
+            continue;
+        }
+
+        // Convert input to integer
+        char *endptr;
+        move = strtol(buffer, &endptr, 10);
+
+        // Check if entire input was a number
+        if (*endptr != '\0' || move < 1 || move > 9)
         {
             printf("Invalid input. Choose a number between 1 and 9.\n");
             continue;
@@ -176,23 +197,23 @@ const char *check_winner(char board[SIZE][SIZE])
     for (int i = 0; i < SIZE; i++)
     {
         // Check rows
-        if (board[i][0] != ' ' && board[i][0] != '\0' && board[i][0] == board[i][1] && board[i][1] == board[i][2])
+        if (board[i][0] != ' ' && board[i][0] == board[i][1] && board[i][1] == board[i][2])
         {
             return (board[i][0] == 'X') ? "X" : "O";
         }
         // Check columns
-        if (board[0][i] != ' ' && board[0][i] != '\0' && board[0][i] == board[1][i] && board[1][i] == board[2][i])
+        if (board[0][i] != ' ' && board[0][i] == board[1][i] && board[1][i] == board[2][i])
         {
             return (board[0][i] == 'X') ? "X" : "O";
         }
     }
 
     // Check diagonals
-    if (board[0][0] != ' ' && board[0][0] != '\0' && board[0][0] == board[1][1] && board[1][1] == board[2][2])
+    if (board[0][0] != ' ' && board[0][0] == board[1][1] && board[1][1] == board[2][2])
     {
         return (board[0][0] == 'X') ? "X" : "O";
     }
-    if (board[0][2] != ' ' && board[0][2] != '\0' && board[0][2] == board[1][1] && board[1][1] == board[2][0])
+    if (board[0][2] != ' ' && board[0][2] == board[1][1] && board[1][1] == board[2][0])
     {
         return (board[0][2] == 'X') ? "X" : "O";
     }
