@@ -16,11 +16,11 @@ def main():
 
     Sets up the GTK Application, grid layout, and connects signal handlers.
     """
-    apply_css()
 
     app = Gtk.Application(application_id="com.csc1103.TicTacToe")
 
     def on_activate(app):
+        apply_css()
         window = Gtk.ApplicationWindow(application=app)
         window.set_title("Tic Tac Toe Grid")
         window.set_default_size(400, 400)
