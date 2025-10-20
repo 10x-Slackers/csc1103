@@ -3,121 +3,103 @@ from gi.repository import Gdk, Gtk
 
 gi.require_version("Gtk", "4.0")
 
-"""@file
-Displays a 3x3 grid of buttons for playing Tic-Tac-Toe
-"""
+# Track current player
+current_player = "O"
+
+# 2D list to store references to each button in the 3x3 grid
+buttons = []
 
 
-class TicTacToeGrid(Gtk.Application):
-    """@brief Display a Tic-Tac-Toe grid.
-
-    @details
-    Manages application lifecycle, the GTK window, a 3x3 grid of buttons,
-    simple player-turn switching and CSS styling for X and O.
+def main():
     """
+    Entry point of the Tic Tac Toe application.
 
-    def __init__(self):
-        """@brief Initialize the application.
+    Sets up the GTK Application, grid layout, and connects signal handlers.
+    """
+    apply_css()
 
-        @details
-        Calls Gtk.Application.__init__ with an application_id, connects
-        the "activate" signal to on_activate and sets the starting player.
-        """
-        super().__init__(application_id="com.csc1103.TicTacToe")
-        self.connect("activate", self.ttt_grid)
-        self.current_player = "X"
+    app = Gtk.Application(application_id="com.csc1103.TicTacToe")
 
-    def ttt_grid(self, app):
-        """@brief Activate handler: build and show the main window.
+    def on_activate(app):
+        window = Gtk.ApplicationWindow(application=app)
+        window.set_title("Tic Tac Toe Grid")
+        window.set_default_size(400, 400)
+        window.set_resizable(False)
 
-        @param app The Gtk.Application instance passed by the activate signal.
-        @type app: Gtk.Application
+        grid = Gtk.Grid()
+        grid.set_row_spacing(5)
+        grid.set_column_spacing(5)
+        grid.set_margin_top(10)
+        grid.set_margin_bottom(10)
+        grid.set_margin_start(10)
+        grid.set_margin_end(10)
 
-        @details
-        Creates the application window, configures layout and CSS, creates a
-        3x3 grid of Gtk.Button widgets and attaches click handlers.
-        """
-        self.window = Gtk.ApplicationWindow(application=app)
-        self.window.set_title("Tic Tac Toe Grid")
-        self.window.set_default_size(400, 400)
-        self.window.set_resizable(False)
-
-        # CSS styling setup
-        self.apply_css()
-
-        self.grid = Gtk.Grid()
-        self.grid.set_row_spacing(5)
-        self.grid.set_column_spacing(5)
-        self.grid.set_margin_top(10)
-        self.grid.set_margin_bottom(10)
-        self.grid.set_margin_start(10)
-        self.grid.set_margin_end(10)
-
-        self.buttons = []
-
+        # Create 3x3 grid of buttons
         for row in range(3):
             row_buttons = []
             for col in range(3):
                 button = Gtk.Button()
                 button.set_size_request(125, 125)
-                button.connect("clicked", self.on_button_clicked)
-                self.grid.attach(button, col, row, 1, 1)
+                button.connect("clicked", on_button_clicked)
+                grid.attach(button, col, row, 1, 1)
                 row_buttons.append(button)
-            self.buttons.append(row_buttons)
+            buttons.append(row_buttons)
 
-        self.window.set_child(self.grid)
-        self.window.present()
+        window.set_child(grid)
+        window.present()
 
-    def on_button_clicked(self, button):
-        """@brief Handle a grid button click.
+    app.connect("activate", on_activate)
+    app.run()
 
-        @param button The Button that was clicked.
 
-        @details
-        Sets the clicked button's label to the current player's mark ("X" or "O"),
-        disables the button so it cannot be clicked again, applies a CSS class
-        for styling based on the mark, and toggles the current player.
-        """
-        button.set_label(self.current_player)
-        button.set_sensitive(False)
+def apply_css():
+    """
+    Apply CSS styling for the X and O symbols.
 
-        if self.current_player == "X":
-            button.get_style_context().add_class("x-style")
-        else:
-            button.get_style_context().add_class("o-style")
+    - X will be red.
+    - O will be blue.
+    """
+    css = b"""
+    .x-style {
+        font-size: 50px;
+        color: red;
+    }
 
-        # Switch player
-        self.current_player = "O" if self.current_player == "X" else "X"
+    .o-style {
+        font-size: 50px;
+        color: blue;
+    }
+    """
+    css_provider = Gtk.CssProvider()
+    css_provider.load_from_data(css)
+    display = Gdk.Display.get_default()
+    Gtk.StyleContext.add_provider_for_display(
+        display, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+    )
 
-    def apply_css(self):
-        """@brief Apply CSS styles for X and O marks.
 
-        @details
-        Modifies the 'X' and 'O' for styling
-        """
-        # Create CSS provider
-        css = b"""
-        .x-style {
-            font-size: 50px;
-            color: red;
-        }
+def on_button_clicked(button):
+    """
+    Callback for when a grid button is clicked.
 
-        .o-style {
-            font-size: 50px;
-            color: blue;
-        }
-        """
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_data(css)
+    Sets the button label to the current player's symbol,
+    applies styling, disables the button, and switches players.
 
-        # Apply CSS to default screen
-        display = Gdk.Display.get_default()
-        Gtk.StyleContext.add_provider_for_display(
-            display, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-        )
+    Args:
+        button: The button that was clicked.
+    """
+    global current_player
+
+    button.set_label(current_player)
+    button.set_sensitive(False)
+
+    if current_player == "X":
+        button.get_style_context().add_class("x-style")
+        current_player = "O"
+    else:
+        button.get_style_context().add_class("o-style")
+        current_player = "X"
 
 
 if __name__ == "__main__":
-    """@brief Module entry point: create and run the program."""
-    app = TicTacToeGrid()
-    app.run()
+    main()
