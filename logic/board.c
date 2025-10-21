@@ -1,27 +1,11 @@
+#include "board.h"
 #include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-
-#define SIZE 3
-
-/**
- * @struct Cell
- * @brief Represents a cell's position on the Tic-Tac-Toe board.
- *
- * Holds the row and column indices of a cell.
- */
-typedef struct
-{
-    int row; /**< Row index of the cell (0-based) */
-    int col; /**< Column index of the cell (0-based) */
-} Cell;
 
 /**
  * @brief Print the Tic-Tac-Toe board in a readable format.
  *
- * Empty cells are displayed as their numbers (1-9).
- * Occupied cells display 'X' or 'O'.
- * Cells in a row are separated by " | " and rows are separated by lines.
+ * Displays 'X', 'O', or the number of the empty cell (1-9).
+ * Cells in a row are separated by ' | '.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
  */
@@ -33,12 +17,14 @@ void print_board(char board[SIZE][SIZE])
         {
             char cell = board[i][j];
             int cell_num = i * SIZE + j + 1;
-
             if (cell == ' ')
+            {
                 printf("%d", cell_num);
+            }
             else
+            {
                 printf("%c", cell);
-
+            }
             if (j < SIZE - 1)
                 printf(" | ");
         }
@@ -83,7 +69,6 @@ int find_empty_cells(char board[SIZE][SIZE], Cell empty_cells[], int max_cells)
  *
  * Checks all rows, columns, and diagonals for a winner.
  * If no winner and no empty cells remain, it's a draw.
- * Empty cells are now checked inline without using a helper function.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
  * @return const char* Returns:
@@ -119,17 +104,12 @@ const char *check_winner(char board[SIZE][SIZE])
         return (board[0][2] == 'X') ? "X" : "O";
     }
 
-    // Inline check for any empty cells (faster than using find_empty_cells)
-    for (int i = 0; i < SIZE; i++)
+    // Check for draw
+    Cell empty_cells[SIZE * SIZE];
+    if (find_empty_cells(board, empty_cells, SIZE * SIZE) == 0)
     {
-        for (int j = 0; j < SIZE; j++)
-        {
-            if (board[i][j] == ' ')
-            {
-                return NULL;
-            }
-        }
+        return "Draw";
     }
 
-    return "Draw";
+    return NULL;
 }
