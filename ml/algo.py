@@ -73,12 +73,18 @@ def main() -> None:
 
     # Train and persist the model
     prior, likelihood = train(x, y)
-    save_model(prior, likelihood, MODEL_PATH)
+    # save_model(prior, likelihood, MODEL_PATH)
     episodes = int(len(dataset) / 80 * 20)
-    simulate_game(episodes)
+    games = simulate_game(episodes)
+    for game in games:
+        board_vector, outcome_vector = vectorize(game)
+        x.append(board_vector)
+        y.append(outcome_vector)
+    prior, likelihood = train(x, y)
+    save_model(prior, likelihood, MODEL_PATH)
 
 
-def simulate_game(episodes: int) -> None:
+def simulate_game(episodes: int) -> list[DataEntry]:
     """
     Simulate a single game between the AI and a random player.
 
@@ -87,6 +93,7 @@ def simulate_game(episodes: int) -> None:
     """
     # Simulate several games between the AI and player to have a hybrid training
     # 20-80 split, 20% for testing, 80% from dataset provided
+    history: list[DataEntry] = []
     result: dict[str, int] = {"X": 0, "O": 0, "Draw": 0}
     for _ in range(episodes):
         model = load_model(MODEL_PATH)
@@ -101,7 +108,10 @@ def simulate_game(episodes: int) -> None:
             current_board[move[0]][move[1]] = player
             player = AI_PLAYER if player == HUMAN_PLAYER else HUMAN_PLAYER
         result[check_winner(current_board) or "Draw"] += 1
+        outcome = "positive" if check_winner(current_board) == AI_PLAYER else "negative"
+        history.append({"board": current_board, "outcome": outcome})
     print(f"Game result: {result}\n")
+    return history
 
 
 def vectorize(entry: DataEntry) -> tuple[BoardVector, OutcomeVector]:
