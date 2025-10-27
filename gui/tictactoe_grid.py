@@ -87,38 +87,20 @@ def set_game_grid(grid, vbox):
 
     buttons_list.clear()
 
-    # Create buttons manually (3x3 grid)
-    b00 = Gtk.Button()
-    b01 = Gtk.Button()
-    b02 = Gtk.Button()
-    b10 = Gtk.Button()
-    b11 = Gtk.Button()
-    b12 = Gtk.Button()
-    b20 = Gtk.Button()
-    b21 = Gtk.Button()
-    b22 = Gtk.Button()
+    # Create 3x3 grid of buttons
+    for row in range(3):
+        for col in range(3):
+            button = Gtk.Button()
+            button.set_size_request(TTT_GRID_SIZE, TTT_GRID_SIZE)
+            button.connect("clicked", on_button_clicked)
 
-    buttons_list.extend([b00, b01, b02, b10, b11, b12, b20, b21, b22])
+            # Attach button to grid
+            grid.attach(button, col, row, 1, 1)
 
-    # Set button sizes
-    for b in buttons_list:
-        b.set_size_request(TTT_GRID_SIZE, TTT_GRID_SIZE)
-        b.connect("clicked", on_button_clicked)
+            # Add to buttons_list in order (row-major)
+            buttons_list.append(button)
 
-    # Attach to grid manually
-    grid.attach(b00, 0, 0, 1, 1)
-    grid.attach(b01, 1, 0, 1, 1)
-    grid.attach(b02, 2, 0, 1, 1)
-
-    grid.attach(b10, 0, 1, 1, 1)
-    grid.attach(b11, 1, 1, 1, 1)
-    grid.attach(b12, 2, 1, 1, 1)
-
-    grid.attach(b20, 0, 2, 1, 1)
-    grid.attach(b21, 1, 2, 1, 1)
-    grid.attach(b22, 2, 2, 1, 1)
-
-    # Add grid to vbox
+    # Add the grid to the vertical box
     vbox.append(grid)
 
 
@@ -168,7 +150,6 @@ def on_button_clicked(button):
     """
     global current_player, turn_label, buttons_list, board_state
     board_state_index = buttons_list.index(button)
-    print(board_state_index)
 
     button.set_label(current_player)
     button.set_sensitive(False)
