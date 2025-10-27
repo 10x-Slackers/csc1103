@@ -175,11 +175,11 @@ def on_button_clicked(button):
 
     if current_player == "X":
         button.add_css_class("x-style")
-        board_state[int(board_state_index)] = "X"
+        board_state[board_state_index] = "X"
         current_player = "O"
     else:
         button.add_css_class("o-style")
-        board_state[int(board_state_index)] = "O"
+        board_state[board_state_index] = "O"
         current_player = "X"
 
     update_turn_label()
