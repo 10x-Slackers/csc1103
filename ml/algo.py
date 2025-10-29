@@ -11,15 +11,21 @@ import math
 import random
 from typing import TypedDict
 
-from logic.board import check_winner, find_empty_cells
+from logic.board import find_empty_cells, print_board
 from ml.dataset import DataEntry, parse
 
 MODEL_PATH = "ml/naive_bayes_model.json"
 
+BLANK_BOARD: list[list[str]] = [
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+]
+
 TEST_BOARD: list[list[str]] = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
+    ["X", "", "X"],
+    ["X", "O", ""],
+    ["O", "", ""],
 ]
 AI_PLAYER = "O"
 HUMAN_PLAYER = "X"
@@ -33,7 +39,7 @@ VECTORS = {"": 0, "X": 1, "O": 2, "positive": 1, "negative": 0}
 ALPHA = 1.0
 
 # Model shape constants
-VALUES = 3  # Each cell can be empty, X, or O
+STATE = 3  # Each cell can be empty, X, or O
 FEATURES = 9  # Cells on a 3x3 board
 CLASSES = 2  # Negative (0) and positive (1)
 EPISODES = 10  # Number of games to simulate in the demo
@@ -63,55 +69,46 @@ def main() -> None:
     """
     # Load and vectorize the dataset
     dataset = parse("dataset/tic-tac-toe.data")
+    random.shuffle(dataset)
+    # Split dataset into 80:20 for training:testing after shuffling
+    training_len = int(len(dataset) * 0.8)
+    training_data = dataset[:training_len]
+    testing_data = dataset[training_len:]
     x: list[BoardVector] = []
     y: list[OutcomeVector] = []
-
-    for entry in dataset:
+    for entry in training_data:
         board_vector, outcome_vector = vectorize(entry)
         x.append(board_vector)
         y.append(outcome_vector)
-
     # Train and persist the model
     prior, likelihood = train(x, y)
-    # save_model(prior, likelihood, MODEL_PATH)
-    episodes = int(len(dataset) / 80 * 20)
-    games = simulate_game(episodes)
-    for game in games:
-        board_vector, outcome_vector = vectorize(game)
-        x.append(board_vector)
-        y.append(outcome_vector)
-    prior, likelihood = train(x, y)
     save_model(prior, likelihood, MODEL_PATH)
+    model = load_model(MODEL_PATH)
+    # simulate test
+    test_model(testing_data, model)
+    # Demo of model making move on a test board
+    print("Test board:")
+    print_board(TEST_BOARD)
+    move = ai_move(TEST_BOARD, model)
+    print(f"AI selected move: {move}")
+    TEST_BOARD[move[0]][move[1]] = AI_PLAYER
+    print_board(TEST_BOARD)
 
 
-def simulate_game(episodes: int) -> list[DataEntry]:
-    """
-    Simulate a single game between the AI and a random player.
-
-    Args:
-        episodes: Number of episodes to simulate
-    """
-    # Simulate several games between the AI and player to have a hybrid training
-    # 20-80 split, 20% for testing, 80% from dataset provided
-    history: list[DataEntry] = []
-    result: dict[str, int] = {"X": 0, "O": 0, "Draw": 0}
-    for _ in range(episodes):
-        model = load_model(MODEL_PATH)
-        current_board = [row.copy() for row in TEST_BOARD]
-        player = HUMAN_PLAYER
-        while check_winner(current_board) is None:
-            if player == HUMAN_PLAYER:
-                empty_cells = find_empty_cells(current_board)
-                move = random.choice(empty_cells)
-            else:
-                move = ai_move(current_board, model)
-            current_board[move[0]][move[1]] = player
-            player = AI_PLAYER if player == HUMAN_PLAYER else HUMAN_PLAYER
-        result[check_winner(current_board) or "Draw"] += 1
-        outcome = "positive" if check_winner(current_board) == AI_PLAYER else "negative"
-        history.append({"board": current_board, "outcome": outcome})
-    print(f"Game result: {result}\n")
-    return history
+def test_model(testing_data: list[DataEntry], model: Model) -> None:
+    accuracy = len(testing_data)
+    result = 0
+    for test_data in testing_data:
+        _, outcome = vectorize(test_data)
+        # predict_res is always [negative, positive]
+        predict_res = probability(test_data["board"], model)
+        # if the negative value is higher, it indicates that the ai has lost
+        # and if positive value is higher, means the outcome is positive
+        predict_outcome = predict_res.index(max(predict_res))
+        # if the prediction is the same as the outcome, accuracy is better
+        result += predict_outcome == outcome
+    accuracy = (result / accuracy) * 100
+    print(f"Accuracy of prediction: {accuracy:.2f}%")
 
 
 def vectorize(entry: DataEntry) -> tuple[BoardVector, OutcomeVector]:
@@ -141,28 +138,40 @@ def train(x: list[BoardVector], y: list[OutcomeVector]) -> tuple[Prior, Likeliho
     """
     # Initialize counts
     class_counts = [0] * CLASSES
-    feature_counts = [[[0] * VALUES for _ in range(FEATURES)] for _ in range(CLASSES)]
+    # count of each occurence for each possible STATE (0,1,2)
+    feature_counts = [[[0] * STATE for _ in range(FEATURES)] for _ in range(CLASSES)]
     prior: Prior = [0.0] * CLASSES
+    # 2 different outcomes with 9 boxes with each box having 3 possible STATE (0, 1, 2)
     likelihood: Likelihood = [
-        [[0.0] * VALUES for _ in range(FEATURES)] for _ in range(CLASSES)
+        [[0.0] * STATE for _ in range(FEATURES)] for _ in range(CLASSES)
     ]
     total_samples = len(x)
 
     # Count occurrences of every class and feature value
     for board_vector, outcome in zip(x, y, strict=True):
+        # keep track for number of outcome
         class_counts[outcome] += 1
         for i, cell_value in enumerate(board_vector):
+            # increment outcome for box i with ""(0), X(1) or O(2)
             feature_counts[outcome][i][cell_value] += 1
 
     # Compute prior probabilities (base probabilities of each class)
     for cl in range(CLASSES):
+        # Formula used: (number of outcome + ALPHA) /
+        # (total samples + ALPHA * 2[possible outcomes])
         prior[cl] = (class_counts[cl] + ALPHA) / (total_samples + ALPHA * CLASSES)
 
     # Compute likelihood probabilities (probability of feature given class)
     for cl in range(CLASSES):
+        # loops through all boxes
         for feat in range(FEATURES):
-            total_count = sum(feature_counts[cl][feat]) + ALPHA * VALUES
-            for val in range(VALUES):
+            # total count for all possible state for each box given outcome
+            # ALPHA * state is so that when a feature value hasn't been observed in the
+            # training data for a given class, so it doesn't lead to zero probability
+            total_count = sum(feature_counts[cl][feat]) + ALPHA * STATE
+            # loops through all possible state for each box
+            for val in range(STATE):
+                # possibility for each box to be in each state given outcome
                 likelihood[cl][feat][val] = (
                     feature_counts[cl][feat][val] + ALPHA
                 ) / total_count
@@ -198,7 +207,7 @@ def load_model(filepath: str) -> Model:
     return model
 
 
-def probability(board: list[list[str]], model: Model) -> float:
+def probability(board: list[list[str]], model: Model) -> list[float]:
     """
     Compute the posterior probability that the given board leads to a positive (1)
     outcome, according to the Naive Bayes model. Uses the log-sum-exp trick to convert
@@ -233,15 +242,8 @@ def probability(board: list[list[str]], model: Model) -> float:
     exp_scores = [math.exp(lp - m) for lp in log_scores]
     lse = m + math.log(sum(exp_scores))
     log_post = [s - lse for s in log_scores]
-    return math.exp(log_post[1])
-
-
-def predict(board: list[list[str]], model: Model) -> int:
-    """
-    Predict the outcome class for a board.
-    """
-    p_positive = probability(board, model)
-    return 1 if p_positive >= 0.5 else 0
+    post = [math.exp(lp) for lp in log_post]
+    return post
 
 
 def normalize_to_x(board: list[list[str]], ai_player: str) -> list[list[str]]:
@@ -285,7 +287,7 @@ def ai_move(board: list[list[str]], model: Model) -> tuple[int, int]:
     empty_cells = find_empty_cells(board)
     if not empty_cells:
         raise ValueError("No empty cells available for a move.")
-
+    # Initialize a negative best probability to ensure any valid move will be better
     best_move = (-1, -1)
     best_prob = -1.0
 
@@ -298,7 +300,7 @@ def ai_move(board: list[list[str]], model: Model) -> tuple[int, int]:
         test_board[i][j] = "X"  # AI is 'X' after normalization
 
         # Predict outcome probability
-        p_positive = probability(test_board, model)
+        p_positive = probability(test_board, model)[1]
 
         # Choose the move with the highest predicted probability of winning
         if p_positive > best_prob:
