@@ -317,14 +317,8 @@ def finalize_blink(selected_buttons):
     for btn in selected_buttons:
         with suppress(Exception):
             btn.remove_css_class("blink")
-
-        # restore original sensitivity stored earlier
-        try:
             was = getattr(btn, "_was_sensitive", False)
             btn.set_sensitive(was)
-        except Exception:
-            pass
-        with suppress(Exception):
             btn.queue_draw()
 
 
@@ -353,7 +347,6 @@ def on_button_clicked(button):
         current_player = "X"
 
     update_turn_label()
-    print(board_state)
 
 
 def reset_game():
@@ -385,7 +378,7 @@ def play_click_sound(is_x):
     Plays a different sound depending on whether the player is X or O.
     This runs in a separate thread so the GUI doesn't freeze.
     """
-    path = "Input project file path here"
+    path = "/workspaces/csc1103/gui/ui/"
     sound_file = path + "x.mp3" if is_x else path + "o.mp3"
     threading.Thread(target=play_sound, args=(sound_file,), daemon=True).start()
 
