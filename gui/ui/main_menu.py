@@ -2,7 +2,6 @@ import gi
 
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gdk  # noqa
-
 from ui import tictactoe_grid  # noqa
 
 """
@@ -19,10 +18,8 @@ WINDOW_WIDTH = 280
 SPACING = 15
 MARGIN = 30
 
-app = Gtk.Application(application_id="com.csc1103.TicTacToeMenu")
 
-
-def main_menu(app):
+def main(app):
     """
     Build and present the main application window.
 
@@ -130,7 +127,7 @@ def on_one_player_clicked(button):
     window = button.get_root()
     if window is not None:
         app = window.get_application()
-        tictactoe_grid.main(app)
+        tictactoe_grid.main(app, mode="1P")
         window.close()
 
 
@@ -138,7 +135,7 @@ def on_two_player_clicked(button):
     window = button.get_root()
     if window is not None:
         app = window.get_application()
-        tictactoe_grid.main(app)
+        tictactoe_grid.main(app, mode="2P")
         window.close()
 
 
@@ -177,6 +174,7 @@ def apply_css():
     )
 
 
+# Error says app not defined but is taken from main.py
 if __name__ == "__main__":
-    app.connect("activate", main_menu)
-    app.run()
+    app.connect("activate", main_menu)  # noqa
+    app.run()  # noqa
