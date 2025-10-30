@@ -74,7 +74,7 @@ def main() -> None:
     dataset = parse("dataset/tic-tac-toe.data")
     random.shuffle(dataset)
     # Split dataset into 80:20 for training:testing after shuffling
-    training_len = int(len(dataset) * 0.8)
+    training_len, testing_len = int(len(dataset) * 0.8), int(len(dataset) * 0.2)
     training_data = dataset[:training_len]
     testing_data = dataset[training_len:]
     x: list[BoardVector] = []
@@ -89,7 +89,7 @@ def main() -> None:
     model = load_model(MODEL_PATH)
     # simulate test
     result = test_model(testing_data, model)
-    summary = confusion_calculation(result)
+    summary = confusion_calculation(result, testing_len)
     print_matrix(summary)
     # Demo of model making move on a test board
     print("\nTest board:")
@@ -147,7 +147,7 @@ def test_model(testing_data: list[DataEntry], model: Model) -> list[str]:
     return result
 
 
-def confusion_calculation(result: list[str]) -> dict[str, int | float]:
+def confusion_calculation(result: list[str], count: int) -> dict[str, int | float]:
     """
     calculate and print confusion matrix and related metrics
 
@@ -161,23 +161,24 @@ def confusion_calculation(result: list[str]) -> dict[str, int | float]:
         summary[r] += 1
 
     tn, tp, fn, fp = summary["TN"], summary["TP"], summary["FN"], summary["FP"]
-    total = tn + tp + fn + fp
+    p = tp + fn
+    n = tn + fp
     # true positive rate and true negative rate
-    tpr = tp / (tp + fn) if (tp + fn) else 0
-    tnr = tn / (tn + fp) if (tn + fp) else 0
+    tpr = tp / p
+    tnr = tn / n
     summary.update(
         {
-            "Prevalence": (tp + fn) / total if total else 0,
-            "Accuracy": (tp + tn) / total if total else 0,
+            "Prevalence": p / count,
+            "Accuracy": (tp + tn) / count,
             "Balanced Accuracy": (tpr + tnr) / 2,
-            "Positive predictive value": tp / (tp + fp) if (tp + fp) else 0,
-            "Negative Predictive Value": tn / (tn + fn) if (tn + fn) else 0,
+            "Positive predictive value": tp / (tp + fp),
+            "Negative Predictive Value": tn / (tn + fn),
             "True Positive Rate": tpr,
             "True Negative Rate": tnr,
             "F1-score": 2 * tp / (2 * tp + fp + fn),
             "False Positive Rate": 1 - tnr,
             "False Negative Rate": 1 - tpr,
-            "Total": total,
+            "Total": count,
         }
     )
     return summary
