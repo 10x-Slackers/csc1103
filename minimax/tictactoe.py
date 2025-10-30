@@ -1,4 +1,5 @@
 import random
+
 from logic.board import check_winner, find_empty_cells, print_board
 
 MIN_SCORE = -10

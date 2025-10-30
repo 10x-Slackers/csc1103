@@ -18,7 +18,7 @@ class Tree:
 
     left: Optional["Tree"] = None
     right: Optional["Tree"] = None
-    data: Optional[int] = None
+    data: int | None = None
 
 
 def minimax(node: Tree, is_max: bool = True) -> int:
@@ -27,7 +27,8 @@ def minimax(node: Tree, is_max: bool = True) -> int:
 
     Args:
         node (Tree): The current node in the game tree.
-        is_max (bool): True if the current level is the maximising player, False if minimizing
+        is_max (bool): True if the current level is the maximising player,
+            False if minimizing
     Returns:
         int: The minimax value of the node.
     """
@@ -62,7 +63,8 @@ def minimax_ab(
         node (Tree): The current node in the game tree.
         alpha (float): The best found option for the maximizer.
         beta (float): The best found option for the minimizer.
-        is_max (bool): True if the current level is the maximising player, False if minimizing
+        is_max (bool): True if the current level is the maximising player,
+            False if minimizing
 
     Returns:
         int: The minimax value of the node.
