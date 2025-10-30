@@ -3,7 +3,7 @@ Missing Functionalities (Implement after logic combined)
 - Updating of Scoreboard when a Player wins
 - After the game ends, player can click on any of the buttons to start the next game
 - When the player goes back to the main menu, the score resets back to 0
-- Audio for when the game ends
+- Audio for when the game has a winner
 
 Known Bugs
 - When the Grid buttons blinks, players able to click it to change
