@@ -27,6 +27,9 @@ TEST_BOARD: list[list[str]] = [
     ["X", "O", ""],
     ["O", "", ""],
 ]
+
+MAPPING = {(0, 0): "TN", (1, 1): "TP", (1, 0): "FN", (0, 1): "FP"}
+
 AI_PLAYER = "O"
 HUMAN_PLAYER = "X"
 
@@ -85,9 +88,11 @@ def main() -> None:
     save_model(prior, likelihood, MODEL_PATH)
     model = load_model(MODEL_PATH)
     # simulate test
-    test_model(testing_data, model)
+    result = test_model(testing_data, model)
+    summary = confusion_calculation(result)
+    print_matrix(summary)
     # Demo of model making move on a test board
-    print("Test board:")
+    print("\nTest board:")
     print_board(TEST_BOARD)
     move = ai_move(TEST_BOARD, model)
     print(f"AI selected move: {move}")
@@ -95,20 +100,87 @@ def main() -> None:
     print_board(TEST_BOARD)
 
 
-def test_model(testing_data: list[DataEntry], model: Model) -> None:
-    accuracy = len(testing_data)
-    result = 0
+def print_matrix(summary: dict[str, int | float]) -> None:
+    """
+    Print confusion matrix and related metrics
+
+    Args:
+        summary: dictionary of confusion matrix counts and metrics
+    Returns:
+        None
+    """
+    print("\n=== Confusion Matrix Counts ===")
+    print(f"TP: {summary['TP']:<5} FP: {summary['FP']:<5}")
+    print(f"FN: {summary['FN']:<5} TN: {summary['TN']:<5}")
+    print(f"Total: {summary['Total']}\n")
+
+    print("=== Metrics Summary ===")
+    print(f"{'Metric':<30} {'Value':>10}")
+    print("-" * 41)
+    for k, v in summary.items():
+        if k in ["TP", "FP", "FN", "TN", "Total"]:  # skip raw counts in this section
+            continue
+        print(f"{k:<30} {v:>10.4f}")
+
+
+def test_model(testing_data: list[DataEntry], model: Model) -> list[str]:
+    """
+    Test the trained model on the testing dataset and print f-score
+
+    Args:
+        testing_data: List of dataset entries for testing
+        model: Trained Naive Bayes model
+    Returns:
+        None
+    """
+    outcomes: list[OutcomeVector] = []
+    predict_outcomes: list[OutcomeVector] = []
     for test_data in testing_data:
         _, outcome = vectorize(test_data)
+        outcomes.append(outcome)
         # predict_res is always [negative, positive]
         predict_res = probability(test_data["board"], model)
-        # if the negative value is higher, it indicates that the ai has lost
-        # and if positive value is higher, means the outcome is positive
-        predict_outcome = predict_res.index(max(predict_res))
-        # if the prediction is the same as the outcome, accuracy is better
-        result += predict_outcome == outcome
-    accuracy = (result / accuracy) * 100
-    print(f"Accuracy of prediction: {accuracy:.2f}%")
+        predict_outcomes.append(predict_res.index(max(predict_res)))
+    result: list[str] = [
+        MAPPING[(o, p)] for o, p in zip(outcomes, predict_outcomes, strict=True)
+    ]
+    return result
+
+
+def confusion_calculation(result: list[str]) -> dict[str, int | float]:
+    """
+    calculate and print confusion matrix and related metrics
+
+    Args:
+        result: list of results from model predictions
+    Returns:
+        None
+    """
+    summary: dict[str, int | float] = {"TN": 0, "TP": 0, "FN": 0, "FP": 0}
+    for r in result:
+        summary[r] += 1
+
+    tn, tp, fn, fp = summary["TN"], summary["TP"], summary["FN"], summary["FP"]
+    total = tn + tp + fn + fp
+    # true positive rate and true negative rate
+    tpr = tp / (tp + fn) if (tp + fn) else 0
+    tnr = tn / (tn + fp) if (tn + fp) else 0
+    summary.update(
+        {
+            "Prevalence": (tp + fn) / total if total else 0,
+            "Accuracy": (tp + tn) / total if total else 0,
+            "Balanced Accuracy": (tpr + tnr) / 2,
+            "Positive predictive value": tp / (tp + fp) if (tp + fp) else 0,
+            "Negative Predictive Value": tn / (tn + fn) if (tn + fn) else 0,
+            "True Positive Rate": tpr,
+            "True Negative Rate": tnr,
+            "F1-score": 2 * tp / (2 * tp + fp + fn),
+            "False Positive Rate": 1 - tnr,
+            "False Negative Rate": 1 - tpr,
+            "Total": total,
+        }
+    )
+    return summary
 
 
 def vectorize(entry: DataEntry) -> tuple[BoardVector, OutcomeVector]:
@@ -189,7 +261,7 @@ def save_model(prior: Prior, likelihood: Likelihood, filepath: str) -> None:
         filepath: Path to save the model
     """
     model: Model = {"prior": prior, "likelihood": likelihood}
-    with open(filepath, "w") as f:
+    with open(filepath, "w", encoding="utf-8") as f:
         json.dump(model, f)
 
 
@@ -202,7 +274,7 @@ def load_model(filepath: str) -> Model:
     Returns:
         The loaded Naive Bayes model
     """
-    with open(filepath) as f:
+    with open(filepath, encoding="utf-8") as f:
         model: Model = json.load(f)
     return model
 
@@ -246,16 +318,16 @@ def probability(board: list[list[str]], model: Model) -> list[float]:
     return post
 
 
-def normalize_to_x(board: list[list[str]], ai_player: str) -> list[list[str]]:
+def normalize_to_o(board: list[list[str]], ai_player: str) -> list[list[str]]:
     """
-    Normalize the board to always have 'X' as the AI player.
-    If 'O' has more moves, swap 'X' and 'O'.
+    Normalize the board to always have 'O' as the AI player.
+    so that AI can make a move as 'X' always go first in the model training.
 
     Args:
         board: 3x3 Tic-Tac-Toe board
-        ai_player: str - The current AI player symbol ("X" or "O")
+        ai_player: str - The current AI player symbol ("O")
     Returns:
-        Normalized board with 'X' as the AI player
+        Normalized board with 'O' as the AI player
     """
     if ai_player == "X":
         return board
@@ -291,13 +363,13 @@ def ai_move(board: list[list[str]], model: Model) -> tuple[int, int]:
     best_move = (-1, -1)
     best_prob = -1.0
 
-    # Normalize board to have 'X' as the AI player for consistent predictions
-    normalized = normalize_to_x(board, AI_PLAYER)
+    # Normalize board to have 'O' as the AI player for consistent predictions
+    normalized = normalize_to_o(board, AI_PLAYER)
 
     for i, j in empty_cells:
         # Simulate the move
         test_board = [row.copy() for row in normalized]
-        test_board[i][j] = "X"  # AI is 'X' after normalization
+        test_board[i][j] = "O"  # AI is 'O' after normalization
 
         # Predict outcome probability
         p_positive = probability(test_board, model)[1]
