@@ -3,6 +3,8 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gdk  # noqa
 
+from ui import main_menu  # noqa
+
 TTT_GRID_SIZE = 150
 SPACING = 5
 MARGIN = 30
@@ -16,13 +18,19 @@ buttons_list = []
 board_state = ["", "", "", "", "", "", "", "", ""]
 
 
-def main():
+def main(app):
     """
     Entry point of the Tic Tac Toe application.
+    Resets the board and current player before launching the game.
     """
-    app = Gtk.Application(application_id="com.csc1103.TicTacToe")
-    app.connect("activate", launch_game)
-    app.run()
+    global board_state, current_player, buttons_list
+
+    # Reset game state
+    current_player = "O"
+    board_state = [""] * 9
+    buttons_list = []
+
+    launch_game(app)
 
 
 def launch_game(app):
@@ -40,7 +48,7 @@ def launch_game(app):
     main_container(vbox)
     create_turn_label(vbox)
     set_game_grid(grid, vbox)
-    control_buttons(vbox)
+    control_buttons(vbox, app)
 
     window.set_child(vbox)
     window.present()
@@ -104,7 +112,7 @@ def set_game_grid(grid, vbox):
     vbox.append(grid)
 
 
-def control_buttons(vbox):
+def control_buttons(vbox, app):
     """
     Adds 'Back to Main Menu' (bottom-left) and 'Quit Game' (bottom-right) buttons.
     """
@@ -115,33 +123,38 @@ def control_buttons(vbox):
 
     # Back to Main Menu button (left)
     back_button = Gtk.Button(label="Back to Main Menu")
-    back_button.connect("clicked", on_back_clicked)
+    back_button.connect("clicked", on_back_clicked, app)
 
     # Spacer to push Quit button to the right
     spacer = Gtk.Box()
     spacer.set_hexpand(True)
 
+    blink_button = Gtk.Button(label="Blink!")
+    blink_button.connect("clicked", on_blink)
+
     # Add to bottom_box
     bottom_box.append(back_button)
     bottom_box.append(spacer)
+    bottom_box.append(blink_button)
 
     # Add to main vbox
     vbox.append(bottom_box)
 
 
-def on_back_clicked(button):
+def on_back_clicked(button, app):
     """
     Handle the 'Back to Main Menu' button click.
     """
-    print("Back to Main Menu clicked")
+
+    window = button.get_root()
+    if window is not None:
+        app = window.get_application()
+        main_menu.main_menu(app)
+        window.close()
 
 
-def on_quit_clicked(button):
-    """
-    Handle the 'Quit Game' button click.
-    """
-    app = button.get_root().get_application()
-    app.quit()
+def on_blink(button):
+    print("Blink Clicked")
 
 
 def on_button_clicked(button):
@@ -150,6 +163,7 @@ def on_button_clicked(button):
     """
     global current_player, turn_label, buttons_list, board_state
     board_state_index = buttons_list.index(button)
+    print(board_state_index)
 
     button.set_label(current_player)
     button.set_sensitive(False)
@@ -164,8 +178,6 @@ def on_button_clicked(button):
         current_player = "X"
 
     update_turn_label()
-    # Checking Board State
-    print(board_state)
 
 
 def apply_css():

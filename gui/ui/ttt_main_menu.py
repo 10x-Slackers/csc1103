@@ -1,8 +1,9 @@
 import gi
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gdk, Gtk  # noqa
+from gi.repository import Gtk, Gdk  # noqa
 
+from ui import tictactoe_grid  # noqa
 
 """
 Main menu for the Tic Tac Toe.
@@ -13,22 +14,22 @@ Provides a simple main menu with 1 Player, 2 Player and Quit buttons.
 # --- Callback functions ---
 """Won't do Doxygen comments here for now until implemented"""
 
-WINDOW_LENGTH = 320
-WINDOW_WIDTH = 250
+WINDOW_LENGTH = 300
+WINDOW_WIDTH = 280
 SPACING = 15
 MARGIN = 30
 
 app = Gtk.Application(application_id="com.csc1103.TicTacToeMenu")
 
 
-def main_menu(application):
+def main_menu(app):
     """
     Build and present the main application window.
 
     Args:
         application: The Gtk.Application instance passed by the activate signal.
     """
-    window = Gtk.ApplicationWindow(application=application)
+    window = Gtk.ApplicationWindow(application=app)
     window.set_title("Tic Tac Toe")
     window.set_default_size(WINDOW_LENGTH, WINDOW_WIDTH)
     window.set_resizable(False)
@@ -126,11 +127,19 @@ def quit_button(vbox):
 
 
 def on_one_player_clicked(button):
-    print("1 Player mode selected")
+    window = button.get_root()
+    if window is not None:
+        app = window.get_application()
+        tictactoe_grid.main(app)
+        window.close()
 
 
 def on_two_player_clicked(button):
-    print("2 Player mode selected")
+    window = button.get_root()
+    if window is not None:
+        app = window.get_application()
+        tictactoe_grid.main(app)
+        window.close()
 
 
 def on_quit_clicked(button):
@@ -140,7 +149,10 @@ def on_quit_clicked(button):
     Args:
         button: The Button that was clicked.
     """
-    app.quit()
+    window = button.get_root()
+    if window is not None:
+        app = window.get_application()
+        app.quit()
 
 
 def apply_css():
