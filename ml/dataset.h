@@ -60,20 +60,6 @@ static char*** convert_ttt_matrix(char** ttt);
 static char** str_split(char* a_str, char a_delim);
 
 /**
- * @brief: Main entry point of the program.
- *
- * @return: int: 0 on success
- */
-int main() {
-  const DataEntry* data_entries = process_dataset("dataset/tic-tac-toe.data");
-  if (data_entries == NULL) {
-    return 1;
-  }
-  //   printf("%s\n", data_entries[957].outcome);
-  return 0;
-}
-
-/**
  * @brief: Parses the dataset file and returns an array of DataEntry structs.
  *
  * @param filename: The name of the file to parse.
