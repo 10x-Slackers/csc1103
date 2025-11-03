@@ -55,7 +55,6 @@ def convert_ttt_matrix(ttt: list[str], formatted: bool = False) -> list[list[str
     """
     if formatted:
         ttt = [cell.upper() if cell in ("x", "o") else "" for cell in ttt]
-
     return [ttt[i : i + 3] for i in range(0, 9, 3)]
 
 

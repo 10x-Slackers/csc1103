@@ -1,4 +1,5 @@
 #include "board.h"
+
 #include <stdio.h>
 
 /**
@@ -9,29 +10,17 @@
  *
  * @param board The 3x3 Tic-Tac-Toe board.
  */
-void print_board(char board[SIZE][SIZE])
-{
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            char cell = board[i][j];
-            int cell_num = i * SIZE + j + 1;
-            if (cell == ' ')
-            {
-                printf("%d", cell_num);
-            }
-            else
-            {
-                printf("%c", cell);
-            }
-            if (j < SIZE - 1)
-                printf(" | ");
-        }
-        printf("\n");
-        if (i < SIZE - 1)
-            printf("---------\n");
+void print_board(int board[SIZE][SIZE]) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      int cell = board[i][j];
+      printf("%d", cell);
+      if (j < SIZE - 1) printf(" | ");
     }
+    printf("\n");
+    if (i < SIZE - 1) printf("---------\n");
+  }
+  printf("\n");
 }
 
 /**
@@ -45,23 +34,19 @@ void print_board(char board[SIZE][SIZE])
  * @param max_cells Maximum number of cells the array can hold.
  * @return int The number of empty cells found.
  */
-int find_empty_cells(char board[SIZE][SIZE], Cell empty_cells[], int max_cells)
-{
-    int count = 0;
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            if (board[i][j] == ' ')
-            {
-                if (count < max_cells)
-                {
-                    empty_cells[count++] = (Cell){i, j};
-                }
-            }
+int find_empty_cells(int const board[SIZE][SIZE], Cell empty_cells[],
+                     int max_cells) {
+  int count = 0;
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      if (board[i][j] == 0) {
+        if (count < max_cells) {
+          empty_cells[count++] = (Cell){i, j};
         }
+      }
     }
-    return count;
+  }
+  return count;
 }
 
 /**
@@ -77,39 +62,36 @@ int find_empty_cells(char board[SIZE][SIZE], Cell empty_cells[], int max_cells)
  *         - "Draw" if the board is full with no winner,
  *         - NULL if the game is still ongoing.
  */
-const char *check_winner(char board[SIZE][SIZE])
-{
-    // Check rows and columns
-    for (int i = 0; i < SIZE; i++)
-    {
-        if (board[i][0] != ' ' && board[i][0] == board[i][1] && board[i][1] == board[i][2])
-        {
-            return (board[i][0] == 'X') ? "X" : "O";
-        }
-
-        if (board[0][i] != ' ' && board[0][i] == board[1][i] && board[1][i] == board[2][i])
-        {
-            return (board[0][i] == 'X') ? "X" : "O";
-        }
+const int check_winner(int board[SIZE][SIZE]) {
+  // Check rows and columns
+  for (int i = 0; i < SIZE; i++) {
+    if (board[i][0] != 0 && board[i][0] == board[i][1] &&
+        board[i][1] == board[i][2]) {
+      return (board[i][0] == 1) ? 1 : 2;
     }
 
-    // Check diagonals
-    if (board[0][0] != ' ' && board[0][0] == board[1][1] && board[1][1] == board[2][2])
-    {
-        return (board[0][0] == 'X') ? "X" : "O";
+    if (board[0][i] != 0 && board[0][i] == board[1][i] &&
+        board[1][i] == board[2][i]) {
+      return (board[0][i] == 1) ? 1 : 2;
     }
+  }
 
-    if (board[0][2] != ' ' && board[0][2] == board[1][1] && board[1][1] == board[2][0])
-    {
-        return (board[0][2] == 'X') ? "X" : "O";
-    }
+  // Check diagonals
+  if (board[0][0] != 0 && board[0][0] == board[1][1] &&
+      board[1][1] == board[2][2]) {
+    return (board[0][0] == 1) ? 1 : 2;
+  }
 
-    // Check for draw
-    Cell empty_cells[SIZE * SIZE];
-    if (find_empty_cells(board, empty_cells, SIZE * SIZE) == 0)
-    {
-        return "Draw";
-    }
+  if (board[0][2] != 0 && board[0][2] == board[1][1] &&
+      board[1][1] == board[2][0]) {
+    return (board[0][2] == 1) ? 1 : 2;
+  }
 
-    return NULL;
+  // Check for draw
+  Cell empty_cells[SIZE * SIZE];
+  if (find_empty_cells(board, empty_cells, SIZE * SIZE) == 0) {
+    return 0;
+  }
+
+  return -1;
 }
