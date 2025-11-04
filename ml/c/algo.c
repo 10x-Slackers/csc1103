@@ -2,7 +2,7 @@
 #include "ml.h"
 
 static int load_model(NaiveBayesModel* model, const char* filename);
-static int ai_move(int board[SIZE][SIZE], const NaiveBayesModel model);
+static void ai_move(int board[SIZE][SIZE], const NaiveBayesModel model);
 static void flatten_board(int board[SIZE][SIZE], int* board_vector);
 
 int temp_board[SIZE][SIZE] = {
@@ -11,6 +11,11 @@ int temp_board[SIZE][SIZE] = {
     {2, 0, 0},
 };
 
+/**
+ * @brief: Main function to test AI move on a Tic-Tac-Toe board.
+ *
+ * @return: int: exit status
+ */
 int main() {
   NaiveBayesModel model =
       (NaiveBayesModel){.prior = {0.0}, .likelihood = {{{0.0}}}};
@@ -43,8 +48,16 @@ int load_model(NaiveBayesModel* model, const char* filename) {
   fclose(fp);
   return 0;
 }
-// TBI
-int ai_move(int board[SIZE][SIZE], const NaiveBayesModel model) {
+
+/**
+ * @brief: Determines and makes the best move for the AI on the Tic-Tac-Toe board.
+ *
+ * @param board: 2D array representing the current Tic-Tac-Toe board
+ * @param model: trained Naive Bayes model for evaluating board states
+ *
+ * @return: None
+ */
+void ai_move(int board[SIZE][SIZE], const NaiveBayesModel model) {
   // Implement AI move logic here
   Cell empty_cells[SIZE * SIZE];
   int empty_count = find_empty_cells(board, empty_cells, SIZE * SIZE);
