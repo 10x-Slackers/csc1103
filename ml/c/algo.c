@@ -50,7 +50,8 @@ int load_model(NaiveBayesModel* model, const char* filename) {
 }
 
 /**
- * @brief: Determines and makes the best move for the AI on the Tic-Tac-Toe board.
+ * @brief: Determines and makes the best move for the AI on the Tic-Tac-Toe
+ * board.
  *
  * @param board: 2D array representing the current Tic-Tac-Toe board
  * @param model: trained Naive Bayes model for evaluating board states
@@ -80,7 +81,6 @@ void ai_move(int board[SIZE][SIZE], const NaiveBayesModel model) {
     board[cell.row][cell.col] = 0;
   }
   board[best_move.row][best_move.col] = 2;  // Make the best move
-  return 0;
 }
 
 /**

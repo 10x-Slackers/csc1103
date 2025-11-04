@@ -9,7 +9,8 @@ typedef struct {
 } Cell;
 
 void print_board(int board[SIZE][SIZE]);
-int find_empty_cells(int board[SIZE][SIZE], Cell empty_cells[], int max_cells);
+int find_empty_cells(int const board[SIZE][SIZE], Cell empty_cells[],
+                     int max_cells);
 const int check_winner(int board[SIZE][SIZE]);
 
 #endif  // BOARD_H

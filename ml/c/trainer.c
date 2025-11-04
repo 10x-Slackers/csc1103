@@ -185,7 +185,7 @@ void train_model(const int (*board_vectors)[9], const int* outcomes_vector,
   // count of each occurence for each possible state (0,1,2)
   int cells_counts[OUTCOMES][CELLS][STATE] = {{{0}}};
   // count occurences of every outcome and cell state
-  for (int i = 0; i < training_len - 1; i++) {
+  for (int i = 0; i < training_len; i++) {
     int outcome = outcomes_vector[i];
     // keep track of outcome
     outcome_count[outcome] += 1;
@@ -195,7 +195,7 @@ void train_model(const int (*board_vectors)[9], const int* outcomes_vector,
       cells_counts[outcome][cell][state] += 1;
     }
   }
-  // computer prior probabilities with Laplace smoothing
+  // compute prior probabilities with Laplace smoothing
   for (int outcome = 0; outcome < OUTCOMES; outcome++) {
     // Formula used: (number of occurrences of outcome + ALPHA) /
     // (total number of training examples + number of outcomes * ALPHA)
@@ -203,7 +203,7 @@ void train_model(const int (*board_vectors)[9], const int* outcomes_vector,
                             (training_len + OUTCOMES * ALPHA);
   }
 
-  // Computer likelihood probabilities with Laplace smoothing
+  // Compute likelihood probabilities with Laplace smoothing
   for (int outcome = 0; outcome < OUTCOMES; outcome++) {
     for (int cell = 0; cell < CELLS; cell++) {
       for (int state = 0; state < STATE; state++) {
@@ -399,7 +399,7 @@ char*** convert_ttt_matrix(char** row) {
   for (int i = 0; i < 3; i++) {
     formatted[i] = (char**)malloc(3 * sizeof(char*));
     for (int j = 0; j < 3; j++) {
-      formatted[i][j] = row[i + j];
+      formatted[i][j] = row[i * 3 + j];
     }
   }
   return formatted;
