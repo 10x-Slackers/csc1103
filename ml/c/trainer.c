@@ -1,3 +1,10 @@
+/**
+ * @author: kitsuneez
+ * @date: 2025-11-04
+ * @description: Trains and tests a Naive Bayes classifier for Tic-Tac-Toe
+ * outcomes
+ */
+
 #include "trainer.h"
 
 /**
@@ -19,7 +26,7 @@ int main() {
   if (dataset_size % 10 != 0) {
     testing_len += 1;
   }
-  int(*board_vectors)[9] = malloc(dataset_size * sizeof(*board_vectors));
+  int (*board_vectors)[9] = malloc(dataset_size * sizeof(*board_vectors));
   if (!board_vectors) {
     return free_memory(data_entries, NULL,
                        "Error allocating memory for board vectors");

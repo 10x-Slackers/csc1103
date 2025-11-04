@@ -1,3 +1,10 @@
+/**
+ * @author: kitsuneez
+ * @date: 2025-11-04
+ * @description: Implements AI move logic for Tic-Tac-Toe using a Naive Bayes
+ * model.
+ */
+
 #include "../../logic/board.h"
 #include "ml.h"
 

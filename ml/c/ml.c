@@ -1,3 +1,9 @@
+/**
+ * @author: kitsuneez
+ * @date: 2025-11-04
+ * @description: Common functions used by algorithm and training of model.
+ */
+
 #include "ml.h"
 
 /**
