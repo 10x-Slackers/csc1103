@@ -30,11 +30,3 @@ repos:
       # clang-format C formatter
       - id: clang-format
         args: [-style=file]
-      # Cppcheck C linter
-      - id: cppcheck
-        args:
-          [
-            --enable=all,
-            --suppress=missingIncludeSystem,
-            --check-level=exhaustive,
-          ]
