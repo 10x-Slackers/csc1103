@@ -10,7 +10,7 @@
  *
  * @param board The 3x3 Tic-Tac-Toe board.
  */
-void print_board(int board[SIZE][SIZE]) {
+void print_board(const int board[SIZE][SIZE]) {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
       int cell = board[i][j];
@@ -34,12 +34,12 @@ void print_board(int board[SIZE][SIZE]) {
  * @param max_cells Maximum number of cells the array can hold.
  * @return int The number of empty cells found.
  */
-int find_empty_cells(int const board[SIZE][SIZE], Cell empty_cells[],
+int find_empty_cells(const int board[SIZE][SIZE], Cell empty_cells[],
                      int max_cells) {
   int count = 0;
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
-      if (board[i][j] == 0) {
+      if (board[i][j] == EMPTY) {
         if (count < max_cells) {
           empty_cells[count++] = (Cell){i, j};
         }
@@ -62,35 +62,35 @@ int find_empty_cells(int const board[SIZE][SIZE], Cell empty_cells[],
  *         - "Draw" if the board is full with no winner,
  *         - NULL if the game is still ongoing.
  */
-const int check_winner(int board[SIZE][SIZE]) {
+const int check_winner(const int board[SIZE][SIZE]) {
   // Check rows and columns
   for (int i = 0; i < SIZE; i++) {
-    if (board[i][0] != 0 && board[i][0] == board[i][1] &&
+    if (board[i][0] != EMPTY && board[i][0] == board[i][1] &&
         board[i][1] == board[i][2]) {
-      return (board[i][0] == 1) ? 1 : 2;
+      return (board[i][0] == X) ? X : O;
     }
 
-    if (board[0][i] != 0 && board[0][i] == board[1][i] &&
+    if (board[0][i] != EMPTY && board[0][i] == board[1][i] &&
         board[1][i] == board[2][i]) {
-      return (board[0][i] == 1) ? 1 : 2;
+      return (board[0][i] == X) ? X : O;
     }
   }
 
   // Check diagonals
-  if (board[0][0] != 0 && board[0][0] == board[1][1] &&
+  if (board[0][0] != EMPTY && board[0][0] == board[1][1] &&
       board[1][1] == board[2][2]) {
-    return (board[0][0] == 1) ? 1 : 2;
+    return (board[0][0] == X) ? X : O;
   }
 
-  if (board[0][2] != 0 && board[0][2] == board[1][1] &&
+  if (board[0][2] != EMPTY && board[0][2] == board[1][1] &&
       board[1][1] == board[2][0]) {
-    return (board[0][2] == 1) ? 1 : 2;
+    return (board[0][2] == X) ? X : O;
   }
 
   // Check for draw
   Cell empty_cells[SIZE * SIZE];
   if (find_empty_cells(board, empty_cells, SIZE * SIZE) == 0) {
-    return 0;
+    return EMPTY;  // Indicate draw with EMPTY
   }
 
   return -1;

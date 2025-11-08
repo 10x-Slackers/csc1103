@@ -4,9 +4,82 @@
  * @description: Trains and tests a Naive Bayes classifier for Tic-Tac-Toe
  * outcomes
  */
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "trainer.h"
+#define MAX_LINES 1000
+#define BUFFER 100
+#define OUTCOMES 2
+#define CELLS 9
+#define STATE 3
+#define ALPHA 1.0
+#define FEATURES 9
+#define MODEL_FILE "ml/naive_bayes.bin"
 
+typedef struct {
+  float negative;
+  float positive;
+} score_struct;
+
+typedef struct {
+  char*** board;
+  char* outcome;
+} DataEntry;
+
+typedef struct {
+  float prior[OUTCOMES];
+  float likelihood[OUTCOMES][CELLS][STATE];
+} NaiveBayesModel;
+
+typedef struct {
+  int outcome;
+  int prediction;
+} prediction_struct;
+
+typedef struct {
+  float tn;
+  float tp;
+  float fp;
+  float fn;
+  float prevalence;
+  float accuracy;
+  float balanced_accuracy;
+  float positive_predictive_value;
+  float negative_predictive_value;
+  float recall;
+  float specificity;
+  float f1_score;
+  float false_positive_rate;
+  float false_negative_rate;
+  int total;
+} statistics;
+
+static DataEntry* process_dataset(const char* filename, int* dataentries_size);
+static char*** convert_ttt_matrix(char** ttt);
+static char** str_split(char* a_str, const char a_delim);
+static void shuffle(DataEntry* data_entries, int size);
+static void vectorize(DataEntry data_entry, int board_vector[9], int formatted);
+static int get_vector_value(const char* symbol);
+static int free_memory(DataEntry* data_entries, int (*board_vectors)[9],
+                       const char* error_message);
+static int prepare_vectors(int (*board_vectors)[9], int* outcomes_vector,
+                           const DataEntry* data_entries,
+                           const int training_len);
+static void train_model(const int (*board_vectors)[9],
+                        const int* outcomes_vector, const int training_len,
+                        NaiveBayesModel* model);
+static int save_model(const NaiveBayesModel model);
+static prediction_struct* test_model(const int (*board_vectors)[9],
+                                     const int* outcomes_vector,
+                                     int training_len, int dataset_size,
+                                     const NaiveBayesModel* model);
+static statistics calculate_statistics(const prediction_struct* predictions,
+                                       const int size);
+static void print_statistics(const statistics stats);
+score_struct probability(const int board_vector[9],
+                         const NaiveBayesModel* model);
 /**
  * @brief: Main entry point of the program.
  *
@@ -26,7 +99,7 @@ int main() {
   if (dataset_size % 10 != 0) {
     testing_len += 1;
   }
-  int (*board_vectors)[9] = malloc(dataset_size * sizeof(*board_vectors));
+  int(*board_vectors)[9] = malloc(dataset_size * sizeof(*board_vectors));
   if (!board_vectors) {
     return free_memory(data_entries, NULL,
                        "Error allocating memory for board vectors");
@@ -46,9 +119,8 @@ int main() {
                        "Error during model testing");
   }
 
-  confusion_matrix cm =
-      calculate_confusion_matrix(&test_result[0], testing_len);
-  print_confusion_matrix(cm);
+  statistics stats = calculate_statistics(&test_result[0], testing_len);
+  print_statistics(stats);
   free(test_result);
   free_memory(data_entries, board_vectors, NULL);
   return 0;
@@ -63,42 +135,42 @@ int main() {
  *
  * @return: confusion_matrix struct containing the calculated metrics
  */
-confusion_matrix calculate_confusion_matrix(
-    const prediction_struct* predictions, int size) {
-  confusion_matrix cm = {0};
+statistics calculate_statistics(const prediction_struct* predictions,
+                                const int size) {
+  statistics stats = {0};
   for (int i = 0; i < size; i++) {
     int actual = predictions[i].outcome;
     int predicted = predictions[i].prediction;
     if (actual == 1 && predicted == 1) {
-      cm.tp++;
+      stats.tp++;
     } else if (actual == 0 && predicted == 0) {
-      cm.tn++;
+      stats.tn++;
     } else if (actual == 0 && predicted == 1) {
-      cm.fp++;
+      stats.fp++;
     } else if (actual == 1 && predicted == 0) {
-      cm.fn++;
+      stats.fn++;
     }
   }
-  cm.total = size;
-  cm.prevalence = (float)(cm.tp + cm.fn) / size;
-  cm.accuracy = (float)(cm.tp + cm.tn) / size;
-  cm.true_positive_rate =
-      cm.tp + cm.fn > 0 ? (float)cm.tp / (cm.tp + cm.fn) : 0.0;
-  cm.true_negative_rate =
-      cm.tn + cm.fp > 0 ? (float)cm.tn / (cm.tn + cm.fp) : 0.0;
-  cm.positive_predictive_value =
-      cm.tp + cm.fp > 0 ? (float)cm.tp / (cm.tp + cm.fp) : 0.0;
-  cm.negative_predictive_value =
-      cm.tn + cm.fn > 0 ? (float)cm.tn / (cm.tn + cm.fn) : 0.0;
-  cm.f1_score = (2 * cm.tp + cm.fp + cm.fn) > 0
-                    ? (2.0 * cm.tp) / (2 * cm.tp + cm.fp + cm.fn)
-                    : 0.0;
-  cm.false_positive_rate =
-      cm.fp + cm.tn > 0 ? (float)cm.fp / (cm.fp + cm.tn) : 0.0;
-  cm.false_negative_rate =
-      cm.fn + cm.tp > 0 ? (float)cm.fn / (cm.fn + cm.tp) : 0.0;
-  cm.balanced_accuracy = (cm.true_positive_rate + cm.true_negative_rate) / 2.0;
-  return cm;
+  stats.total = size;
+  stats.prevalence = (float)(stats.tp + stats.fn) / size;
+  stats.accuracy = (float)(stats.tp + stats.tn) / size;
+  stats.recall =
+      stats.tp + stats.fn > 0 ? (float)stats.tp / (stats.tp + stats.fn) : 0.0;
+  stats.specificity =
+      stats.tn + stats.fp > 0 ? (float)stats.tn / (stats.tn + stats.fp) : 0.0;
+  stats.positive_predictive_value =
+      stats.tp + stats.fp > 0 ? (float)stats.tp / (stats.tp + stats.fp) : 0.0;
+  stats.negative_predictive_value =
+      stats.tn + stats.fn > 0 ? (float)stats.tn / (stats.tn + stats.fn) : 0.0;
+  stats.f1_score = (2 * stats.tp + stats.fp + stats.fn) > 0
+                       ? (2.0 * stats.tp) / (2 * stats.tp + stats.fp + stats.fn)
+                       : 0.0;
+  stats.false_positive_rate =
+      stats.fp + stats.tn > 0 ? (float)stats.fp / (stats.fp + stats.tn) : 0.0;
+  stats.false_negative_rate =
+      stats.fn + stats.tp > 0 ? (float)stats.fn / (stats.fn + stats.tp) : 0.0;
+  stats.balanced_accuracy = (stats.recall + stats.specificity) / 2.0;
+  return stats;
 }
 
 /**
@@ -108,20 +180,20 @@ confusion_matrix calculate_confusion_matrix(
  *
  * @return: None
  */
-void print_confusion_matrix(confusion_matrix cm) {
+void print_statistics(const statistics stats) {
   printf("Confusion Matrix:\n");
-  printf("TP: %.0f, TN: %.0f, FP: %.0f, FN: %.0f\n", cm.tp, cm.tn, cm.fp,
-         cm.fn);
-  printf("Prevalence: %.4f\n", cm.prevalence);
-  printf("Accuracy: %.4f\n", cm.accuracy);
-  printf("Balanced Accuracy: %.4f\n", cm.balanced_accuracy);
-  printf("Positive Predictive Value: %.4f\n", cm.positive_predictive_value);
-  printf("Negative Predictive Value: %.4f\n", cm.negative_predictive_value);
-  printf("True Positive Rate: %.4f\n", cm.true_positive_rate);
-  printf("True Negative Rate: %.4f\n", cm.true_negative_rate);
-  printf("F1 Score: %.4f\n", cm.f1_score);
-  printf("False Positive Rate: %.4f\n", cm.false_positive_rate);
-  printf("False Negative Rate: %.4f\n", cm.false_negative_rate);
+  printf("TP: %.0f, TN: %.0f, FP: %.0f, FN: %.0f\n", stats.tp, stats.tn,
+         stats.fp, stats.fn);
+  printf("Prevalence: %.4f\n", stats.prevalence);
+  printf("Accuracy: %.4f\n", stats.accuracy);
+  printf("Balanced Accuracy: %.4f\n", stats.balanced_accuracy);
+  printf("Positive Predictive Value: %.4f\n", stats.positive_predictive_value);
+  printf("Negative Predictive Value: %.4f\n", stats.negative_predictive_value);
+  printf("Recall: %.4f\n", stats.recall);
+  printf("Specificity: %.4f\n", stats.specificity);
+  printf("F1 Score: %.4f\n", stats.f1_score);
+  printf("False Positive Rate: %.4f\n", stats.false_positive_rate);
+  printf("False Negative Rate: %.4f\n", stats.false_negative_rate);
 }
 
 /**
@@ -163,7 +235,7 @@ prediction_struct* test_model(const int (*board_vectors)[9],
  *
  * @return int: 0 on success, 1 on failure
  */
-int save_model(NaiveBayesModel model) {
+int save_model(const NaiveBayesModel model) {
   FILE* fp = fopen(MODEL_FILE, "wb");
   if (fp == NULL) {
     printf("Could not open file to save model\n");
@@ -186,7 +258,7 @@ int save_model(NaiveBayesModel model) {
  * @return: None
  */
 void train_model(const int (*board_vectors)[9], const int* outcomes_vector,
-                 int training_len, NaiveBayesModel* model) {
+                 const int training_len, NaiveBayesModel* model) {
   // initializes count for positive and negative classes
   int outcome_count[OUTCOMES] = {0};
   // count of each occurence for each possible state (0,1,2)
@@ -419,7 +491,7 @@ char*** convert_ttt_matrix(char** row) {
  * @param a_delim: The delimiter character.
  * @return: char**: Pointer to an array of strings.
  */
-char** str_split(char* a_str, char a_delim) {
+char** str_split(char* a_str, const char a_delim) {
   char** result = 0;
   size_t count = 0;
   char* tmp = a_str;
@@ -452,4 +524,40 @@ char** str_split(char* a_str, char a_delim) {
   }
 
   return result;
+}
+
+/**
+ * @brief: Calculates the probability scores for each outcome given a board
+ * vector and a trained Naive Bayes model.
+ *
+ * @param board_vector  1D integer array (length 9) representing the
+ *                      vectorized board
+ * @param model         Pointer to the trained NaiveBayesModel
+ * @return score_struct Containing the probability scores for negative and
+ *                      positive outcomes
+ */
+score_struct probability(const int board_vector[9],
+                         const NaiveBayesModel* model) {
+  float log_scores[OUTCOMES] = {0.0};
+  for (int outcome = 0; outcome < OUTCOMES; outcome++) {
+    float s = log(model->prior[outcome]);
+    for (int i = 0; i < CELLS; i++) {
+      int cell_value = board_vector[i];
+      s += log(model->likelihood[outcome][i][cell_value]);
+    }
+    log_scores[outcome] = s;
+  }
+
+  float max_score =
+      log_scores[0] > log_scores[1] ? log_scores[0] : log_scores[1];
+  float total_log_score = 0;
+  for (int outcome = 0; outcome < OUTCOMES; outcome++) {
+    total_log_score += exp(log_scores[outcome] - max_score);
+  }
+  float lse = max_score + log(total_log_score);
+  for (int outcome = 0; outcome < OUTCOMES; outcome++) {
+    log_scores[outcome] = exp(log_scores[outcome] - lse);
+  }
+  score_struct score = {.negative = log_scores[0], .positive = log_scores[1]};
+  return score;
 }
