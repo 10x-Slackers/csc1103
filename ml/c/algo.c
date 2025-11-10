@@ -20,9 +20,9 @@ int main() {
     printf("Error loading model");
     return 1;
   }
-  print_board(temp_board);
+  print_board(temp_board, NULL);
   ai_move(temp_board, model);
-  print_board(temp_board);
+  print_board(temp_board, NULL);
   return 0;
 }
 
