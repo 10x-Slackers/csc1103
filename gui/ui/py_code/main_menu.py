@@ -2,7 +2,7 @@ import gi
 
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gdk  # noqa
-from ui import tictactoe_grid  # noqa
+from gui.ui.py_code import tictactoe_grid  # noqa
 
 """
 Main menu for the Tic Tac Toe.
