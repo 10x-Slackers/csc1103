@@ -208,4 +208,5 @@ static void apply_css(void) {
   gtk_style_context_add_provider_for_display(
       display, GTK_STYLE_PROVIDER(style_provider),
       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref(style_provider);
 }
