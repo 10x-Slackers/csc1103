@@ -65,9 +65,8 @@ void ai_move(int board[SIZE][SIZE], const NaiveBayesModel model) {
     Cell cell = empty_cells[i];
     // Simulate move
     board[cell.row][cell.col] = 2;  // Assume AI is player 2
-    flatten_board(board, board_vector);
     // Evaluate board
-    score_struct p_score = probability(board_vector, &model);
+    score_struct p_score = probability(board, &model);
     float p_positive = p_score.positive;
     if (p_positive > best_score) {
       best_score = p_positive;
@@ -80,38 +79,24 @@ void ai_move(int board[SIZE][SIZE], const NaiveBayesModel model) {
 }
 
 /**
- * @brief: Flattens a 2D Tic-Tac-Toe board into a 1D array.
- *
- * @param board: 2D array representing the Tic-Tac-Toe board
- * @param board_vector: pointer to a 1D array to hold the flattened board
- * @return: void
- */
-void flatten_board(int board[SIZE][SIZE], int* board_vector) {
-  for (int i = 0; i < SIZE; i++) {
-    for (int j = 0; j < SIZE; j++) {
-      board_vector[i * SIZE + j] = board[i][j];
-    }
-  }
-}
-
-/**
  * @brief: Calculates the probability scores for each outcome given a board
  * vector and a trained Naive Bayes model.
  *
- * @param board_vector  1D integer array (length 9) representing the
- *                      vectorized board
+ * @param board         2D array representing the Tic-Tac-Toe board
  * @param model         Pointer to the trained NaiveBayesModel
  * @return score_struct Containing the probability scores for negative and
  *                      positive outcomes
  */
-score_struct probability(const int board_vector[9],
+score_struct probability(const int board[SIZE][SIZE],
                          const NaiveBayesModel* model) {
   float log_scores[OUTCOMES] = {0.0};
   for (int outcome = 0; outcome < OUTCOMES; outcome++) {
     float s = log(model->prior[outcome]);
-    for (int i = 0; i < CELLS; i++) {
-      int cell_value = board_vector[i];
-      s += log(model->likelihood[outcome][i][cell_value]);
+    for (int row = 0; row < SIZE; row++) {
+      for (int col = 0; col < SIZE; col++) {
+        int cell_value = board[row][col];
+        s += log(model->likelihood[outcome][row][col][cell_value]);
+      }
     }
     log_scores[outcome] = s;
   }
