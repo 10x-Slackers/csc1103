@@ -9,8 +9,10 @@
  * Cells in a row are separated by ' | '.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
+ * @param score_board Pointer to the score_board_t struct for displaying scores.
  */
-void print_board(const int board[SIZE][SIZE]) {
+void print_board(const int board[SIZE][SIZE],
+                 const score_board_t* score_board) {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
       int cell = board[i][j];
@@ -18,21 +20,25 @@ void print_board(const int board[SIZE][SIZE]) {
       if (cell == EMPTY) {
         printf("%d", cell_num);
       } else {
-        printf("%c", cell);
+        printf("%c", cell == X ? 'X' : 'O');
       }
       if (j < SIZE - 1) printf(" | ");
     }
     printf("\n");
     if (i < SIZE - 1) printf("---------\n");
   }
-  printf("Player X | Tie | Player O\n");
-  // printf("   %d     |  %d  |    %d\n\n");
+  printf("\n");
+  if (score_board != NULL) {
+    printf("Player X | Tie | Player O\n");
+    printf("   %d     |  %d  |    %d\n\n", score_board->score_X,
+           score_board->score_tie, score_board->score_O);
+  }
 }
 
 /**
  * @brief Find all empty cells on the Tic-Tac-Toe board.
  *
- * An empty cell is one containing a space (' ').
+ * An empty cell is one containing 0.
  * Stores the coordinates of empty cells in the provided array.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
@@ -62,7 +68,7 @@ int find_empty_cells(const int board[SIZE][SIZE], Cell empty_cells[],
  * If no winner and no empty cells remain, it's a draw.
  *
  * @param board The 3x3 Tic-Tac-Toe board.
- * @return const char* Returns:
+ * @return const int Returns:
  *         - "X" if player X wins,
  *         - "O" if player O wins,
  *         - "Draw" if the board is full with no winner,

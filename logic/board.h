@@ -11,7 +11,13 @@ typedef struct {
   int col;
 } Cell;
 
-void print_board(const int board[SIZE][SIZE]);
+typedef struct {
+  int score_X;
+  int score_O;
+  int score_tie;
+} score_board_t;
+
+void print_board(const int board[SIZE][SIZE], const score_board_t* score_board);
 int find_empty_cells(const int board[SIZE][SIZE], Cell empty_cells[],
                      int max_cells);
 const int check_winner(const int board[SIZE][SIZE]);
