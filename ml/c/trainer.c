@@ -20,6 +20,7 @@
 #define ALPHA 1.0
 #define FEATURES 9
 #define MODEL_FILE "ml/naive_bayes.bin"
+#define SEED 123
 
 typedef struct {
   float negative;
@@ -73,6 +74,7 @@ static void shuffle(DataEntry* data_entries, int size);
 static int free_memory(DataEntry* data_entries, const char* error_message);
 
 int main() {
+  srand(SEED);
   int dataset_size;
   DataEntry* data_entries =
       process_dataset("dataset/tic-tac-toe.data", &dataset_size);
