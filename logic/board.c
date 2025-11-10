@@ -14,13 +14,19 @@ void print_board(const int board[SIZE][SIZE]) {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
       int cell = board[i][j];
-      printf("%d", cell);
+      int cell_num = i * SIZE + j + 1;
+      if (cell == EMPTY) {
+        printf("%d", cell_num);
+      } else {
+        printf("%c", cell);
+      }
       if (j < SIZE - 1) printf(" | ");
     }
     printf("\n");
     if (i < SIZE - 1) printf("---------\n");
   }
-  printf("\n");
+  printf("Player X | Tie | Player O\n");
+  // printf("   %d     |  %d  |    %d\n\n");
 }
 
 /**
