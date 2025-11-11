@@ -54,13 +54,8 @@ typedef struct {
 } statistics;
 
 static DataEntry* process_dataset(const char* filename, int* dataentries_size);
-static void convert_ttt_matrix(char** row, int board[SIZE][SIZE]);
-static char** str_split(char* a_str, const char a_delim);
-static void shuffle(DataEntry* data_entries, int size);
-static int get_vector_value(const char* symbol);
 static NaiveBayesModel train_model(const DataEntry* data_entries,
                                    const int training_len);
-static int free_memory(DataEntry* data_entries, const char* error_message);
 static int save_model(const NaiveBayesModel model);
 static prediction_struct* test_model(const DataEntry* data_entries,
                                      const int training_len,
@@ -71,6 +66,11 @@ static score_struct probability(const int board[SIZE][SIZE],
 static statistics calculate_statistics(const prediction_struct* predictions,
                                        const int size);
 static void print_statistics(const statistics stats);
+static void convert_ttt_matrix(char** row, int board[SIZE][SIZE]);
+static int get_vector_value(const char* symbol);
+static char** str_split(char* a_str, const char a_delim);
+static void shuffle(DataEntry* data_entries, int size);
+static int free_memory(DataEntry* data_entries, const char* error_message);
 
 int main() {
   int dataset_size;
@@ -151,99 +151,6 @@ DataEntry* process_dataset(const char* filename, int* dataentries_size) {
 }
 
 /**
- * @brief: Converts a flat array of 9 elements into a 3x3 Tic-Tac-Toe board.
- *
- * @param row: The flat array of 9 elements.
- * @return: char***: Pointer to a 3x3 array representing the Tic-Tac-Toe board.
- */
-void convert_ttt_matrix(char** row, int board[SIZE][SIZE]) {
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      board[i][j] = get_vector_value(row[i * 3 + j]);
-    }
-  }
-}
-
-/**
- * @brief: Splits a string into an array of strings based on a delimiter.
- *
- * @param a_str: The string to split.
- * @param a_delim: The delimiter character.
- * @return: char**: Pointer to an array of strings.
- */
-char** str_split(char* a_str, const char a_delim) {
-  char** result = 0;
-  size_t count = 0;
-  char* tmp = a_str;
-  char const* last_comma = 0;
-  char delim[2];
-  delim[0] = a_delim;
-  delim[1] = 0;
-
-  while (*tmp) {
-    if (a_delim == *tmp) {
-      count++;
-      last_comma = tmp;
-    }
-    tmp++;
-  }
-  count += last_comma < (a_str + strlen(a_str) - 1);
-  count++;
-
-  result = (char**)malloc(sizeof(char*) * count);
-
-  if (result) {
-    size_t idx = 0;
-    char const* value = strtok(a_str, delim);
-
-    while (value) {
-      *(result + idx++) = strdup(value);
-      value = strtok(0, delim);
-    }
-    *(result + idx) = 0;
-  }
-
-  return result;
-}
-
-/**
- * @brief: shuffles the given array of Dataentry so array will be 'randomized"
- *
- * @param data_entries: list of data entries to be shuffled
- * @param size: size of array
- *
- * @return None
- */
-void shuffle(DataEntry* data_entries, int size) {
-  if (size > 1) {
-    for (int i = 0; i < size - 1; i++) {
-      int j = i + rand() % (size - i);
-      DataEntry temp = data_entries[j];
-      data_entries[j] = data_entries[i];
-      data_entries[i] = temp;
-    }
-  }
-}
-
-/**
- * @brief: converts a symbol to its corresponding integer value
- *
- * @param symbol: symbol to be converted
- *
- * @return: int: corresponding integer value of the symbol
- */
-int get_vector_value(const char* symbol) {
-  if (strcmp(symbol, "positive\n") == 0 || strcmp(symbol, "positive") == 0)
-    return 1;
-  if (strcmp(symbol, "negative\n") == 0 || strcmp(symbol, "negative") == 0)
-    return 0;
-  if (strcmp(symbol, "x") == 0) return X;
-  if (strcmp(symbol, "o") == 0) return O;
-  if (strcmp(symbol, "b") == 0) return EMPTY;
-  return -1;
-}
-
-/**
  * @brief: Train the Naive Bayes classifier by updating counts based on the
  * provided data.
  *
@@ -291,24 +198,6 @@ NaiveBayesModel train_model(const DataEntry* data_entries,
     }
   }
   return model;
-}
-
-/**
- * @brief: Free allocated memory and optionally print an error message.
- *
- * @param data_entries   Array of DataEntry objects to be freed
- * @param error_message  Optional error message; if non-NULL it will be
- *                       printed to stderr
- *
- * @return: 1
- */
-int free_memory(DataEntry* data_entries, const char* error_message) {
-  if (error_message) {
-    fprintf(stderr, "%s\n", error_message);
-  }
-  // if we have reached depth 0, free encased arrays and return
-  free(data_entries);
-  return 1;
 }
 
 /**
@@ -450,4 +339,116 @@ void print_statistics(const statistics stats) {
   printf("Recall: %.4f\n", stats.recall);
   printf("F1 Score: %.4f\n", stats.f1_score);
   printf("Total Samples: %d\n", stats.total);
+}
+
+/**
+ * @brief: Converts a flat array of 9 elements into a 3x3 Tic-Tac-Toe board.
+ *
+ * @param row: The flat array of 9 elements.
+ * @param board: The 3x3 array to store the converted board.
+ * @return: char***: Pointer to a 3x3 array representing the Tic-Tac-Toe board.
+ */
+void convert_ttt_matrix(char** row, int board[SIZE][SIZE]) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      board[i][j] = get_vector_value(row[i * 3 + j]);
+    }
+  }
+}
+
+/**
+ * @brief: converts a symbol to its corresponding integer value
+ *
+ * @param symbol: symbol to be converted
+ *
+ * @return: int: corresponding integer value of the symbol
+ */
+int get_vector_value(const char* symbol) {
+  if (strcmp(symbol, "positive\n") == 0 || strcmp(symbol, "positive") == 0)
+    return 1;
+  if (strcmp(symbol, "negative\n") == 0 || strcmp(symbol, "negative") == 0)
+    return 0;
+  if (strcmp(symbol, "x") == 0) return X;
+  if (strcmp(symbol, "o") == 0) return O;
+  if (strcmp(symbol, "b") == 0) return EMPTY;
+  return -1;
+}
+
+/**
+ * @brief: Splits a string into an array of strings based on a delimiter.
+ *
+ * @param a_str: The string to split.
+ * @param a_delim: The delimiter character.
+ * @return: char**: Pointer to an array of strings.
+ */
+char** str_split(char* a_str, const char a_delim) {
+  char** result = 0;
+  size_t count = 0;
+  char* tmp = a_str;
+  char const* last_comma = 0;
+  char delim[2];
+  delim[0] = a_delim;
+  delim[1] = 0;
+
+  while (*tmp) {
+    if (a_delim == *tmp) {
+      count++;
+      last_comma = tmp;
+    }
+    tmp++;
+  }
+  count += last_comma < (a_str + strlen(a_str) - 1);
+  count++;
+
+  result = (char**)malloc(sizeof(char*) * count);
+
+  if (result) {
+    size_t idx = 0;
+    char const* value = strtok(a_str, delim);
+
+    while (value) {
+      *(result + idx++) = strdup(value);
+      value = strtok(0, delim);
+    }
+    *(result + idx) = 0;
+  }
+
+  return result;
+}
+
+/**
+ * @brief: shuffles the given array of Dataentry so array will be 'randomized"
+ *
+ * @param data_entries: list of data entries to be shuffled
+ * @param size: size of array
+ *
+ * @return None
+ */
+void shuffle(DataEntry* data_entries, int size) {
+  if (size > 1) {
+    for (int i = 0; i < size - 1; i++) {
+      int j = i + rand() % (size - i);
+      DataEntry temp = data_entries[j];
+      data_entries[j] = data_entries[i];
+      data_entries[i] = temp;
+    }
+  }
+}
+
+/**
+ * @brief: Free allocated memory and optionally print an error message.
+ *
+ * @param data_entries   Array of DataEntry objects to be freed
+ * @param error_message  Optional error message; if non-NULL it will be
+ *                       printed to stderr
+ *
+ * @return: 1
+ */
+int free_memory(DataEntry* data_entries, const char* error_message) {
+  if (error_message) {
+    fprintf(stderr, "%s\n", error_message);
+  }
+  // if we have reached depth 0, free encased arrays and return
+  free(data_entries);
+  return 1;
 }
