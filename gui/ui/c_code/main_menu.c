@@ -9,13 +9,14 @@
 
 #include <gtk/gtk.h>
 
+#include "pick_difficulty.h"
 #include "tic_tac_toe_grid.h"
 
 /* Constants */
-#define WINDOW_LENGTH 300
-#define WINDOW_WIDTH 280
-#define SPACING 15
-#define MARGIN 30
+#define WINDOW_LENGTH 400
+#define WINDOW_WIDTH 500
+#define SPACING 20
+#define MARGIN 40
 #define XALIGN 0.5
 
 /* Function prototypes */
@@ -40,9 +41,9 @@ static void add_quit_button(GtkBox* vbox);
  */
 void main_menu(GtkApplication* app) {
   GtkWidget* window = gtk_application_window_new(app);
-  gtk_window_set_title(GTK_WINDOW(window), "Tic Tac Toe");
+  gtk_window_set_title(GTK_WINDOW(window), "Tic Tac Toe Fun!");
   gtk_window_set_default_size(GTK_WINDOW(window), WINDOW_LENGTH, WINDOW_WIDTH);
-  gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+  gtk_window_set_resizable(GTK_WINDOW(window), TRUE);
 
   apply_css();
 
@@ -81,7 +82,7 @@ static void setup_main_container(GtkBox* vbox) {
  * @param vbox Pointer to the GtkBox container to append the label to
  */
 static void add_welcome_label(GtkBox* vbox) {
-  GtkWidget* label = gtk_label_new("Welcome to Tic Tac Toe!");
+  GtkWidget* label = gtk_label_new("🎮 Tic Tac Toe Fun! 🎮");
   gtk_label_set_xalign(GTK_LABEL(label), XALIGN);
   gtk_widget_set_name(label, "welcome");
   gtk_box_append(vbox, label);
@@ -99,11 +100,13 @@ static void add_welcome_label(GtkBox* vbox) {
 static void add_player_buttons(GtkBox* vbox, GtkApplication* app) {
   GtkWidget* button_container = gtk_box_new(GTK_ORIENTATION_VERTICAL, SPACING);
 
-  GtkWidget* btn_1p = gtk_button_new_with_label("1 Player");
+  GtkWidget* btn_1p = gtk_button_new_with_label("🤖 Play vs Computer");
+  gtk_widget_set_name(btn_1p, "player-button");
   g_signal_connect(btn_1p, "clicked", G_CALLBACK(on_one_player_clicked), app);
   gtk_box_append(GTK_BOX(button_container), btn_1p);
 
-  GtkWidget* btn_2p = gtk_button_new_with_label("2 Player");
+  GtkWidget* btn_2p = gtk_button_new_with_label("👥 Play with Friend");
+  gtk_widget_set_name(btn_2p, "player-button");
   g_signal_connect(btn_2p, "clicked", G_CALLBACK(on_two_player_clicked), app);
   gtk_box_append(GTK_BOX(button_container), btn_2p);
 
@@ -135,7 +138,8 @@ static void add_spacer(GtkBox* vbox) {
  */
 static void add_quit_button(GtkBox* vbox) {
   GtkWidget* quit_container = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, SPACING);
-  GtkWidget* btn_quit = gtk_button_new_with_label("Quit Game");
+  GtkWidget* btn_quit = gtk_button_new_with_label("Exit");
+  gtk_widget_set_name(btn_quit, "quit-button");
   g_signal_connect(btn_quit, "clicked", G_CALLBACK(on_quit_clicked), NULL);
   gtk_box_append(GTK_BOX(quit_container), btn_quit);
   gtk_box_append(vbox, quit_container);
@@ -152,7 +156,7 @@ static void add_quit_button(GtkBox* vbox) {
 static void on_one_player_clicked(GtkButton* button, gpointer user_data) {
   GtkApplication* app = GTK_APPLICATION(user_data);
   GtkWindow* window = GTK_WINDOW(gtk_widget_get_root(GTK_WIDGET(button)));
-  launch_game(app, "1P");
+  pick_difficulty(app);
   gtk_window_close(window);
 }
 
@@ -188,17 +192,73 @@ static void on_quit_clicked(GtkButton* button, gpointer user_data) {
 /**
  * @brief Applies custom CSS styling to the application
  *
- * Loads and applies custom CSS rules for styling the welcome label
- * with custom fonts, colors, and text effects.
+ * Loads and applies custom CSS rules for styling with bright colors,
+ * rounded corners, and fun animations for a kid-friendly interface.
  */
 static void apply_css(void) {
   const gchar* css =
+      "window {"
+      "   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"
+      "   background-color: #667eea;"
+      "}"
+      ""
       "label#welcome {"
-      "   font-family: sans-serif, cursive, \"Comic Sans MS\";"
-      "   font-size: 28px;"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;"
+      "   font-size: 36px;"
       "   font-weight: bold;"
-      "   color: #ff6600;"
-      "   text-shadow: 1px 1px 2px #ffaa33;"
+      "   color: #ffffff;"
+      "   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3),"
+      "                -1px -1px 2px rgba(255, 255, 255, 0.2);"
+      "   padding: 20px;"
+      "   margin-bottom: 30px;"
+      "}"
+      ""
+      "button#player-button {"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;"
+      "   font-size: 22px;"
+      "   font-weight: bold;"
+      "   color: #1a1a2e;"
+      "   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);"
+      "   background-color: #ffd700;"
+      "   border: 4px solid #1a1a2e;"
+      "   border-radius: 25px;"
+      "   padding: 20px 40px;"
+      "   min-height: 70px;"
+      "   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3),"
+      "               inset 0 1px 0 rgba(255, 255, 255, 0.3);"
+      "   transition: all 0.3s ease;"
+      "}"
+      ""
+      "button#player-button:hover {"
+      "   background: linear-gradient(135deg, #ffe44d 0%, #fff9a3 100%);"
+      "   background-color: #ffe44d;"
+      "   transform: scale(1.05);"
+      "   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4),"
+      "               inset 0 1px 0 rgba(255, 255, 255, 0.4);"
+      "}"
+      ""
+      "button#player-button:active {"
+      "   transform: scale(0.98);"
+      "   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);"
+      "}"
+      ""
+      "button#quit-button {"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;"
+      "   font-size: 16px;"
+      "   font-weight: bold;"
+      "   color: #1a1a2e;"
+      "   background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);"
+      "   background-color: #ff6b6b;"
+      "   border: 3px solid #1a1a2e;"
+      "   border-radius: 20px;"
+      "   padding: 12px 30px;"
+      "   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"
+      "}"
+      ""
+      "button#quit-button:hover {"
+      "   background: linear-gradient(135deg, #ff8787 0%, #ffa5a5 100%);"
+      "   background-color: #ff8787;"
+      "   transform: scale(1.03);"
       "}";
 
   GtkCssProvider* style_provider = gtk_css_provider_new();

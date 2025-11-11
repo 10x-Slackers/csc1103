@@ -19,8 +19,9 @@
 // CONSTANTS
 // ============================================================================
 
-#define TTT_GRID_SIZE 150
+#define TTT_GRID_SIZE 175
 #define SPACING 10
+#define VBOX_SPACING 20
 #define MARGIN 30
 #define PADDING 20
 #define WINDOW_SIZE ((TTT_GRID_SIZE * 3) + (SPACING * 2) + (MARGIN * 2))
@@ -163,15 +164,17 @@ void launch_game(GtkApplication* app, char* mode) {
   apply_css();
 
   GtkWidget* window = gtk_application_window_new(app);
-  gtk_window_set_title(GTK_WINDOW(window), "Tic Tac Toe Grid");
+  gtk_window_set_title(GTK_WINDOW(window), "Let's Play!");
   gtk_window_set_default_size(GTK_WINDOW(window), WINDOW_SIZE, WINDOW_SIZE);
   gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
-  GtkBox* vbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 20));
+  GtkBox* vbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, VBOX_SPACING));
+  gtk_widget_set_hexpand(GTK_WIDGET(vbox), TRUE);
+  gtk_widget_set_vexpand(GTK_WIDGET(vbox), TRUE);
   GtkGrid* grid = GTK_GRID(gtk_grid_new());
 
-  GtkWidget* top_spacer = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
-  gtk_widget_set_vexpand(top_spacer, TRUE);
+  GtkWidget* top_spacer = gtk_box_new(GTK_ORIENTATION_VERTICAL, VBOX_SPACING);
+  gtk_widget_set_vexpand(top_spacer, FALSE);
   gtk_box_append(vbox, top_spacer);
 
   create_turn_label(vbox);
@@ -258,7 +261,7 @@ static void create_turn_label(GtkBox* vbox) {
   GtkWidget* label_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 40);
   gtk_widget_set_halign(label_box, GTK_ALIGN_CENTER);
 
-  game.turn_label = gtk_label_new("Player X's Turn");
+  game.turn_label = gtk_label_new("🎮 Player X's Turn");
   gtk_widget_add_css_class(game.turn_label, "turn-x");
 
   gtk_box_append(GTK_BOX(label_box), game.turn_label);
@@ -276,7 +279,11 @@ static void create_turn_label(GtkBox* vbox) {
 static void create_game_grid(GtkGrid* grid, GtkBox* vbox) {
   gtk_grid_set_row_spacing(grid, SPACING);
   gtk_grid_set_column_spacing(grid, SPACING);
+
   gtk_widget_set_halign(GTK_WIDGET(grid), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign(GTK_WIDGET(grid), GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand(GTK_WIDGET(grid), TRUE);
+  gtk_widget_set_vexpand(GTK_WIDGET(grid), TRUE);
 
   for (int i = 0; i < TTT_BUTTONS; i++) {
     game.buttons[i] = gtk_button_new();
@@ -306,14 +313,14 @@ static void create_scoreboard(GtkBox* vbox) {
   gtk_widget_set_halign(scoreboard_box, GTK_ALIGN_CENTER);
 
   const char* player_o_label =
-      (strcmp(game.game_mode, "1P") == 0) ? "Computer" : "Player O";
+      (strcmp(game.game_mode, "1P") == 0) ? "🤖 Computer" : "⭕ Player O";
 
   struct {
     const char* label_text;
     const char* css_class;
     GtkWidget** score_label_ptr;
-  } columns[] = {{"Player X", "score-x", &game.score_x_label},
-                 {"Tie", "score-tie", &game.score_tie_label},
+  } columns[] = {{"❌ Player X", "score-x", &game.score_x_label},
+                 {"🤝 Tie", "score-tie", &game.score_tie_label},
                  {player_o_label, "score-o", &game.score_o_label}};
 
   for (int i = 0; i < 3; i++) {
@@ -345,7 +352,8 @@ static void create_control_buttons(GtkBox* vbox, GtkApplication* app) {
   GtkWidget* button_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, PADDING);
   gtk_widget_set_halign(button_box, GTK_ALIGN_CENTER);
 
-  GtkWidget* back_button = gtk_button_new_with_label("Back to Main Menu");
+  GtkWidget* back_button = gtk_button_new_with_label("⬅️ Back to Menu");
+  gtk_widget_set_name(back_button, "back-button");
   g_signal_connect(back_button, "clicked", G_CALLBACK(on_back_clicked), app);
 
   gtk_box_append(GTK_BOX(button_box), back_button);
@@ -375,11 +383,11 @@ static void update_turn_label(void) {
   const char* css_class;
 
   if (game.current_player[0] == 'X') {
-    label_text = "Player X's Turn";
+    label_text = "🎮 Player X's Turn";
     css_class = "turn-x";
   } else {
-    label_text = (strcmp(game.game_mode, "1P") == 0) ? "Computer's Turn"
-                                                     : "Player O's Turn";
+    label_text = (strcmp(game.game_mode, "1P") == 0) ? "🤖 Computer's Turn"
+                                                     : "🎮 Player O's Turn";
     css_class = "turn-o";
   }
 
@@ -465,28 +473,27 @@ static void on_button_clicked(GtkButton* button, gpointer user_data) {
     if (strcmp(winner, "Tie") == 0) {
       printf("It's a Tie!\n");
       gtk_label_set_text(GTK_LABEL(game.turn_label),
-                         "It's a Tie! Click any cell to start a new game");
+                         "🤝 It's a Tie! Click any cell to play again");
       gtk_widget_remove_css_class(game.turn_label, "turn-x");
       gtk_widget_remove_css_class(game.turn_label, "turn-o");
-      gtk_widget_add_css_class(game.turn_label, "game-over");
+      gtk_widget_add_css_class(game.turn_label, "game-over-tie");
       update_scoreboard("Tie");
     } else {
       // Handle X or O win
       const char* winner_text;
       if (strcmp(winner, "X") == 0) {
-        printf("Player X wins!\n");
-        winner_text = "Player X Wins! Click any cell to start a new game";
+        winner_text = "🎉 Player X Wins! Click any cell to play again";
+        gtk_widget_add_css_class(game.turn_label, "game-over-x");
       } else {
-        printf("Player O wins!\n");
         winner_text = (strcmp(game.game_mode, "1P") == 0)
-                          ? "Computer Wins! Click any cell to play again"
-                          : "Player O Wins! Click any cell to play again";
+                          ? "🤖 Computer Wins! Click any cell to try again"
+                          : "🎉 Player O Wins! Click any cell to play again";
+        gtk_widget_add_css_class(game.turn_label, "game-over-o");
       }
 
       gtk_label_set_text(GTK_LABEL(game.turn_label), winner_text);
       gtk_widget_remove_css_class(game.turn_label, "turn-x");
       gtk_widget_remove_css_class(game.turn_label, "turn-o");
-      gtk_widget_add_css_class(game.turn_label, "game-over");
 
       // Animate winning buttons
       GtkWidget* winning_buttons[3];
@@ -723,60 +730,116 @@ static gboolean toggle_scoreboard_blink(gpointer user_data) {
 /**
  * @brief Applies CSS styling to the application
  *
- * * Loads custom CSS for buttons, labels, animations, and scoreboard styling.
+ * Loads custom CSS for buttons, labels, animations, and scoreboard styling
+ * with a kid-friendly, colorful design.
  */
 static void apply_css(void) {
   GtkCssProvider* provider = gtk_css_provider_new();
 
   const gchar* css =
+      "/* Window background */\n"
+      "window {\n"
+      "   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n"
+      "   background-color: #667eea;\n"
+      "}\n"
+      "\n"
       "/* X and O symbols in grid */\n"
       ".x-style {\n"
-      "   font-size: 50px;\n"
-      "   color: red;\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 80px;\n"
+      "   color: #ff6b6b;\n"
       "   font-weight: bold;\n"
+      "   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);\n"
       "}\n"
       ".o-style {\n"
-      "   font-size: 50px;\n"
-      "   color: blue;\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 80px;\n"
+      "   color: #4dabf7;\n"
       "   font-weight: bold;\n"
+      "   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);\n"
       "}\n"
       "\n"
       "/* Turn label */\n"
       ".turn-x {\n"
-      "   font-size: 24px;\n"
-      "   color: red;\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 28px;\n"
+      "   color: #ffffff;\n"
       "   font-weight: bold;\n"
+      "   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);\n"
+      "   padding: 10px 20px;\n"
+      "   background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);\n"
+      "   background-color: #ff6b6b;\n"
+      "   border-radius: 15px;\n"
       "}\n"
       ".turn-o {\n"
-      "   font-size: 24px;\n"
-      "   color: blue;\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 28px;\n"
+      "   color: #ffffff;\n"
       "   font-weight: bold;\n"
+      "   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);\n"
+      "   padding: 10px 20px;\n"
+      "   background: linear-gradient(135deg, #4dabf7 0%, #74c0fc 100%);\n"
+      "   background-color: #4dabf7;\n"
+      "   border-radius: 15px;\n"
       "}\n"
-      ".game-over {\n"
-      "   font-size: 20px;\n"
-      "   color: green;\n"
+      ".game-over-x {\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 24px;\n"
+      "   color: #ffffff;\n"
       "   font-weight: bold;\n"
+      "   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);\n"
+      "   padding: 10px 20px;\n"
+      "   background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);\n"
+      "   background-color: #ff6b6b;\n"
+      "   border-radius: 15px;\n"
+      "}\n"
+      ".game-over-o {\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 24px;\n"
+      "   color: #ffffff;\n"
+      "   font-weight: bold;\n"
+      "   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);\n"
+      "   padding: 10px 20px;\n"
+      "   background: linear-gradient(135deg, #4dabf7 0%, #74c0fc 100%);\n"
+      "   background-color: #4dabf7;\n"
+      "   border-radius: 15px;\n"
+      "}\n"
+      ".game-over-tie {\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 24px;\n"
+      "   color: #ffffff;\n"
+      "   font-weight: bold;\n"
+      "   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);\n"
+      "   padding: 10px 20px;\n"
+      "   background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%);\n"
+      "   background-color: #fbbf24;\n"
+      "   border-radius: 15px;\n"
       "}\n"
       "\n"
       "/* Grid buttons */\n"
       ".grid-button {\n"
-      "   background-color: white;\n"
-      "   border: 2px solid #ccc;\n"
-      "   border-radius: 8px;\n"
+      "   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);\n"
+      "   background-color: #ffffff;\n"
+      "   border: 4px solid #e9ecef;\n"
+      "   border-radius: 20px;\n"
       "   padding: 0;\n"
-      "   transition: background-color 0.25s ease-in-out, border 0.25s "
-      "ease-in-out;\n"
+      "   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\n"
+      "   transition: all 0.2s ease-in-out;\n"
       "}\n"
       ".grid-button:hover {\n"
-      "   border-color: #888;\n"
-      "   background-color: #f2f2f2;\n"
+      "   border-color: #adb5bd;\n"
+      "   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);\n"
+      "   background-color: #f8f9fa;\n"
+      "   transform: scale(1.05);\n"
+      "   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);\n"
       "}\n"
       ".grid-button.blink {\n"
-      "   background-color: yellow;\n"
-      "   border: 2px solid orange;\n"
-      "   box-shadow: 0 0 15px 5px yellow;\n"
-      "   transition: background-color 0.25s ease-in-out, box-shadow 0.25s "
-      "ease-in-out;\n"
+      "   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);\n"
+      "   background-color: #ffd700;\n"
+      "   border: 4px solid #fbbf24;\n"
+      "   box-shadow: 0 0 20px 5px #ffd700;\n"
+      "   transform: scale(1.1);\n"
+      "   transition: all 0.2s ease-in-out;\n"
       "}\n"
       "\n"
       "/* Remove GTK default shadows */\n"
@@ -787,28 +850,64 @@ static void apply_css(void) {
       "\n"
       "/* Scoreboard */\n"
       ".scoreboard-label {\n"
-      "   font-size: 18px;\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 20px;\n"
       "   font-weight: bold;\n"
+      "   color: #ffffff;\n"
+      "   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);\n"
       "}\n"
       ".score-value {\n"
-      "   font-size: 24px;\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 32px;\n"
       "   font-weight: bold;\n"
+      "   color: #ffffff;\n"
+      "   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);\n"
       "}\n"
-      ".score-x { color: red; }\n"
-      ".score-o { color: blue; }\n"
-      ".score-tie { color: black; }\n"
+      ".score-x { \n"
+      "   color: #ff6b6b;\n"
+      "   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);\n"
+      "}\n"
+      ".score-o { \n"
+      "   color: #4dabf7;\n"
+      "   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);\n"
+      "}\n"
+      ".score-tie { \n"
+      "   color: #fbbf24;\n"
+      "   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);\n"
+      "}\n"
       ".score-blink {\n"
-      "   transform: scale(1.3);\n"
+      "   transform: scale(1.4);\n"
       "   font-weight: 900;\n"
-      "   text-shadow: 0 0 10px currentColor;\n"
-      "   transition: all 0.25s ease-in-out;\n"
+      "   text-shadow: 0 0 15px currentColor, 3px 3px 6px rgba(0, 0, 0, 0.5);\n"
+      "   transition: all 0.2s ease-in-out;\n"
+      "}\n"
+      "\n"
+      "/* Back button */\n"
+      "button#back-button {\n"
+      "   font-family: 'Comic Sans MS', cursive, sans-serif;\n"
+      "   font-size: 18px;\n"
+      "   font-weight: bold;\n"
+      "   color: #1a1a2e;\n"
+      "   background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);\n"
+      "   background-color: #60a5fa;\n"
+      "   border: 3px solid #1a1a2e;\n"
+      "   border-radius: 20px;\n"
+      "   padding: 12px 30px;\n"
+      "   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\n"
+      "}\n"
+      "\n"
+      "button#back-button:hover {\n"
+      "   background: linear-gradient(135deg, #93c5fd 0%, #bfdbfe 100%);\n"
+      "   background-color: #93c5fd;\n"
+      "   transform: scale(1.05);\n"
       "}\n";
 
   GtkCssProvider* style_provider = gtk_css_provider_new();
-  gtk_css_provider_load_from_string(provider, css);
+  gtk_css_provider_load_from_string(style_provider, css);
+
   GdkDisplay* display = gdk_display_get_default();
   gtk_style_context_add_provider_for_display(
-      display, GTK_STYLE_PROVIDER(provider),
+      display, GTK_STYLE_PROVIDER(style_provider),
       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref(style_provider);
 }
