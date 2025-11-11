@@ -18,13 +18,13 @@ typedef struct {
 
 typedef struct {
   float prior[OUTCOMES];
-  float likelihood[OUTCOMES][CELLS][STATE];
+  double likelihood[OUTCOMES][SIZE][SIZE][STATE];
 } NaiveBayesModel;
 
 static int load_model(NaiveBayesModel* model, const char* filename);
 static void ai_move(int board[SIZE][SIZE], const NaiveBayesModel model);
 static void flatten_board(int board[SIZE][SIZE], int* board_vector);
-score_struct probability(const int board_vector[9],
+score_struct probability(const int board[SIZE][SIZE],
                          const NaiveBayesModel* model);
 
 int temp_board[SIZE][SIZE] = {
