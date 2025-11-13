@@ -1,16 +1,35 @@
 #include "naive_bayes.h"
 
+#include <math.h>
 #include <string.h>
 
-int load_nb_model(NaiveBayesModel* model, const unsigned char* data,
-                  unsigned int data_len) {
-  if (data_len != sizeof(NaiveBayesModel)) {
-    return -1;
+/**
+ * @brief Invert the board state by swapping X and O.
+ *
+ * This is necessary because the Naive Bayes model is trained on X as the
+ * positive player.
+ *
+ * @param board Pointer to the Board structure to invert.
+ */
+static void invert_board(Board* board) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      if (board->cells[i][j] == X) {
+        board->cells[i][j] = O;
+      } else if (board->cells[i][j] == O) {
+        board->cells[i][j] = X;
+      }
+    }
   }
-  memcpy(model, data, sizeof(NaiveBayesModel));
-  return 0;
 }
 
+/**
+ * @brief Evaluate the board state using the Naive Bayes model.
+ * @param board Pointer to the Board structure.
+ * @param model Pointer to the Naive Bayes Model.
+ * @return float Positive probability if positive outcome is more likely,
+ *               negative probability (as negative value) if negative outcome
+ */
 static float naive_bayes(Board* board, const NaiveBayesModel* model) {
   float log_scores[OUTCOMES] = {0.0};
   // Calculate log probability for each outcome
@@ -50,4 +69,45 @@ static float naive_bayes(Board* board, const NaiveBayesModel* model) {
   } else {
     return -prob_negative;
   }
+}
+
+int load_nb_model(NaiveBayesModel* model, const char* model_path) {
+  FILE* file = fopen(model_path, "rb");
+  if (!file) {
+    return -1;
+  }
+  fread(model, sizeof(NaiveBayesModel), 1, file);
+  fclose(file);
+  return 0;
+}
+
+Cell nb_find_move(const Board* board, const NaiveBayesModel* model) {
+  Player ai_player = board->current_player;
+  Cell best_move = {-1, -1};
+  float best_prob = -1.0;
+
+  Cell empty_cells[SIZE * SIZE];
+  int num_moves = find_empty_cells(board, empty_cells, SIZE * SIZE);
+
+  Board board_copy;
+  copy_board(board, &board_copy);
+  // If AI is PLAYER_O, invert the board for evaluation
+  if (ai_player == PLAYER_O) {
+    invert_board(&board_copy);
+  }
+
+  // Evaluate moves
+  for (int m = 0; m < num_moves; m++) {
+    Cell cell = empty_cells[m];
+    make_move(&board_copy, &cell);
+    float score = naive_bayes(&board_copy, model);
+    undo_move(&board_copy);
+    // Update best move if this move has a better win probability
+    if (score > best_prob) {
+      best_prob = score;
+      best_move = cell;
+    }
+  }
+
+  return best_move;
 }

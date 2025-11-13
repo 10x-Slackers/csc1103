@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #define SIZE 3
 
@@ -17,6 +18,7 @@ typedef struct {
 typedef struct {
   CellState cells[SIZE][SIZE];
   Player current_player;
+  Cell last_move;
   int move_count;
 } Board;
 
@@ -25,19 +27,6 @@ typedef struct {
   int score_O;
   int score_tie;
 } GameStats;
-
-static const Cell WIN_PATTERNS[8][3] = {
-    // Rows
-    {{0, 0}, {0, 1}, {0, 2}},
-    {{1, 0}, {1, 1}, {1, 2}},
-    {{2, 0}, {2, 1}, {2, 2}},
-    // Columns
-    {{0, 0}, {1, 0}, {2, 0}},
-    {{0, 1}, {1, 1}, {2, 1}},
-    {{0, 2}, {1, 2}, {2, 2}},
-    // Diagonals
-    {{0, 0}, {1, 1}, {2, 2}},
-    {{0, 2}, {1, 1}, {2, 0}}};
 
 /**
  * @brief Initialize a game board to an empty state.
@@ -69,7 +58,17 @@ void copy_board(const Board* src, Board* dest);
  * @param cell Pointer to the Cell structure to check.
  * @return true if the cell is empty, false otherwise.
  */
-bool check_cell(const Board* board, Cell* cell);
+bool check_cell(const Board* board, const Cell* cell);
+
+/**
+ * @brief Find all empty cells on the board.
+ * @param board Pointer to the Board structure.
+ * @param empty_cells Output array to store empty cell positions. Can be NULL to
+ *                    just count empty cells.
+ * @param max_cells Maximum number of cells the array can hold.
+ * @return int The number of empty cells found.
+ */
+int find_empty_cells(const Board* board, Cell empty_cells[], size_t max_cells);
 
 /**
  * @brief Make a move on the board at the specified row and column.
@@ -77,16 +76,14 @@ bool check_cell(const Board* board, Cell* cell);
  * @param cell Pointer to the Cell structure indicating where to make the move.
  * @return true if the move was successful, false otherwise.
  */
-bool make_move(Board* board, Cell* cell);
+bool make_move(Board* board, const Cell* cell);
 
 /**
- * @brief Find all empty cells on the board.
+ * @brief Undo the last move made on the board.
  * @param board Pointer to the Board structure.
- * @param empty_cells Output array to store empty cell positions. Can be NULL to
- *                    just count empty cells.
- * @return int The number of empty cells found.
+ * @return true if the undo was successful, false otherwise.
  */
-int find_empty_cells(const Board* board, Cell empty_cells[]);
+bool undo_move(Board* board);
 
 /**
  * @brief Check if there is a winner or if the game is a draw.
@@ -95,5 +92,12 @@ int find_empty_cells(const Board* board, Cell empty_cells[]);
  *                DRAW if it's a draw, or ONGOING if the game is still ongoing.
  */
 Winner check_winner(const Board* board);
+
+/**
+ * @brief Select a random valid move from the available empty cells.
+ * @param board Pointer to the Board structure.
+ * @return Cell The selected random move.
+ */
+Cell random_move(const Board* board);
 
 #endif  // BOARD_H
