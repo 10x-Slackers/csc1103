@@ -3,7 +3,7 @@
 
 #include "board.h"
 
-// Positive (win), negative (draw or loss)
+// Negative (draw or loss), positive (win)
 #define OUTCOMES 2
 // BLANK, X, O
 #define STATE 3

@@ -1,13 +1,17 @@
+#include <stdio.h>
 
 #include "../shared/board.h"
 #include "../shared/minimax.h"
 #include "../shared/naive_bayes.h"
-
-int main() {
+int main(int argc, char* argv[]) {
+  const char* weights_path = "src/ml_trainer/weights.bin";
+  if (argc > 1) {
+    weights_path = argv[1];
+  }
   NaiveBayesModel model;
-  int res = load_nb_model(&model, "src/ml_trainer/weights.bin");
+  int res = load_nb_model(&model, weights_path);
   if (res != 0) {
-    printf("Error loading model\n");
+    printf("Error loading model from '%s'\n", weights_path);
     return 1;
   }
 

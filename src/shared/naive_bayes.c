@@ -1,6 +1,7 @@
 #include "naive_bayes.h"
 
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 
 /**
@@ -76,8 +77,11 @@ int load_nb_model(NaiveBayesModel* model, const char* model_path) {
   if (!file) {
     return -1;
   }
-  fread(model, sizeof(NaiveBayesModel), 1, file);
+  size_t read_count = fread(model, sizeof(NaiveBayesModel), 1, file);
   fclose(file);
+  if (read_count != 1) {
+    return -1;
+  }
   return 0;
 }
 

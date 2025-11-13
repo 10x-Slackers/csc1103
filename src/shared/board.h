@@ -2,12 +2,12 @@
 #define BOARD_H
 
 #include <stdbool.h>
-#include <stdio.h>
+#include <stddef.h>
 
 #define SIZE 3
 
-typedef enum { PLAYER_X = 1, PLAYER_O = 2 } Player;
 typedef enum { EMPTY, X, O } CellState;
+typedef enum { PLAYER_X = 1, PLAYER_O = 2 } Player;
 typedef enum { ONGOING, WIN_X, WIN_O, DRAW } Winner;
 
 typedef struct {
