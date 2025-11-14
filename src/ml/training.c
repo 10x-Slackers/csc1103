@@ -7,7 +7,6 @@
 NaiveBayesModel train_model(const DataEntry* data_entries,
                             const size_t data_entries_size) {
   NaiveBayesModel model;
-
   // Initialize the model with zeros
   memset(&model, 0, sizeof(NaiveBayesModel));
   // Initialize outcome counts

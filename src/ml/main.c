@@ -22,6 +22,7 @@ int main(int argc, char* argv[]) {
     return EXIT_FAILURE;
   }
   printf("Total number of data entries: %zu\n", data_entries_size);
+
   // Shuffle dataset
   srand(DATASET_SHUFFLE_SEED);
   if (shuffle_dataset(data_entries, data_entries_size) != 0) {
@@ -29,6 +30,7 @@ int main(int argc, char* argv[]) {
     free(data_entries);
     return EXIT_FAILURE;
   }
+
   // Calculate training-testing split
   int ratio_percentage = (int)(TRAINING_SPLIT_RATIO * 100);
   printf("Training-testing split: %d - %d\n", ratio_percentage,
@@ -42,6 +44,7 @@ int main(int argc, char* argv[]) {
     // Train model
     NaiveBayesModel model = train_model(data_entries, training_split);
     printf("Training completed.\n");
+
     // Save model
     printf("Model will be saved to: %s\n", model_path);
     if (save_model(&model, model_path) != 0) {
