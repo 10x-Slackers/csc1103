@@ -18,7 +18,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gst", "1.0")
 from gi.repository import Gtk, Gdk, GLib, Gst  # noqa
-from ui import main_menu  # noqa
+from gui.ui.py_code import main_menu  # noqa
 from contextlib import suppress  # noqa
 
 TTT_GRID_SIZE = 150
