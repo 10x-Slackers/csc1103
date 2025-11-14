@@ -95,6 +95,7 @@ int main(int argc, char* argv[]) {
     printf("Precision: %.4f\n", metrics.precision);
     printf("Recall: %.4f\n", metrics.recall);
     printf("F1 Score: %.4f\n", metrics.f1_score);
+    free((void*)predictions);
   }
 
   free(data_entries);
