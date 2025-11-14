@@ -5,6 +5,7 @@
 
 // Negative (draw or loss), positive (win)
 #define OUTCOMES 2
+typedef enum { NEGATIVE, POSITIVE } Outcome;
 // BLANK, X, O
 #define STATE 3
 

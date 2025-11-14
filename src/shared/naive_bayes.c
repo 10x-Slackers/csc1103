@@ -63,12 +63,12 @@ static float naive_bayes(Board* board, const NaiveBayesModel* model) {
 
   // Return positive probability if it's higher, else return negative
   // probability as negative value
-  float prob_negative = (float)log_scores[0];
-  float prob_positive = (float)log_scores[1];
+  double prob_negative = log_scores[NEGATIVE];
+  double prob_positive = log_scores[POSITIVE];
   if (prob_positive >= prob_negative) {
-    return prob_positive;
+    return (float)prob_positive;
   } else {
-    return -prob_negative;
+    return -(float)prob_negative;
   }
 }
 
