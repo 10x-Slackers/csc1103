@@ -23,7 +23,7 @@ Prediction* evaluate_model(const DataEntry* data_entries,
 
     // Predict outcome using the Naive Bayes model
     float prob = naive_bayes(&board, model);
-    // Assign actual and predicted outcsomes
+    // Assign actual and predicted outsomes
     predictions[i].actual = data_entries[i].outcome;
     predictions[i].prediction = (prob >= 0) ? POSITIVE : NEGATIVE;
   }

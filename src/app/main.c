@@ -5,7 +5,7 @@
 #include "../shared/minimax.h"
 #include "../shared/naive_bayes.h"
 
-int main(int argc, const char* argv[]) {
+int main(int argc, char* argv[]) {
   const char* weights_path = "src/ml/naive_bayes.bin";
   if (argc > 1) {
     weights_path = argv[1];

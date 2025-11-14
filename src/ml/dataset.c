@@ -47,7 +47,7 @@ static int process_line(char* line, DataEntry* entry) {
     entry->outcome = NEGATIVE;
   } else {
     fprintf(stderr, "Error: Invalid outcome in dataset: %s\n", token);
-    exit(EXIT_FAILURE);
+    return -1;
   }
 
   return 0;
