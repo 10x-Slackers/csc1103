@@ -1,0 +1,117 @@
+#include "naive_bayes.h"
+
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+
+/**
+ * @brief Invert the board state by swapping X and O.
+ *
+ * This is necessary because the Naive Bayes model is trained on X as the
+ * positive player.
+ *
+ * @param board Pointer to the Board structure to invert.
+ */
+static void invert_board(Board* board) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      if (board->cells[i][j] == X) {
+        board->cells[i][j] = O;
+      } else if (board->cells[i][j] == O) {
+        board->cells[i][j] = X;
+      }
+    }
+  }
+}
+
+/**
+ * @brief Evaluate the board state using the Naive Bayes model.
+ * @param board Pointer to the Board structure.
+ * @param model Pointer to the Naive Bayes Model.
+ * @return float Positive probability if positive outcome is more likely,
+ *               negative probability (as negative value) if negative outcome
+ */
+static float naive_bayes(Board* board, const NaiveBayesModel* model) {
+  double log_scores[OUTCOMES] = {0.0};
+  // Calculate log probability for each outcome
+  for (int outcome = 0; outcome < OUTCOMES; outcome++) {
+    // Start with log prior
+    double score = log(model->prior[outcome]);
+    // Add log likelihoods for each cell in the board
+    for (int row = 0; row < SIZE; row++) {
+      for (int col = 0; col < SIZE; col++) {
+        int cell_value = board->cells[row][col];
+        score += log(model->likelihood[outcome][row][col][cell_value]);
+      }
+    }
+    log_scores[outcome] = score;
+  }
+
+  // Compute the sum of exponentials
+  double max_score =
+      log_scores[0] > log_scores[1] ? log_scores[0] : log_scores[1];
+  double total_log_score = 0;
+  for (int outcome = 0; outcome < OUTCOMES; outcome++) {
+    total_log_score += exp(log_scores[outcome] - max_score);
+  }
+  // Compute log-sum-exp: log(sum(exp(x_i))) = max + log(sum(exp(x_i - max)))
+  double lse = max_score + log(total_log_score);
+  // Convert log probabilities back to regular probabilities (normalized)
+  for (int outcome = 0; outcome < OUTCOMES; outcome++) {
+    log_scores[outcome] = exp(log_scores[outcome] - lse);
+  }
+
+  // Return positive probability if it's higher, else return negative
+  // probability as negative value
+  float prob_negative = (float)log_scores[0];
+  float prob_positive = (float)log_scores[1];
+  if (prob_positive >= prob_negative) {
+    return prob_positive;
+  } else {
+    return -prob_negative;
+  }
+}
+
+int load_nb_model(NaiveBayesModel* model, const char* model_path) {
+  FILE* file = fopen(model_path, "rb");
+  if (!file) {
+    return -1;
+  }
+  size_t read_count = fread(model, sizeof(NaiveBayesModel), 1, file);
+  fclose(file);
+  if (read_count != 1) {
+    return -1;
+  }
+  return 0;
+}
+
+Cell nb_find_move(const Board* board, const NaiveBayesModel* model) {
+  Player ai_player = board->current_player;
+  Cell best_move = {-1, -1};
+  float best_prob = -1.0;
+
+  Cell empty_cells[SIZE * SIZE];
+  int num_moves = find_empty_cells(board, empty_cells, SIZE * SIZE);
+
+  Board board_copy;
+  copy_board(board, &board_copy);
+  // If AI is PLAYER_O, invert the board for evaluation
+  if (ai_player == PLAYER_O) {
+    invert_board(&board_copy);
+  }
+
+  // Evaluate moves
+  for (int m = 0; m < num_moves; m++) {
+    Cell cell = empty_cells[m];
+    make_move(&board_copy, &cell);
+    float score = naive_bayes(&board_copy, model);
+    undo_move(&board_copy);
+    // Update best move if this move has a better win probability
+    if (score > best_prob) {
+      best_prob = score;
+      best_move = cell;
+    }
+  }
+
+  return best_move;
+}
