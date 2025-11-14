@@ -32,11 +32,11 @@ static void invert_board(Board* board) {
  *               negative probability (as negative value) if negative outcome
  */
 static float naive_bayes(Board* board, const NaiveBayesModel* model) {
-  float log_scores[OUTCOMES] = {0.0};
+  double log_scores[OUTCOMES] = {0.0};
   // Calculate log probability for each outcome
   for (int outcome = 0; outcome < OUTCOMES; outcome++) {
     // Start with log prior
-    float score = logf(model->prior[outcome]);
+    double score = log(model->prior[outcome]);
     // Add log likelihoods for each cell in the board
     for (int row = 0; row < SIZE; row++) {
       for (int col = 0; col < SIZE; col++) {
@@ -48,23 +48,23 @@ static float naive_bayes(Board* board, const NaiveBayesModel* model) {
   }
 
   // Compute the sum of exponentials
-  float max_score =
+  double max_score =
       log_scores[0] > log_scores[1] ? log_scores[0] : log_scores[1];
-  float total_log_score = 0;
+  double total_log_score = 0;
   for (int outcome = 0; outcome < OUTCOMES; outcome++) {
-    total_log_score += expf(log_scores[outcome] - max_score);
+    total_log_score += exp(log_scores[outcome] - max_score);
   }
   // Compute log-sum-exp: log(sum(exp(x_i))) = max + log(sum(exp(x_i - max)))
-  float lse = max_score + logf(total_log_score);
+  double lse = max_score + log(total_log_score);
   // Convert log probabilities back to regular probabilities (normalized)
   for (int outcome = 0; outcome < OUTCOMES; outcome++) {
-    log_scores[outcome] = expf(log_scores[outcome] - lse);
+    log_scores[outcome] = exp(log_scores[outcome] - lse);
   }
 
   // Return positive probability if it's higher, else return negative
   // probability as negative value
-  float prob_negative = log_scores[0];
-  float prob_positive = log_scores[1];
+  float prob_negative = (float)log_scores[0];
+  float prob_positive = (float)log_scores[1];
   if (prob_positive >= prob_negative) {
     return prob_positive;
   } else {

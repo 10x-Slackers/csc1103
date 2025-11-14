@@ -9,7 +9,7 @@
 #define STATE 3
 
 typedef struct {
-  float prior[OUTCOMES];
+  double prior[OUTCOMES];
   double likelihood[OUTCOMES][SIZE][SIZE][STATE];
 } NaiveBayesModel;
 
