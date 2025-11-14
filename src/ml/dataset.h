@@ -6,8 +6,8 @@
 #include "../shared/board.h"
 #include "../shared/naive_bayes.h"
 
-#define MAX_DATASET_LINE_LENGTH 256
 #define DATASET_SHUFFLE_SEED 1337
+#define MAX_DATASET_LINE_LENGTH 256
 #define TRAINING_SPLIT_RATIO 0.8
 
 typedef struct {

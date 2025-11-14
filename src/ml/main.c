@@ -20,8 +20,9 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "Error: Failed to process dataset\n");
     return EXIT_FAILURE;
   }
-  printf("Number of data entries: %zu\n", data_entries_size);
+  printf("Total number of data entries: %zu\n", data_entries_size);
   // Shuffle dataset
+  srand(DATASET_SHUFFLE_SEED);
   if (shuffle_dataset(data_entries, data_entries_size) != 0) {
     fprintf(stderr, "Error: Failed to shuffle dataset\n");
     free(data_entries);
@@ -37,12 +38,15 @@ int main(int argc, char* argv[]) {
   if (mode == MODE_TRAIN) {
     printf("\n===== TRAINING MODE =====\n");
     printf("Model will be saved to: %s\n", model_path);
-    return EXIT_SUCCESS;
+    printf("Training on %zu entries\n", training_split);
   }
 
   if (mode == MODE_STATS) {
     printf("\n===== EVALUATION MODE =====\n");
     printf("Using model: %s\n", model_path);
-    return EXIT_SUCCESS;
+    printf("Evaluating on %zu entries\n", testing_split);
   }
+
+  free(data_entries);
+  return EXIT_SUCCESS;
 }

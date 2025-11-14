@@ -13,9 +13,9 @@ static DataEntry process_line(char* line) {
   for (size_t i = 0; i < SIZE; i++) {
     for (size_t j = 0; j < SIZE; j++) {
       if (token) {
-        if (strcmp(token, "X") == 0) {
+        if (strcmp(token, "x") == 0) {
           entry.cells[i][j] = X;
-        } else if (strcmp(token, "O") == 0) {
+        } else if (strcmp(token, "o") == 0) {
           entry.cells[i][j] = O;
         } else {
           entry.cells[i][j] = EMPTY;
@@ -37,7 +37,7 @@ static DataEntry process_line(char* line) {
 DataEntry* process_dataset(const char* filepath, size_t* data_entries_size) {
   FILE* dataset = fopen(filepath, "r");
   if (!dataset) {
-    fprintf(stderr, "Error: Failed to open dataset");
+    fprintf(stderr, "Error: Failed to open dataset\n");
     return NULL;
   }
 
@@ -51,7 +51,7 @@ DataEntry* process_dataset(const char* filepath, size_t* data_entries_size) {
   // Allocate memory for data entries
   DataEntry* data_entries = (DataEntry*)malloc(count * sizeof(DataEntry));
   if (!data_entries) {
-    fprintf(stderr, "Error: Memory allocation failed for data entries");
+    fprintf(stderr, "Error: Memory allocation failed for data entries\n");
     fclose(dataset);
     return NULL;
   }
@@ -64,7 +64,7 @@ DataEntry* process_dataset(const char* filepath, size_t* data_entries_size) {
     if (fgets(line, sizeof(line), dataset)) {
       data_entries[i] = process_line(line);
     } else {
-      fprintf(stderr, "Error: Failed to read dataset line");
+      fprintf(stderr, "Error: Failed to read dataset line\n");
       free(data_entries);
       fclose(dataset);
       return NULL;
