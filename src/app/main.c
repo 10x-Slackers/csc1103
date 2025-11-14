@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../shared/board.h"
 #include "../shared/minimax.h"
 #include "../shared/naive_bayes.h"
+
 int main(int argc, char* argv[]) {
   const char* weights_path = "src/ml_trainer/weights.bin";
   if (argc > 1) {
@@ -12,7 +14,7 @@ int main(int argc, char* argv[]) {
   int res = load_nb_model(&model, weights_path);
   if (res != 0) {
     printf("Error loading model from '%s'\n", weights_path);
-    return 1;
+    return EXIT_FAILURE;
   }
 
   Board board;
@@ -51,5 +53,5 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }
