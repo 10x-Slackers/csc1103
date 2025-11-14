@@ -112,7 +112,8 @@ bool make_move(Board* board, const Cell* cell) {
   if (!check_cell(board, cell)) {
     return false;
   }
-  board->cells[cell->row][cell->col] = board->current_player;
+  board->cells[cell->row][cell->col] =
+      (board->current_player == PLAYER_X) ? X : O;
   board->move_count++;
   board->current_player =
       (board->current_player == PLAYER_X) ? PLAYER_O : PLAYER_X;
