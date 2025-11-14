@@ -6,7 +6,7 @@
 #include "../shared/naive_bayes.h"
 
 int main(int argc, char* argv[]) {
-  const char* weights_path = "src/ml_trainer/weights.bin";
+  const char* weights_path = "src/ml/naive_bayes.bin";
   if (argc > 1) {
     weights_path = argv[1];
   }

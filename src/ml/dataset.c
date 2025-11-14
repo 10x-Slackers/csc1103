@@ -5,7 +5,7 @@
 #include <string.h>
 
 static DataEntry process_line(char* line) {
-  DataEntry entry;
+  DataEntry entry = {0};
 
   char* token;
   token = strtok(line, ",");
@@ -25,7 +25,7 @@ static DataEntry process_line(char* line) {
     }
   }
   if (token) {
-    if (strcmp(token, "positive\n") == 0) {
+    if (strncmp(token, "positive", 8) == 0) {
       entry.outcome = POSITIVE;
     } else {
       entry.outcome = NEGATIVE;
