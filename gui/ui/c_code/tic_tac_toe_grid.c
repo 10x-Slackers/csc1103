@@ -95,11 +95,16 @@ static BlinkData* active_blink_data = NULL;
 /**
  * @struct ScoreBlinkData
  * @brief Data structure for scoreboard blink animations
+ * Tracks the label being animated, blink count, and the timeout id so the
+ * animation can be cancelled and freed safely.
  */
 typedef struct {
   GtkWidget* label; /**< Score label to animate */
   int count;        /**< Current blink cycle count */
+  guint timeout_id;
 } ScoreBlinkData;
+
+static ScoreBlinkData* active_score_blink = NULL;
 
 // ============================================================================
 // FUNCTION PROTOTYPES
@@ -674,22 +679,49 @@ static gboolean toggle_blink_timeout(gpointer user_data) {
 /**
  * @brief Starts a blink animation for a scoreboard label
  *
+ * Cancels any existing scoreboard animation (to avoid leaks), applies the
+ * blink CSS class, and registers a timeout. The active animation is tracked
+ * in active_score_blink so it can be cancelled if necessary.
+ *
  * @param label The label widget to animate
  */
 static void start_scoreboard_blink(GtkWidget* label) {
+  /* Cancel any existing scoreboard animation first */
+  if (active_score_blink != NULL) {
+    if (active_score_blink->timeout_id > 0) {
+      g_source_remove(active_score_blink->timeout_id);
+    }
+    if (GTK_IS_WIDGET(active_score_blink->label)) {
+      gtk_widget_remove_css_class(active_score_blink->label, "score-blink");
+      gtk_widget_queue_draw(active_score_blink->label);
+    }
+    g_free(active_score_blink);
+    active_score_blink = NULL;
+  }
+
   ScoreBlinkData* data = g_malloc(sizeof(ScoreBlinkData));
   data->label = label;
   data->count = 0;
+  data->timeout_id = 0;
 
-  gtk_widget_add_css_class(label, "score-blink");
-  gtk_widget_queue_draw(label);
+  /* Apply initial blink style */
+  if (GTK_IS_WIDGET(label)) {
+    gtk_widget_add_css_class(label, "score-blink");
+    gtk_widget_queue_draw(label);
+  }
   data->count = 1;
 
-  g_timeout_add(BLINK_INTERVAL_MS, toggle_scoreboard_blink, data);
+  /* Start timeout and track it */
+  data->timeout_id =
+      g_timeout_add(BLINK_INTERVAL_MS, toggle_scoreboard_blink, data);
+  active_score_blink = data;
 }
 
 /**
  * @brief Timeout callback for scoreboard blink animation
+ *
+ * Toggles the blink CSS class on/off. Frees the ScoreBlinkData and clears
+ * active_score_blink when the animation completes or when the widget is gone.
  *
  * @param user_data Pointer to ScoreBlinkData structure
  * @return G_SOURCE_REMOVE when animation completes, G_SOURCE_CONTINUE otherwise
@@ -697,12 +729,14 @@ static void start_scoreboard_blink(GtkWidget* label) {
 static gboolean toggle_scoreboard_blink(gpointer user_data) {
   ScoreBlinkData* data = (ScoreBlinkData*)user_data;
 
+  /* If the widget was destroyed, free and stop */
   if (!GTK_IS_WIDGET(data->label)) {
+    if (active_score_blink == data) active_score_blink = NULL;
     g_free(data);
     return G_SOURCE_REMOVE;
   }
 
-  // Toggle blink class
+  /* Toggle blink class */
   if (data->count % 2 == 0) {
     gtk_widget_add_css_class(data->label, "score-blink");
   } else {
@@ -712,10 +746,12 @@ static gboolean toggle_scoreboard_blink(gpointer user_data) {
 
   data->count++;
 
-  // Stop after BLINK_CYCLES
+  /* End after BLINK_CYCLES */
   if (data->count >= BLINK_CYCLES) {
     gtk_widget_remove_css_class(data->label, "score-blink");
     gtk_widget_queue_draw(data->label);
+
+    if (active_score_blink == data) active_score_blink = NULL;
     g_free(data);
     return G_SOURCE_REMOVE;
   }
@@ -734,8 +770,6 @@ static gboolean toggle_scoreboard_blink(gpointer user_data) {
  * with a kid-friendly, colorful design.
  */
 static void apply_css(void) {
-  GtkCssProvider* provider = gtk_css_provider_new();
-
   const gchar* css =
       "/* Window background */\n"
       "window {\n"

@@ -11,6 +11,5 @@
 #include <gtk/gtk.h>
 
 void launch_game(GtkApplication* app, char* mode);
-void return_to_main_menu(GtkButton* button, GtkApplication* app);
 
 #endif
