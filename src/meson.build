@@ -12,6 +12,6 @@ app_src = files(
 
 executable('app', app_src, dependencies: [mathlib])
 
-ml_src = files('ml/cli.c', 'ml/dataset.c', 'ml/main.c')
+ml_src = files('ml/cli.c', 'ml/dataset.c', 'ml/main.c', 'ml/training.c')
 
 executable('ml', ml_src)

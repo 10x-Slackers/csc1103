@@ -3,11 +3,10 @@
 
 #include "board.h"
 
-// Negative (draw or loss), positive (win)
-#define OUTCOMES 2
+#define OUTCOMES 2  // Negative (loss/draw), Positive (win)
+#define STATE 3     // BLANK, X, O
+
 typedef enum { NEGATIVE, POSITIVE } Outcome;
-// BLANK, X, O
-#define STATE 3
 
 typedef struct {
   double prior[OUTCOMES];

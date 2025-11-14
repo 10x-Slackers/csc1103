@@ -3,6 +3,7 @@
 
 #include "cli.h"
 #include "dataset.h"
+#include "training.h"
 
 int main(int argc, char* argv[]) {
   ProgramMode mode = MODE_NONE;
@@ -37,8 +38,18 @@ int main(int argc, char* argv[]) {
 
   if (mode == MODE_TRAIN) {
     printf("\n===== TRAINING MODE =====\n");
-    printf("Model will be saved to: %s\n", model_path);
     printf("Training on %zu entries\n", training_split);
+    // Train model
+    NaiveBayesModel model = train_model(data_entries, training_split);
+    printf("Training completed.\n");
+    // Save model
+    printf("Model will be saved to: %s\n", model_path);
+    if (save_model(&model, model_path) != 0) {
+      fprintf(stderr, "Error: Failed to save model\n");
+      free(data_entries);
+      return EXIT_FAILURE;
+    }
+    printf("Model saved successfully.\n");
   }
 
   if (mode == MODE_STATS) {
