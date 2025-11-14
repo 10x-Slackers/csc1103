@@ -13,7 +13,7 @@
 static int process_line(char* line, DataEntry* entry) {
   if (!entry) return -1;
 
-  char* token;
+  const char* token;
   token = strtok(line, ",");
   // Parse cell states from the line
   for (size_t i = 0; i < SIZE; i++) {
@@ -104,9 +104,7 @@ DataEntry* process_dataset(const char* filepath, size_t* data_entries_size) {
 }
 
 int shuffle_dataset(DataEntry* data_entries, size_t size) {
-  if (size < 2) {
-    return -1;
-  }
+  if (size < 2) return -1;
   // Fisher-Yates shuffle
   for (size_t i = 0; i < size - 1; i++) {
     size_t j = i + rand() % (size - i);

@@ -6,7 +6,7 @@
 #include "../shared/board.h"
 #include "../shared/naive_bayes.h"
 
-#define DATASET_SHUFFLE_SEED 1337  // Fixed seed for reproducibility
+#define DATASET_SHUFFLE_SEED 1234  // Fixed seed for reproducibility
 #define MAX_DATASET_LINE_LENGTH 256
 #define TRAINING_SPLIT_RATIO 0.8
 
