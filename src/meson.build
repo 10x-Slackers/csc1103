@@ -12,6 +12,14 @@ app_src = files(
 
 executable('app', app_src, dependencies: [mathlib])
 
-ml_src = files('ml/cli.c', 'ml/dataset.c', 'ml/main.c', 'ml/training.c')
+ml_src = files(
+    'ml/cli.c',
+    'ml/dataset.c',
+    'ml/main.c',
+    'ml/statistics.c',
+    'ml/training.c',
+    'shared/board.c',
+    'shared/naive_bayes.c',
+)
 
-executable('ml', ml_src)
+executable('ml', ml_src, dependencies: [mathlib])
