@@ -1,11 +1,86 @@
-/* Global styling */
+/* Global Styles */
 window {
   background: #181c4e;
   font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
   line-height: 0.85;
 }
 
-/* Game board styling */
+/* Typography */
+.h1 {
+  font-size: 96px;
+  font-weight: bold;
+}
+
+.h2 {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.h3 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Color Classes */
+.x {
+  color: #9efae4;
+}
+
+.o {
+  color: #fac19e;
+}
+
+.easy {
+  color: #99ff99;
+}
+
+.medium {
+  color: #ffff99;
+}
+
+.hard {
+  color: #ff9999;
+}
+
+/* Buttons */
+.button-normal,
+.button-menu,
+dropdown > button {
+  background: #2f399d;
+  border-radius: 20px;
+  padding: 20px;
+  transition: all 200ms;
+}
+
+.button-normal:hover,
+.button-menu:hover,
+dropdown button:hover {
+  background: #3f4aad;
+}
+
+.button-round {
+  border-radius: 50%;
+}
+
+.button-menu {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.button-menu:hover {
+  transform: translateY(-2px);
+}
+
+.button-player {
+  font-size: 128px;
+  font-weight: bold;
+}
+
+dropdown > button {
+  padding: 10px 20px;
+}
+
+/* Game Board */
 .sboard {
   background: #12153b;
   border-radius: 20px;
@@ -31,56 +106,14 @@ window {
   border-bottom: #b1b5e7 4px solid;
 }
 
-/* Button styling */
-.button-normal,
-.button-menu {
+/* Dropdown Style */
+popover.menu > contents,
+listview {
   background: #2f399d;
-  border-radius: 20px;
-  padding: 20px;
-  transition: all 200ms;
-}
-
-.button-normal:hover,
-.button-menu:hover,
-dropdown button:hover {
-  background: #3f4aad;
-}
-
-.button-round {
-  border-radius: 50%;
-}
-
-.button-menu {
-  font-size: 48px;
-  font-weight: bold;
-  transition: all 200ms;
-}
-
-.button-menu:hover {
-  transform: translateY(-2px);
-}
-
-.button-player {
-  font-size: 128px;
-  font-weight: bold;
-  /* padding: 20px 50px; */
-}
-
-/* Dropdown styling */
-dropdown > button {
-  background: #2f399d;
-  border-radius: 20px;
-  transition: all 200ms;
-  padding: 10px 20px;
 }
 
 popover.menu > contents {
   border-radius: 20px;
-  background: #2f399d;
-}
-
-listview {
-  background: #2f399d;
 }
 
 listview row {
@@ -90,40 +123,4 @@ listview row {
 listview row:hover,
 listview row:selected {
   background: #3f4aad;
-}
-
-/* Text styling */
-.h1 {
-  font-size: 96px;
-  font-weight: bold;
-}
-
-.h2 {
-  font-size: 48px;
-  font-weight: bold;
-}
-
-.h3 {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.x {
-  color: #9efae4;
-}
-
-.o {
-  color: #fac19e;
-}
-
-.easy {
-  color: #99ff99;
-}
-
-.medium {
-  color: #ffff99;
-}
-
-.hard {
-  color: #ff9999;
 }

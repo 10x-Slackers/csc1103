@@ -5,7 +5,7 @@ gtk_dep = dependency('gtk4', required: true)
 gui_src = files(
     'app/board_gui.c',
     'app/game.c',
-    'app/gui.c',
+    'app/main.c',
     'app/main_menu.c',
     'app/option_menu.c',
     'shared/board.c',

@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- Created with Cambalache 0.96.1 -->
 <interface>
-  <!-- interface-name gtk-ttt.ui -->
-  <requires lib="gtk" version="4.6"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkWindow" id="window">
     <property name="default-height">900</property>
     <property name="default-width">600</property>
@@ -62,6 +60,7 @@
                     <property name="margin-top">50</property>
                     <child>
                       <object class="GtkToggleButton" id="audio_toggle">
+                        <property name="active">True</property>
                         <property name="css-classes">button-normal
                           button-round</property>
                         <property name="icon-name">audio-volume-high</property>
@@ -542,7 +541,10 @@ cell-vertical</property>
         <child>
           <object class="GtkGrid">
             <property name="hexpand">True</property>
-            <property name="row-spacing">20</property>
+            <property name="margin-bottom">20</property>
+            <property name="margin-end">20</property>
+            <property name="margin-start">20</property>
+            <property name="margin-top">20</property>
             <child>
               <object class="GtkLabel" id="win_msg">
                 <property name="css-classes">h2</property>
@@ -554,20 +556,29 @@ cell-vertical</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="play_again">
-                <property name="label">Play again?</property>
+              <object class="GtkBox">
+                <property name="margin-end">20</property>
+                <property name="margin-start">20</property>
+                <property name="margin-top">20</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">20</property>
+                <child>
+                  <object class="GtkButton" id="go_back">
+                    <property name="css-classes">button-normal
+h3</property>
+                    <property name="label">Go back</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="play_again">
+                    <property name="css-classes">button-normal
+h3</property>
+                    <property name="label">Play again?</property>
+                  </object>
+                </child>
                 <layout>
                   <property name="column">0</property>
                   <property name="row">1</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="go_back">
-                <property name="label">Go back</property>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">2</property>
                 </layout>
               </object>
             </child>
