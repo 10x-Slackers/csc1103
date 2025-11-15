@@ -1,16 +1,19 @@
 cc = meson.get_compiler('c')
 mathlib = cc.find_library('m', required: true)
-
 gtk_dep = dependency('gtk4', required: true)
 
-app_src = files(
-    'app/main.c',
+gui_src = files(
+    'app/board_gui.c',
+    'app/game.c',
+    'app/gui.c',
+    'app/main_menu.c',
+    'app/option_menu.c',
     'shared/board.c',
     'shared/minimax.c',
     'shared/naive_bayes.c',
 )
 
-executable('app', app_src, dependencies: [mathlib])
+executable('gui', gui_src, dependencies: [gtk_dep, mathlib])
 
 ml_src = files(
     'ml/cli.c',

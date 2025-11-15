@@ -1,0 +1,579 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.1 -->
+<interface>
+  <!-- interface-name gtk-ttt.ui -->
+  <requires lib="gtk" version="4.6"/>
+  <object class="GtkWindow" id="window">
+    <property name="default-height">900</property>
+    <property name="default-width">600</property>
+    <property name="resizable">False</property>
+    <child>
+      <object class="GtkStack" id="main_stack">
+        <property name="halign">center</property>
+        <property name="transition-type">crossfade</property>
+        <property name="valign">center</property>
+        <property name="width-request">400</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="child">
+              <object class="GtkGrid" id="main_menu">
+                <property name="margin-end">100</property>
+                <property name="margin-start">100</property>
+                <property name="row-spacing">50</property>
+                <child>
+                  <object class="GtkImage" id="logo">
+                    <property name="css-classes">logo</property>
+                    <property name="file">resources/logo.png</property>
+                    <property name="margin-bottom">50</property>
+                    <property name="pixel-size">300</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="one_player">
+                    <property name="css-classes">button-menu</property>
+                    <property name="hexpand">True</property>
+                    <property name="label">1 Player</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                      <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="two_player">
+                    <property name="css-classes">button-menu</property>
+                    <property name="label">2 Player</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                      <property name="row">2</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="halign">end</property>
+                    <property name="margin-top">50</property>
+                    <child>
+                      <object class="GtkToggleButton" id="audio_toggle">
+                        <property name="css-classes">button-normal
+                          button-round</property>
+                        <property name="icon-name">audio-volume-high</property>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">3</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="name">main_menu</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="child">
+              <object class="GtkGrid" id="player_select">
+                <property name="column-spacing">80</property>
+                <property name="row-spacing">100</property>
+                <property name="width-request">0</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="css-classes">h1</property>
+                    <property name="justify">center</property>
+                    <property name="label">Who goes first?</property>
+                    <property name="wrap">True</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="halign">end</property>
+                    <child>
+                      <object class="GtkButton" id="player_x">
+                        <property name="css-classes">button-menu
+                          button-player
+                          x</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="file">resources/x.png</property>
+                            <property name="pixel-size">150</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="halign">start</property>
+                    <child>
+                      <object class="GtkButton" id="player_o">
+                        <property name="css-classes">button-menu
+                          button-player
+                          o</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="file">resources/o.png</property>
+                            <property name="pixel-size">150</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="name">player_select</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="child">
+              <object class="GtkGrid" id="diff_select">
+                <property name="row-spacing">50</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="css-classes">h1</property>
+                    <property name="justify">center</property>
+                    <property name="label">Choose the difficulty</property>
+                    <property name="margin-end">50</property>
+                    <property name="margin-start">50</property>
+                    <property name="wrap">True</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="halign">center</property>
+                    <property name="row-spacing">50</property>
+                    <property name="width-request">350</property>
+                    <child>
+                      <object class="GtkButton" id="diff_easy">
+                        <property name="css-classes">button-menu
+                          easy</property>
+                        <property name="hexpand">True</property>
+                        <property name="label">Easy</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="diff_medium">
+                        <property name="css-classes">button-menu
+                          medium</property>
+                        <property name="label">Medium</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="diff_hard">
+                        <property name="css-classes">button-menu
+                          hard</property>
+                        <property name="label">Hard</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">1</property>
+                      <property name="row">1</property>
+                      <property name="row-span">1</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="name">diff_select</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="child">
+              <object class="GtkGrid" id="game">
+                <property name="height-request">800</property>
+                <property name="row-spacing">50</property>
+                <property name="width-request">500</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="halign">start</property>
+                    <property name="hexpand">True</property>
+                    <property name="margin-start">40</property>
+                    <property name="valign">start</property>
+                    <child>
+                      <object class="GtkButton" id="back_button">
+                        <property name="css-classes">button-normal
+                          button-round</property>
+                        <property name="icon-name">application-exit</property>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">1</property>
+                      <property name="row">0</property>
+                      <property name="row-span">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="diff_section">
+                    <property name="halign">end</property>
+                    <property name="margin-end">40</property>
+                    <property name="spacing">10</property>
+                    <property name="valign">start</property>
+                    <property name="visible">False</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="css-classes">h3</property>
+                        <property name="label">Difficulty:</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkDropDown" id="diff_dropdown">
+                        <property name="css-classes">h3</property>
+                        <property name="model">
+                          <object class="GtkStringList">
+                            <property name="strings">Easy
+                              Medium
+                              Hard</property>
+                          </object>
+                        </property>
+                        <property name="selected">4294967294</property>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="undo_section">
+                    <property name="halign">end</property>
+                    <property name="margin-end">40</property>
+                    <property name="valign">start</property>
+                    <property name="visible">False</property>
+                    <child>
+                      <object class="GtkButton" id="undo_button">
+                        <property name="css-classes">button-normal
+                          button-round</property>
+                        <property name="icon-name">edit-undo</property>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="column-homogeneous">True</property>
+                    <property name="height-request">500</property>
+                    <property name="margin-bottom">20</property>
+                    <property name="margin-end">20</property>
+                    <property name="margin-start">20</property>
+                    <property name="margin-top">20</property>
+                    <property name="row-homogeneous">True</property>
+                    <property name="width-request">500</property>
+                    <child>
+                      <object class="GtkButton" id="cell_1">
+                        <property name="css-classes">cell</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkImage" id="cell_1_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="column-span">1</property>
+                          <property name="row">0</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_2">
+                        <property name="css-classes">cell
+cell-vertical</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <object class="GtkImage" id="cell_2_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="column-span">1</property>
+                          <property name="row">0</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_3">
+                        <property name="css-classes">cell</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <object class="GtkImage" id="cell_3_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="column-span">1</property>
+                          <property name="row">0</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_4">
+                        <property name="css-classes">cell
+cell-horizontal</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkImage" id="cell_4_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="column-span">1</property>
+                          <property name="row">1</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_5">
+                        <property name="css-classes">cell
+cell-center</property>
+                        <child>
+                          <object class="GtkImage" id="cell_5_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="column-span">1</property>
+                          <property name="row">1</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_6">
+                        <property name="css-classes">cell
+cell-horizontal</property>
+                        <child>
+                          <object class="GtkImage" id="cell_6_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="column-span">1</property>
+                          <property name="row">1</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_7">
+                        <property name="css-classes">cell</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkImage" id="cell_7_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="column-span">1</property>
+                          <property name="row">2</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_8">
+                        <property name="css-classes">cell
+cell-vertical</property>
+                        <child>
+                          <object class="GtkImage" id="cell_8_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="column-span">1</property>
+                          <property name="row">2</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="cell_9">
+                        <property name="css-classes">cell</property>
+                        <child>
+                          <object class="GtkImage" id="cell_9_image">
+                            <property name="file">resources/blank.png</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">2</property>
+                          <property name="column-span">1</property>
+                          <property name="row">2</property>
+                          <property name="row-span">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                      <property name="row">1</property>
+                      <property name="row-span">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="css-classes">sboard</property>
+                    <property name="halign">center</property>
+                    <property name="spacing">30</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="file">resources/x.png</property>
+                        <property name="pixel-size">80</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="score_x">
+                        <property name="css-classes">h2</property>
+                        <property name="label">0</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="css-classes">h3</property>
+                            <property name="label">TIES</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="score_tie">
+                            <property name="css-classes">h2</property>
+                            <property name="label">0</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="score_o">
+                        <property name="css-classes">h2</property>
+                        <property name="label">0</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="file">resources/o.png</property>
+                        <property name="pixel-size">80</property>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                      <property name="row">2</property>
+                      <property name="row-span">1</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="name">game</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <style/>
+  </object>
+  <object class="GtkDialog" id="win_dialog">
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="halign">center</property>
+        <child>
+          <object class="GtkGrid">
+            <property name="hexpand">True</property>
+            <property name="row-spacing">20</property>
+            <child>
+              <object class="GtkLabel" id="win_msg">
+                <property name="css-classes">h2</property>
+                <property name="label">Player _ wins!</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="play_again">
+                <property name="label">Play again?</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="go_back">
+                <property name="label">Go back</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
