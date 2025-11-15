@@ -4,16 +4,14 @@
 #include <gtk/gtk.h>
 
 /**
- * @brief Initialize the main menu UI and connect signals.
+ * @brief Initialize main menu UI and connect signals.
  *
  * Sets up the main menu UI components including one-player and two-player
- * buttons, and audio toggle button. Connects signal handlers for user
- * interactions.
+ * buttons, and audio toggle button.
  *
- * @param builder Pointer to the GtkBuilder instance.
- * @param stack Pointer to the GtkStack for navigation.
- * @return 0 on success, -1 on failure.
+ * @param builder Pointer to the GtkBuilder.
+ * @param stack Pointer to the GtkStack.
  */
-int main_menu(GtkBuilder* builder, GtkStack* stack);
+void main_menu(GtkBuilder* builder, GtkStack* stack);
 
 #endif  // MAIN_MENU_H

@@ -265,8 +265,8 @@
                         <property name="model">
                           <object class="GtkStringList">
                             <property name="strings">Easy
-                              Medium
-                              Hard</property>
+Medium
+Hard</property>
                           </object>
                         </property>
                         <property name="selected">4294967294</property>

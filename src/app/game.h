@@ -22,9 +22,9 @@ typedef enum {
 typedef struct {
   GameMode mode;
   DifficultyLevel difficulty;
+  Player starting_player;
   Board board;
   GameStats stats;
-  Player starting_player;  // Track the starting player for the game
   GtkBuilder* builder;
   NaiveBayesModel* nb_model;
 } GameState;
@@ -33,15 +33,15 @@ typedef struct {
  * @brief Initialize the global game state with default values.
  * @param builder Pointer to the GtkBuilder instance.
  * @param model Pointer to the Naive Bayes model.
- * @return 0 on success, -1 if already initialized.
+ * @return 0 on success, -1 if already initialized or invalid parameters.
  */
 int init_game_state(GtkBuilder* builder, NaiveBayesModel* model);
 
 /**
  * @brief Get the global game state.
- * @return Pointer to the global game state.
+ * @return Pointer to the global game state or NULL if not initialized.
  */
-GameState* get_game_state(void);
+GameState* get_game_state();
 
 /**
  * @brief Set the game mode.
@@ -53,18 +53,20 @@ int set_game_mode(GameMode mode);
 /**
  * @brief Set the first player.
  * @param player The player to start first.
+ * @return 0 on success, -1 if game state is not initialized.
  */
 int set_first_player(Player player);
 
 /**
  * @brief Set the difficulty level.
  * @param difficulty The difficulty level to set.
+ * @return 0 on success, -1 if game state is not initialized.
  */
 int set_difficulty(DifficultyLevel difficulty);
 
 /**
  * @brief Get the AI move based on difficulty level.
- * @return The cell where the AI will move.
+ * @return The cell chosen by the AI.
  */
 Cell get_ai_move();
 

@@ -4,27 +4,25 @@
 #include <gtk/gtk.h>
 
 /**
- * @brief Initialize the player selection UI and connect signals.
+ * @brief Initialize player selection UI and connect signals.
  *
- * Sets up the player selection UI for choosing whether to play as X or O.
- * Connects signal handlers for player selection buttons.
+ * Sets up the player selection components for choosing whether to play as X or
+ * O.
  *
- * @param builder Pointer to the GtkBuilder instance.
- * @param stack Pointer to the GtkStack for navigation.
- * @return 0 on success, -1 on failure.
+ * @param builder Pointer to the GtkBuilder.
+ * @param stack Pointer to the GtkStack.
  */
-int player_select(GtkBuilder* builder, GtkStack* stack);
+void player_select(GtkBuilder* builder, GtkStack* stack);
 
 /**
- * @brief Initialize the difficulty selection UI and connect signals.
+ * @brief Initialize difficulty selection UI and connect signals.
  *
- * Sets up the difficulty selection UI for choosing easy, medium, or hard
- * difficulty. Connects signal handlers for difficulty selection buttons.
+ * Sets up the difficulty selection components for choosing easy, medium, or
+ * hard difficulty.
  *
- * @param builder Pointer to the GtkBuilder instance.
- * @param stack Pointer to the GtkStack for navigation.
- * @return 0 on success, -1 on failure.
+ * @param builder Pointer to the GtkBuilder.
+ * @param stack Pointer to the GtkStack.
  */
-int difficulty_select(GtkBuilder* builder, GtkStack* stack);
+void difficulty_select(GtkBuilder* builder, GtkStack* stack);
 
 #endif  // OPTION_MENU_H

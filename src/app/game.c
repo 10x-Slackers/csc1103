@@ -11,17 +11,17 @@ int init_game_state(GtkBuilder* builder, NaiveBayesModel* model) {
   if (g_game_state_initialized) return -1;
   if (!builder || !model) return -1;
 
-  g_game_state.mode = MODE_2_PLAYER;
-  g_game_state.difficulty = DIFF_NONE;
-  g_game_state.stats.score_X = 0;
-  g_game_state.stats.score_O = 0;
-  g_game_state.stats.score_tie = 0;
-  g_game_state.starting_player = PLAYER_X;
-  g_game_state.builder = builder;
-  g_game_state.nb_model = model;
+  g_game_state = (GameState){
+      .mode = 0,
+      .difficulty = 0,
+      .starting_player = 0,
+      .stats = {0},
+      .builder = builder,
+      .nb_model = model,
+  };
   init_board(&g_game_state.board, PLAYER_X);
-
   g_game_state_initialized = true;
+
   return 0;
 }
 
@@ -51,19 +51,17 @@ int set_difficulty(DifficultyLevel difficulty) {
 Cell get_ai_move() {
   if (!g_game_state_initialized) return (Cell){-1, -1};
 
-  // Pick a random move if it's the first move
-  if (g_game_state.board.move_count == 0) {
+  // Random move for first turn or easy difficulty
+  if (g_game_state.board.move_count == 0 ||
+      g_game_state.difficulty == DIFF_EASY) {
     return random_move(&g_game_state.board);
   }
 
-  switch (g_game_state.difficulty) {
-    case DIFF_EASY:
-      return random_move(&g_game_state.board);
-    case DIFF_MEDIUM:
-      return nb_find_move(&g_game_state.board, g_game_state.nb_model);
-    case DIFF_HARD:
-      return minimax_find_move(&g_game_state.board, true);
-    default:
-      return random_move(&g_game_state.board);
+  // Naive Bayes for medium difficulty
+  if (g_game_state.difficulty == DIFF_MEDIUM) {
+    return nb_find_move(&g_game_state.board, g_game_state.nb_model);
   }
+
+  // Handicapped minimax for hard difficulty and default
+  return minimax_find_move(&g_game_state.board, true);
 }
