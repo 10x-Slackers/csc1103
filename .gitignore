@@ -222,4 +222,4 @@ poetry.toml
 pyrightconfig.json
 
 # Dataset files
-dataset/
+dataset/tic-tac-toe**

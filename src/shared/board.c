@@ -18,6 +18,25 @@ static const Cell WIN_PATTERNS[8][3] = {
     {{0, 0}, {1, 1}, {2, 2}},
     {{0, 2}, {1, 1}, {2, 0}}};
 
+/**
+ * @brief Check if a specific cell is empty.
+ * @param board Pointer to the Board structure.
+ * @param cell Pointer to the Cell structure to check.
+ * @return true if the cell is empty, false otherwise.
+ */
+static bool check_cell(const Board* board, const Cell* cell) {
+  // Check bounds
+  if (cell->row < 0 || cell->row >= SIZE || cell->col < 0 ||
+      cell->col >= SIZE) {
+    return false;
+  }
+  // Check if cell is empty
+  if (board->cells[cell->row][cell->col] == EMPTY) {
+    return true;
+  }
+  return false;
+}
+
 void init_board(Board* board, Player starting_player) {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
@@ -70,19 +89,6 @@ void copy_board(const Board* src, Board* dest) {
   dest->current_player = src->current_player;
   dest->last_move = src->last_move;
   dest->move_count = src->move_count;
-}
-
-bool check_cell(const Board* board, const Cell* cell) {
-  // Check bounds
-  if (cell->row < 0 || cell->row >= SIZE || cell->col < 0 ||
-      cell->col >= SIZE) {
-    return false;
-  }
-  // Check if cell is empty
-  if (board->cells[cell->row][cell->col] == EMPTY) {
-    return true;
-  }
-  return false;
 }
 
 int find_empty_cells(const Board* board, Cell empty_cells[], size_t max_cells) {

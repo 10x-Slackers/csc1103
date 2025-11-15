@@ -53,14 +53,6 @@ void print_board(const Board* board);
 void copy_board(const Board* src, Board* dest);
 
 /**
- * @brief Check if a specific cell is empty.
- * @param board Pointer to the Board structure.
- * @param cell Pointer to the Cell structure to check.
- * @return true if the cell is empty, false otherwise.
- */
-bool check_cell(const Board* board, const Cell* cell);
-
-/**
  * @brief Find all empty cells on the board.
  * @param board Pointer to the Board structure.
  * @param empty_cells Output array to store empty cell positions. Can be NULL to
