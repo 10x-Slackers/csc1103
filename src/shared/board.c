@@ -63,9 +63,9 @@ void print_board(const Board* board) {
           break;
         case EMPTY:
         default:
-          cell = ' ';
+          // cell = ' ';
           // ASCII '1' (49) + cell index (0-8)
-          // cell = '1' + (i * SIZE + j);
+          cell = '1' + (i * SIZE + j);
           break;
       }
       printf(" %c ", cell);
