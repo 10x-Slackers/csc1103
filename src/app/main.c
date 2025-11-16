@@ -76,7 +76,7 @@ static void activate(GtkApplication* app, gpointer user_data G_GNUC_UNUSED) {
   game_board(builder, stack);
   win_dialog(builder);
 
-  // Set initial visible child to main menu
+  // Set the stack to show the main menu
   gtk_stack_set_visible_child_name(stack, "main_menu");
 
   // Show the window

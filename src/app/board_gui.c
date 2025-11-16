@@ -294,16 +294,10 @@ static gboolean process_ai_move(gpointer user_data) {
   GameState* g_game_state = (GameState*)user_data;
   if (!g_game_state) return G_SOURCE_REMOVE;
 
-  // Disable buttons during AI move
-  GtkWidget* game_board =
-      GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, "game_board"));
-  if (game_board) gtk_widget_set_sensitive(game_board, FALSE);
-
   Cell ai_move = get_ai_move();
   make_move(&g_game_state->board, &ai_move);
   update_board_display(g_game_state);
   check_game_over(g_game_state);
-  gtk_widget_set_sensitive(game_board, TRUE);
 
   return G_SOURCE_REMOVE;
 }
