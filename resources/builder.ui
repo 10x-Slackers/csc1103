@@ -24,9 +24,9 @@
                 <child>
                   <object class="GtkImage" id="logo">
                     <property name="css-classes">logo</property>
-                    <property name="file">resources/logo.png</property>
                     <property name="margin-bottom">50</property>
                     <property name="pixel-size">300</property>
+                    <property name="resource">/org/csc1103/tictactoe/logo.png</property>
                     <layout>
                       <property name="column">0</property>
                       <property name="column-span">2</property>
@@ -122,8 +122,8 @@
                           x</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="file">resources/x.png</property>
                             <property name="pixel-size">150</property>
+                            <property name="resource">/org/csc1103/tictactoe/x.png</property>
                           </object>
                         </child>
                       </object>
@@ -147,6 +147,7 @@
                           <object class="GtkImage">
                             <property name="file">resources/o.png</property>
                             <property name="pixel-size">150</property>
+                            <property name="resource">/org/csc1103/tictactoe/o.png</property>
                           </object>
                         </child>
                       </object>
@@ -329,7 +330,7 @@ Hard</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="GtkImage" id="cell_1_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -347,7 +348,7 @@ cell-vertical</property>
                         <property name="hexpand">True</property>
                         <child>
                           <object class="GtkImage" id="cell_2_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -364,7 +365,7 @@ cell-vertical</property>
                         <property name="hexpand">True</property>
                         <child>
                           <object class="GtkImage" id="cell_3_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -382,7 +383,7 @@ cell-horizontal</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="GtkImage" id="cell_4_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -399,7 +400,7 @@ cell-horizontal</property>
 cell-center</property>
                         <child>
                           <object class="GtkImage" id="cell_5_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -416,7 +417,7 @@ cell-center</property>
 cell-horizontal</property>
                         <child>
                           <object class="GtkImage" id="cell_6_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -433,7 +434,7 @@ cell-horizontal</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="GtkImage" id="cell_7_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -450,7 +451,7 @@ cell-horizontal</property>
 cell-vertical</property>
                         <child>
                           <object class="GtkImage" id="cell_8_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -466,7 +467,7 @@ cell-vertical</property>
                         <property name="css-classes">cell</property>
                         <child>
                           <object class="GtkImage" id="cell_9_image">
-                            <property name="file">resources/blank.png</property>
+                            <property name="resource">/org/csc1103/tictactoe/blank.png</property>
                           </object>
                         </child>
                         <layout>
@@ -493,8 +494,8 @@ cell-vertical</property>
                     <child>
                       <object class="GtkImage" id="sboard_x">
                         <property name="css-classes">sboard-player</property>
-                        <property name="file">resources/x.png</property>
                         <property name="pixel-size">80</property>
+                        <property name="resource">/org/csc1103/tictactoe/x.png</property>
                       </object>
                     </child>
                     <child>
@@ -531,8 +532,8 @@ cell-vertical</property>
                     <child>
                       <object class="GtkImage" id="sboard_o">
                         <property name="css-classes">sboard-player</property>
-                        <property name="file">resources/o.png</property>
                         <property name="pixel-size">80</property>
+                        <property name="resource">/org/csc1103/tictactoe/o.png</property>
                       </object>
                     </child>
                     <layout>
@@ -553,7 +554,10 @@ cell-vertical</property>
     <style/>
   </object>
   <object class="GtkDialog" id="win_dialog">
+    <property name="decorated">False</property>
+    <property name="deletable">False</property>
     <property name="modal">True</property>
+    <property name="resizable">False</property>
     <property name="title">Winner!</property>
     <property name="transient-for">window</property>
     <child internal-child="action_area">

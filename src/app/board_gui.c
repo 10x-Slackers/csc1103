@@ -20,18 +20,18 @@ static void update_score_label(GtkBuilder* builder, const char* label_name,
 }
 
 /**
- * @brief Get the image path for a cell state.
+ * @brief Get the image resource path for a cell state.
  * @param state The cell state.
- * @return Path to the appropriate image file.
+ * @return Resource path to the appropriate image file.
  */
 static const char* get_cell_image(CellState state) {
   switch (state) {
     case X:
-      return "resources/x.png";
+      return X_IMAGE_RESOURCE;
     case O:
-      return "resources/o.png";
+      return O_IMAGE_RESOURCE;
     default:
-      return "resources/blank.png";
+      return BLANK_IMAGE_RESOURCE;
   }
 }
 
@@ -43,11 +43,11 @@ static const char* get_cell_image(CellState state) {
 static const char* get_winner_message(Winner winner) {
   switch (winner) {
     case WIN_X:
-      return "Player X wins!";
+      return X_WIN_MESSAGE;
     case WIN_O:
-      return "Player O wins!";
+      return O_WIN_MESSAGE;
     case DRAW:
-      return "It's a draw!";
+      return DRAW_MESSAGE;
     default:
       return NULL;
   }
@@ -104,7 +104,7 @@ static int update_board_display(GameState* g_game_state) {
       if (!cell_button) return -1;
 
       const char* image = get_cell_image(g_game_state->board.cells[i][j]);
-      gtk_image_set_from_file(cell_button, image);
+      gtk_image_set_from_resource(cell_button, image);
     }
   }
 

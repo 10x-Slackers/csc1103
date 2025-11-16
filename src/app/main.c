@@ -1,4 +1,3 @@
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,29 +6,12 @@
 #include "game.h"
 #include "main_menu.h"
 #include "option_menu.h"
-
+#include "utils.h"
 #define APP_ID "com.csc1103.tictactoe"
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 900
-#define CSS_PATH "resources/style.css"
-#define BUILDER_PATH "resources/builder.ui"
-
-/* Global Naive Bayes model */
-static NaiveBayesModel nb_model;
-
-/**
- * @brief Loads and applies CSS styling from the specified file.
- * @param css_path Path to the CSS file.
- */
-static void load_css(const char* css_path) {
-  GtkCssProvider* provider = gtk_css_provider_new();
-  // Load CSS from the specified file
-  gtk_css_provider_load_from_path(provider, css_path);
-  gtk_style_context_add_provider_for_display(
-      gdk_display_get_default(), GTK_STYLE_PROVIDER(provider),
-      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref(provider);
-}
+#define CSS_RESOURCE "/org/csc1103/tictactoe/style.css"
+#define BUILDER_RESOURCE "/org/csc1103/tictactoe/builder.ui"
 
 /**
  * @brief Callback function triggered when the GTK application is activated.
@@ -41,24 +23,29 @@ static void load_css(const char* css_path) {
  * @param user_data User data pointer (unused).
  */
 static void activate(GtkApplication* app, gpointer user_data G_GNUC_UNUSED) {
-  // Load the UI from the builder file
-  GtkBuilder* builder = gtk_builder_new();
-  GError* error = NULL;
-  if (!gtk_builder_add_from_file(builder, BUILDER_PATH, &error)) {
-    g_printerr("Error loading UI file: %s\n", error->message);
-    if (error) g_error_free(error);
+  // Load the UI from the builder resource
+  GtkBuilder* builder = get_builder(BUILDER_RESOURCE);
+  if (!builder) {
+    g_printerr("Failed to load UI resource.\n");
+    return;
+  }
+
+  // Load CSS from resource
+  load_css(CSS_RESOURCE);
+
+  // Load the Naive Bayes model
+  NaiveBayesModel nb_model;
+  if (load_nb_model(&nb_model, "src/ml/naive_bayes.bin") != 0) {
+    g_printerr(
+        "Error: Failed to load Naive Bayes model from "
+        "'src/ml/naive_bayes.bin'\n");
     g_object_unref(builder);
     return;
   }
 
-  // Load CSS
-  load_css(CSS_PATH);
-
   // Initialize game state with the builder and Naive Bayes model
   if (init_game_state(builder, &nb_model) != 0) {
     g_printerr("Failed to initialize game state.\n");
-    g_object_unref(builder);
-    return;
   }
 
   // Get the main stack
@@ -93,8 +80,8 @@ static void activate(GtkApplication* app, gpointer user_data G_GNUC_UNUSED) {
 /**
  * @brief Main entry point of the application.
  *
- * Seeds the random number generator, loads the Naive Bayes model, then creates
- * and runs the GTK application.
+ * Seeds the random number generator, loads the Naive Bayes model, then
+ * creates and runs the GTK application.
  *
  * @param argc Argument count.
  * @param argv Argument vector.
@@ -103,14 +90,6 @@ static void activate(GtkApplication* app, gpointer user_data G_GNUC_UNUSED) {
 int main(int argc, char* argv[]) {
   // Seed RNG
   srand((unsigned int)time(NULL));
-
-  // Load Naive Bayes model
-  if (load_nb_model(&nb_model, "src/ml/naive_bayes.bin") != 0) {
-    fprintf(stderr,
-            "Error: Failed to load Naive Bayes model from "
-            "'src/ml/naive_bayes.bin'\n");
-    return EXIT_FAILURE;
-  }
 
   // Create and run the GTK application
   GtkApplication* app =

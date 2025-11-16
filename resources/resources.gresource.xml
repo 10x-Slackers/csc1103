@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/org/csc1103/tictactoe">
+        <file preprocess="xml-stripblanks">builder.ui</file>
+        <file>style.css</file>
+        <file>logo.png</file>
+        <file>x.png</file>
+        <file>o.png</file>
+        <file>blank.png</file>
+    </gresource>
+</gresources>

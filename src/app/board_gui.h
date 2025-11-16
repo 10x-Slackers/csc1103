@@ -7,6 +7,14 @@
 #define SCORE_BUFFER_SIZE 6   // Buffer size for score text formatting
 #define BUTTON_NAME_SIZE 20   // Buffer size for button name formatting
 
+#define X_IMAGE_RESOURCE "/org/csc1103/tictactoe/x.png"
+#define O_IMAGE_RESOURCE "/org/csc1103/tictactoe/o.png"
+#define BLANK_IMAGE_RESOURCE "/org/csc1103/tictactoe/blank.png"
+
+#define X_WIN_MESSAGE "Player X wins!"
+#define O_WIN_MESSAGE "Player O wins!"
+#define DRAW_MESSAGE "It's a draw!"
+
 /**
  * @brief Update the game state and UI.
  *
