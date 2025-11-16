@@ -57,7 +57,7 @@ static void set_diff_hard(GtkStack* stack) {
 }
 
 void update_ai_hint_visibility(GtkBuilder* builder) {
-  GameState* g_game_state = get_game_state();
+  const GameState* g_game_state = get_game_state();
   if (!g_game_state || !builder) return;
 
   GtkWidget* ai_hint =

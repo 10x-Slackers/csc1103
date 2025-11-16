@@ -163,12 +163,12 @@ static int show_win_dialog(GameState* g_game_state, const char* message) {
 
   GtkLabel* win_label =
       GTK_LABEL(gtk_builder_get_object(g_game_state->builder, "win_msg"));
-  GtkWidget* win_dialog =
+  GtkWidget* dialog =
       GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, "win_dialog"));
-  if (!win_label || !win_dialog) return -1;
+  if (!win_label || !dialog) return -1;
 
   gtk_label_set_text(win_label, message);
-  gtk_widget_set_visible(win_dialog, TRUE);
+  gtk_widget_set_visible(dialog, TRUE);
 
   return 0;
 }
@@ -344,7 +344,7 @@ static void change_difficulty(GtkDropDown* dropdown,
       break;
   }
 
-  GameState* g_game_state = get_game_state();
+  const GameState* g_game_state = get_game_state();
   if (!g_game_state) return;
 
   // Only reset if difficulty actually changed
@@ -360,9 +360,8 @@ static void change_difficulty(GtkDropDown* dropdown,
  */
 static void play_again_clicked(GtkBuilder* builder) {
   // Hide the win dialog
-  GtkWidget* win_dialog =
-      GTK_WIDGET(gtk_builder_get_object(builder, "win_dialog"));
-  if (win_dialog) gtk_widget_set_visible(win_dialog, FALSE);
+  GtkWidget* dialog = GTK_WIDGET(gtk_builder_get_object(builder, "win_dialog"));
+  if (dialog) gtk_widget_set_visible(dialog, FALSE);
   // Reset game state for a new game
   reset_game_state();
 }
@@ -373,9 +372,8 @@ static void play_again_clicked(GtkBuilder* builder) {
  */
 static void go_back_clicked(GtkBuilder* builder) {
   // Hide the win dialog
-  GtkWidget* win_dialog =
-      GTK_WIDGET(gtk_builder_get_object(builder, "win_dialog"));
-  if (win_dialog) gtk_widget_set_visible(win_dialog, FALSE);
+  GtkWidget* dialog = GTK_WIDGET(gtk_builder_get_object(builder, "win_dialog"));
+  if (dialog) gtk_widget_set_visible(dialog, FALSE);
   // Navigate to main menu
   GtkStack* stack = GTK_STACK(gtk_builder_get_object(builder, "main_stack"));
   if (stack) to_main_menu(stack);

@@ -13,7 +13,7 @@ static AudioState g_audio = {0};
  * @return TRUE to continue receiving messages.
  */
 static gboolean on_eos(GstBus* bus, GstMessage* msg, gpointer data) {
-  gboolean* loop = (gboolean*)data;
+  const gboolean* loop = (gboolean*)data;
   // Loop the music on end of stream if enabled
   if (GST_MESSAGE_TYPE(msg) == GST_MESSAGE_EOS && *loop) {
     GstElement* playbin = GST_ELEMENT(GST_MESSAGE_SRC(msg));
