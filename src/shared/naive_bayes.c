@@ -36,7 +36,6 @@ static void invert_board(Board* board) {
 int load_nb_model(NaiveBayesModel* model, const char* model_path) {
   // Load from embedded binary data if file path is not provided
   if (model_path == NULL && nb_model_bin_len == sizeof(NaiveBayesModel)) {
-    printf("Loading Naive Bayes model from embedded data.\n");
     memcpy(model, nb_model_bin, sizeof(NaiveBayesModel));
     return 0;
   }

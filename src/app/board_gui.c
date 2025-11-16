@@ -312,6 +312,7 @@ static gboolean process_ai_move(gpointer user_data) {
  * @param stack Pointer to the GtkStack for navigation.
  */
 static void to_main_menu(GtkStack* stack) {
+  reset_scoreboard();
   reset_game_state();
   gtk_stack_set_visible_child_name(stack, "main_menu");
 }
@@ -349,6 +350,7 @@ static void change_difficulty(GtkDropDown* dropdown,
   // Only reset if difficulty actually changed
   if (g_game_state->difficulty == difficulty) return;
   set_difficulty(difficulty);
+  reset_scoreboard();
   reset_game_state();
 }
 

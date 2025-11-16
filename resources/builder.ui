@@ -24,7 +24,8 @@
                 <child>
                   <object class="GtkImage" id="logo">
                     <property name="css-classes">logo</property>
-                    <property name="margin-bottom">50</property>
+                    <property name="margin-bottom">20</property>
+                    <property name="margin-top">40</property>
                     <property name="pixel-size">300</property>
                     <property name="resource">/org/csc1103/tictactoe/logo.png</property>
                     <layout>
@@ -59,13 +60,28 @@
                 </child>
                 <child>
                   <object class="GtkBox">
+                    <property name="halign">start</property>
+                    <child>
+                      <object class="GtkButton" id="quit_game">
+                        <property name="css-classes">button-normal
+button-round</property>
+                        <property name="icon-name">application-exit</property>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">3</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
                     <property name="halign">end</property>
-                    <property name="margin-top">50</property>
                     <child>
                       <object class="GtkToggleButton" id="audio_toggle">
                         <property name="active">True</property>
                         <property name="css-classes">button-normal
-                          button-round</property>
+button-round</property>
                         <property name="icon-name">audio-volume-high</property>
                       </object>
                     </child>
@@ -90,8 +106,11 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="css-classes">h1</property>
+                    <property name="hexpand">True</property>
                     <property name="justify">center</property>
                     <property name="label">Who goes first?</property>
+                    <property name="margin-end">20</property>
+                    <property name="margin-start">20</property>
                     <property name="wrap">True</property>
                     <layout>
                       <property name="column">0</property>
@@ -103,6 +122,7 @@
                 <child>
                   <object class="GtkLabel" id="player_ai_hint">
                     <property name="css-classes">h3</property>
+                    <property name="hexpand">True</property>
                     <property name="label">Player O is the AI player!</property>
                     <layout>
                       <property name="column">0</property>

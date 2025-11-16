@@ -55,7 +55,10 @@ void main_menu(GtkBuilder* builder, GtkStack* stack) {
       GTK_WIDGET(gtk_builder_get_object(builder, "two_player"));
   GtkWidget* audio_toggle =
       GTK_WIDGET(gtk_builder_get_object(builder, "audio_toggle"));
-  if (!one_player || !two_player || !audio_toggle) {
+  GtkWidget* quit_game =
+      GTK_WIDGET(gtk_builder_get_object(builder, "quit_game"));
+  GtkWindow* window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
+  if (!one_player || !two_player || !audio_toggle || !quit_game || !window) {
     g_printerr("Error: Could not find main menu buttons.\n");
     return;
   }
@@ -65,4 +68,6 @@ void main_menu(GtkBuilder* builder, GtkStack* stack) {
   g_signal_connect_swapped(two_player, "clicked",
                            G_CALLBACK(two_player_clicked), builder);
   g_signal_connect(audio_toggle, "toggled", G_CALLBACK(toggle_audio), NULL);
+  g_signal_connect_swapped(quit_game, "clicked", G_CALLBACK(gtk_window_close),
+                           window);
 }

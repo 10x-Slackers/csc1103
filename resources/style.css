@@ -1,45 +1,52 @@
 /* Global Styles */
 window {
-  background: #181c4e;
-  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
-  line-height: 0.85;
+  /* lighter, cheerful background with subtle radial texture feel */
+  background: linear-gradient(45deg, #67bbff, #67ffb6 100%);
+  /* playful but widely-available fallback font stack */
+  font-family: "Comic Neue", "Comic Sans MS", "Chalkboard SE", "Trebuchet MS",
+    sans-serif;
+  line-height: 1.15;
+  color: #21304a; /* general text color */
 }
 
 /* Typography */
 .h1 {
-  font-size: 96px;
+  font-size: 72px;
   font-weight: bold;
+  color: #cd5974;
 }
 
 .h2 {
-  font-size: 48px;
+  font-size: 36px;
   font-weight: bold;
+  color: #cd5974;
 }
 
 .h3 {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
+  color: #cd5974;
 }
 
 /* Color Classes */
 .x {
-  color: #9efae4;
+  color: #499eff;
 }
 
 .o {
-  color: #fac19e;
+  color: #ff9f6b;
 }
 
 .easy {
-  color: #99ff99;
+  color: #9ee493;
 }
 
 .medium {
-  color: #ffff99;
+  color: #ffd97d;
 }
 
 .hard {
-  color: #ff9999;
+  color: #ff7b95;
 }
 
 /* Animations */
@@ -57,13 +64,13 @@ window {
 
 @keyframes glowing {
   0% {
-    box-shadow: 0 0 5px #3f4aad;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
   }
   50% {
-    box-shadow: 0 0 20px #3f4aad;
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.2);
   }
   100% {
-    box-shadow: 0 0 5px #3f4aad;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -92,16 +99,24 @@ window {
 .button-normal,
 .button-menu,
 dropdown > button {
-  background: #2f399d;
+  background: linear-gradient(180deg, #6b8cff 0%, #4d6df7 100%);
+  color: white;
   border-radius: 20px;
-  padding: 20px;
+  padding: 15px;
   transition: all 200ms;
+  box-shadow: 0 6px 0 #364cae;
+  border: none;
+}
+
+.button-normal > image {
+  padding: 20px;
+  -gtk-icon-transform: scale(2);
 }
 
 .button-normal:hover,
 .button-menu:hover,
 dropdown button:hover {
-  background: #3f4aad;
+  transform: translateY(-4px);
 }
 
 .button-round {
@@ -109,12 +124,8 @@ dropdown button:hover {
 }
 
 .button-menu {
-  font-size: 48px;
+  font-size: 44px;
   font-weight: bold;
-}
-
-.button-menu:hover {
-  transform: translateY(-2px);
 }
 
 .button-player {
@@ -128,7 +139,7 @@ dropdown > button {
 
 /* Game Board */
 .sboard {
-  background: #12153b;
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 20px;
   padding: 10px 20px;
 }
@@ -140,27 +151,28 @@ dropdown > button {
 
 .cell {
   border: none;
-  background: #181c4e;
+  background: none;
 }
 
 .cell-center {
-  border: #b1b5e7 4px solid;
+  border: #ebefff 4px solid;
 }
 
 .cell-vertical {
-  border-left: #b1b5e7 4px solid;
-  border-right: #b1b5e7 4px solid;
+  border-left: #ebefff 4px solid;
+  border-right: #ebefff 4px solid;
 }
 
 .cell-horizontal {
-  border-top: #b1b5e7 4px solid;
-  border-bottom: #b1b5e7 4px solid;
+  border-top: #ebefff 4px solid;
+  border-bottom: #ebefff 4px solid;
 }
 
 /* Dropdown Style */
 popover.menu > contents,
 listview {
-  background: #2f399d;
+  background: linear-gradient(180deg, #6b8cff, #4d6df7);
+  color: #fff;
 }
 
 popover.menu > contents {
@@ -173,5 +185,5 @@ listview row {
 
 listview row:hover,
 listview row:selected {
-  background: #3f4aad;
+  background: #5662ca;
 }

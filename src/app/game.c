@@ -65,3 +65,11 @@ Cell get_ai_move() {
   // Handicapped minimax for hard difficulty and default
   return minimax_find_move(&g_game_state.board, true);
 }
+
+int reset_scoreboard() {
+  if (!g_game_state_initalised) return -1;
+  g_game_state.stats.score_X = 0;
+  g_game_state.stats.score_O = 0;
+  g_game_state.stats.score_tie = 0;
+  return 0;
+}

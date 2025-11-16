@@ -70,4 +70,10 @@ int set_difficulty(DifficultyLevel difficulty);
  */
 Cell get_ai_move();
 
+/**
+ * @brief Reset the scoreboard stats to zero.
+ * @return 0 on success, -1 if game state is not initalised.
+ */
+int reset_scoreboard();
+
 #endif  // GAME_H
