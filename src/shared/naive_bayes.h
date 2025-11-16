@@ -14,7 +14,10 @@ typedef struct {
 } NaiveBayesModel;
 
 /**
- * @brief Load a Naive Bayes model from embedded binary data.
+ * @brief Load a Naive Bayes model from a specified binary file.
+ *
+ * Attempts to load from embedded binary data if no file path is provided.
+ *
  * @param model Pointer to the NaiveBayesModel structure to load data into.
  * @param model_path Path to the binary model file.
  * @return int 0 on success, -1 on failure.

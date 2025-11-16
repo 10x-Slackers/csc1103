@@ -4,6 +4,15 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef EMBED_NB_MODEL
+#include "nb_model.h"
+extern unsigned char nb_model_bin[];
+extern unsigned int nb_model_bin_len;
+#else
+static const unsigned char* nb_model_bin = NULL;
+static const unsigned int nb_model_bin_len = 0;
+#endif
+
 /**
  * @brief Invert the board state by swapping X and O.
  *
@@ -25,15 +34,20 @@ static void invert_board(Board* board) {
 }
 
 int load_nb_model(NaiveBayesModel* model, const char* model_path) {
-  FILE* file = fopen(model_path, "rb");
-  if (!file) {
-    return -1;
+  // Load from embedded binary data if file path is not provided
+  if (model_path == NULL && nb_model_bin_len == sizeof(NaiveBayesModel)) {
+    printf("Loading Naive Bayes model from embedded data.\n");
+    memcpy(model, nb_model_bin, sizeof(NaiveBayesModel));
+    return 0;
   }
+
+  FILE* file = fopen(model_path, "rb");
+  if (!file) return -1;
+
   size_t read_count = fread(model, sizeof(NaiveBayesModel), 1, file);
   fclose(file);
-  if (read_count != 1) {
-    return -1;
-  }
+  if (read_count != 1) return -1;
+
   return 0;
 }
 

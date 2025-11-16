@@ -1,10 +1,11 @@
+# Math library
 cc = meson.get_compiler('c')
 mathlib = cc.find_library('m', required: true)
 
-# GTK 4
+# GTK 4 dependency
 gtk_dep = dependency('gtk4', required: true)
 
-# GResource bundle
+# GResource assets bundle
 gnome = import('gnome')
 gresource = gnome.compile_resources(
     'resources',
@@ -13,7 +14,25 @@ gresource = gnome.compile_resources(
     c_name: 'resources',
 )
 
-gui_src = files(
+# Naive Bayes model weights
+fs = import('fs')
+nb_weights_exist = fs.exists(meson.current_source_dir() / 'ml' / 'naive_bayes.bin')
+if nb_weights_exist
+    nb_header = custom_target(
+        'nb_model.h',
+        output: 'nb_model.h',
+        input: 'ml/naive_bayes.bin',
+        command: ['xxd', '-i', '-n', 'nb_model_bin', '@INPUT@', '@OUTPUT@'],
+        install: false,
+    )
+    add_project_arguments('-DEMBED_NB_MODEL', language: 'c')
+else
+    warning(
+        'Naive Bayes model weights not found. The GUI and ML CLI will be built without the embedded model.',
+    )
+endif
+
+app_src = files(
     'app/board_gui.c',
     'app/game.c',
     'app/main.c',
@@ -25,7 +44,11 @@ gui_src = files(
     'shared/naive_bayes.c',
 )
 
-executable('tictactoe', [gui_src, gresource], dependencies: [gtk_dep, mathlib])
+if nb_weights_exist
+    app_src += [nb_header]
+endif
+
+executable('tictactoe', [app_src, gresource], dependencies: [gtk_dep, mathlib])
 
 ml_src = files(
     'ml/cli.c',
