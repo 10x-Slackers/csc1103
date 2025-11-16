@@ -1,27 +1,34 @@
 #include "main_menu.h"
 
 #include "game.h"
+#include "option_menu.h"
 
 /**
  * @brief Handle one player button click.
- * @param stack Pointer to the GtkStack.
+ * @param builder Pointer to the GtkBuilder.
  */
-static void one_player_clicked(GtkStack* stack) {
+static void one_player_clicked(GtkBuilder* builder) {
   // Set game mode to one player
   set_game_mode(MODE_1_PLAYER);
+  // Update AI hint visibility
+  update_ai_hint_visibility(builder);
   // Navigate to difficulty selection
-  gtk_stack_set_visible_child_name(stack, "diff_select");
+  GtkStack* stack = GTK_STACK(gtk_builder_get_object(builder, "main_stack"));
+  if (stack) gtk_stack_set_visible_child_name(stack, "diff_select");
 }
 
 /**
  * @brief Handle two player button click.
- * @param stack Pointer to the GtkStack.
+ * @param builder Pointer to the GtkBuilder.
  */
-static void two_player_clicked(GtkStack* stack) {
+static void two_player_clicked(GtkBuilder* builder) {
   // Set game mode to two player
   set_game_mode(MODE_2_PLAYER);
+  // Update AI hint visibility
+  update_ai_hint_visibility(builder);
   // Navigate to player selection
-  gtk_stack_set_visible_child_name(stack, "player_select");
+  GtkStack* stack = GTK_STACK(gtk_builder_get_object(builder, "main_stack"));
+  if (stack) gtk_stack_set_visible_child_name(stack, "player_select");
 }
 
 /**
@@ -55,8 +62,8 @@ void main_menu(GtkBuilder* builder, GtkStack* stack) {
   }
   // Connect signals for menu buttons
   g_signal_connect_swapped(one_player, "clicked",
-                           G_CALLBACK(one_player_clicked), stack);
+                           G_CALLBACK(one_player_clicked), builder);
   g_signal_connect_swapped(two_player, "clicked",
-                           G_CALLBACK(two_player_clicked), stack);
+                           G_CALLBACK(two_player_clicked), builder);
   g_signal_connect(audio_toggle, "toggled", G_CALLBACK(toggle_audio), NULL);
 }

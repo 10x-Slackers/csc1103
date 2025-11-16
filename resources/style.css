@@ -42,6 +42,52 @@ window {
   color: #ff9999;
 }
 
+/* Animations */
+@keyframes pulsate {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 5px #3f4aad;
+  }
+  50% {
+    box-shadow: 0 0 20px #3f4aad;
+  }
+  100% {
+    box-shadow: 0 0 5px #3f4aad;
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.logo {
+  animation: 1s linear infinite pulsate;
+}
+
+.current-player {
+  animation: 2s ease-in-out infinite glowing;
+}
+
+.winning-cell {
+  animation: 1s ease-in-out infinite rainbow;
+}
+
 /* Buttons */
 .button-normal,
 .button-menu,
@@ -85,6 +131,11 @@ dropdown > button {
   background: #12153b;
   border-radius: 20px;
   padding: 10px 20px;
+}
+
+.sboard-player {
+  border-radius: 15px;
+  padding: 5px;
 }
 
 .cell {

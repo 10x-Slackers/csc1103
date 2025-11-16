@@ -21,7 +21,7 @@ static int minimax(const Board* board, Player ai_player, bool handicap,
   if (handicap && depth >= HANDICAP_MAX_DEPTH) return 0;
 
   // Evaluate terminal states
-  Winner result = check_winner(board);
+  Winner result = check_winner(board, NULL);
   if (result == DRAW) return 0;
   if (result == WIN_X || result == WIN_O) {
     int score = SIZE * SIZE - depth;

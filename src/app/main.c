@@ -13,7 +13,6 @@
 #define WINDOW_HEIGHT 900
 #define CSS_PATH "resources/style.css"
 #define BUILDER_PATH "resources/builder.ui"
-#define APP_TITLE "Group 3 Tic-Tac-Toe"
 
 /* Global Naive Bayes model */
 static NaiveBayesModel nb_model;
@@ -77,24 +76,18 @@ static void activate(GtkApplication* app, gpointer user_data G_GNUC_UNUSED) {
   game_board(builder, stack);
   win_dialog(builder);
 
-  // Set the stack to show the main menu
+  // Set initial visible child to main menu
   gtk_stack_set_visible_child_name(stack, "main_menu");
 
-  GtkWidget* main_window =
-      GTK_WIDGET(gtk_builder_get_object(builder, "window"));
-  GtkWidget* win_dialog =
-      GTK_WIDGET(gtk_builder_get_object(builder, "win_dialog"));
-  if (!main_window || !win_dialog) {
-    g_printerr("Failed to find main window or win dialog in UI file.\n");
+  // Show the window
+  GtkWidget* window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+  if (!window) {
+    g_printerr("Failed to find main window in UI file.\n");
     g_object_unref(builder);
     return;
   }
-  // Set the dialog as transient for the main window and modal
-  gtk_window_set_transient_for(GTK_WINDOW(win_dialog), GTK_WINDOW(main_window));
-  gtk_window_set_modal(GTK_WINDOW(win_dialog), TRUE);
-  // Show the window
-  gtk_window_set_application(GTK_WINDOW(main_window), app);
-  gtk_widget_set_visible(main_window, TRUE);
+  gtk_window_set_application(GTK_WINDOW(window), app);
+  gtk_widget_set_visible(window, TRUE);
 }
 
 /**

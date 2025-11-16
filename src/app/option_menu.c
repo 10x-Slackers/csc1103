@@ -50,6 +50,22 @@ static void set_diff_hard(GtkStack* stack) {
   gtk_stack_set_visible_child_name(stack, "player_select");
 }
 
+void update_ai_hint_visibility(GtkBuilder* builder) {
+  GameState* g_game_state = get_game_state();
+  if (!g_game_state || !builder) return;
+
+  GtkWidget* ai_hint =
+      GTK_WIDGET(gtk_builder_get_object(builder, "player_ai_hint"));
+  if (!ai_hint) {
+    g_printerr("Error: Could not find AI hint widget.\n");
+    return;
+  }
+
+  // Show AI hint only in one-player mode
+  bool ai_mode = (g_game_state->mode == MODE_1_PLAYER);
+  gtk_widget_set_visible(ai_hint, ai_mode);
+}
+
 void player_select(GtkBuilder* builder, GtkStack* stack) {
   GtkWidget* x_button = GTK_WIDGET(gtk_builder_get_object(builder, "player_x"));
   GtkWidget* o_button = GTK_WIDGET(gtk_builder_get_object(builder, "player_o"));

@@ -4,6 +4,12 @@
 #include <gtk/gtk.h>
 
 /**
+ * @brief Update player AI hint visibility based on game mode.
+ * @param builder Pointer to the GtkBuilder.
+ */
+void update_ai_hint_visibility(GtkBuilder* builder);
+
+/**
  * @brief Initialize player selection UI and connect signals.
  *
  * Sets up the player selection components for choosing whether to play as X or

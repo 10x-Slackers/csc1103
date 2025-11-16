@@ -141,7 +141,7 @@ bool undo_move(Board* board) {
   return true;
 }
 
-Winner check_winner(const Board* board) {
+Winner check_winner(const Board* board, Cell winning_cells[SIZE]) {
   size_t patterns = sizeof(WIN_PATTERNS) / sizeof(WIN_PATTERNS[0]);
 
   for (size_t i = 0; i < patterns; ++i) {
@@ -151,6 +151,11 @@ Winner check_winner(const Board* board) {
     CellState c = board->cells[pattern[2].row][pattern[2].col];
 
     if (a != EMPTY && a == b && b == c) {
+      if (winning_cells) {
+        winning_cells[0] = pattern[0];
+        winning_cells[1] = pattern[1];
+        winning_cells[2] = pattern[2];
+      }
       return (a == X) ? WIN_X : WIN_O;
     }
   }

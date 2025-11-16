@@ -79,6 +79,20 @@ static int update_scoreboard(GameState* g_game_state) {
 static int update_board_display(GameState* g_game_state) {
   if (!g_game_state || !g_game_state->builder) return -1;
 
+  GtkImage* score_x_image =
+      GTK_IMAGE(gtk_builder_get_object(g_game_state->builder, "sboard_x"));
+  GtkImage* score_o_image =
+      GTK_IMAGE(gtk_builder_get_object(g_game_state->builder, "sboard_o"));
+  if (!score_x_image || !score_o_image) return -1;
+  // Make current player glow
+  if (g_game_state->board.current_player == PLAYER_X) {
+    gtk_widget_add_css_class(GTK_WIDGET(score_x_image), "current-player");
+    gtk_widget_remove_css_class(GTK_WIDGET(score_o_image), "current-player");
+  } else {
+    gtk_widget_add_css_class(GTK_WIDGET(score_o_image), "current-player");
+    gtk_widget_remove_css_class(GTK_WIDGET(score_x_image), "current-player");
+  }
+
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
       char button_img[BUTTON_NAME_SIZE];
@@ -116,13 +130,20 @@ static int toggle_top_right(GameState* g_game_state) {
   gtk_widget_set_visible(undo_section, !show_difficulty);
   gtk_widget_set_visible(diff_section, show_difficulty);
 
-  // Update difficulty dropdown to show current selection
   if (show_difficulty) {
+    // Update difficulty dropdown to show current selection
     GtkDropDown* diff_dropdown = GTK_DROP_DOWN(
         gtk_builder_get_object(g_game_state->builder, "diff_dropdown"));
     if (!diff_dropdown) return -1;
     gtk_drop_down_set_selected(diff_dropdown,
                                g_game_state->difficulty - DIFF_EASY);
+  } else {
+    // Update undo button to be enabled/disabled based on last move availability
+    GtkButton* undo_button = GTK_BUTTON(
+        gtk_builder_get_object(g_game_state->builder, "undo_button"));
+    if (!undo_button) return -1;
+    gtk_widget_set_sensitive(GTK_WIDGET(undo_button),
+                             g_game_state->board.last_move.row != -1);
   }
 
   return 0;
@@ -151,12 +172,56 @@ static int show_win_dialog(GameState* g_game_state, const char* message) {
 }
 
 /**
+ * @brief Highlight the winning cells by adding a CSS class.
+ * @param g_game_state Pointer to the GameState.
+ * @param winning_cells Array of the winning cells.
+ */
+static void highlight_winning_cells(GameState* g_game_state,
+                                    const Cell winning_cells[SIZE]) {
+  if (!g_game_state || !g_game_state->builder || !winning_cells) return;
+
+  for (int i = 0; i < SIZE; i++) {
+    int cell_index = winning_cells[i].row * SIZE + winning_cells[i].col + 1;
+    char button_name[BUTTON_NAME_SIZE];
+    snprintf(button_name, sizeof(button_name), "cell_%d", cell_index);
+
+    GtkWidget* cell_button =
+        GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, button_name));
+    if (cell_button) {
+      gtk_widget_add_css_class(cell_button, "winning-cell");
+    }
+  }
+}
+
+/**
+ * @brief Clear winning cell highlights by removing the CSS class.
+ * @param g_game_state Pointer to the GameState.
+ */
+static void clear_winning_highlights(GameState* g_game_state) {
+  if (!g_game_state || !g_game_state->builder) return;
+
+  for (int i = 1; i <= 9; i++) {
+    char button_name[BUTTON_NAME_SIZE];
+    snprintf(button_name, sizeof(button_name), "cell_%d", i);
+
+    GtkWidget* cell_button =
+        GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, button_name));
+    if (cell_button) {
+      gtk_widget_remove_css_class(cell_button, "winning-cell");
+    }
+  }
+}
+
+/**
  * @brief Reset the game state for a new game.
  * @return 0 on success, -1 on failure.
  */
 static int reset_game_state() {
   GameState* g_game_state = get_game_state();
   if (!g_game_state) return -1;
+
+  // Clear winning highlights from previous game
+  clear_winning_highlights(g_game_state);
 
   // Alternate starting player for next game
   g_game_state->starting_player =
@@ -182,8 +247,14 @@ static int reset_game_state() {
 static bool check_game_over(GameState* g_game_state) {
   if (!g_game_state || !g_game_state->builder) return false;
 
-  Winner winner = check_winner(&g_game_state->board);
+  Cell winning_cells[SIZE];
+  Winner winner = check_winner(&g_game_state->board, winning_cells);
   if (winner == ONGOING) return false;
+
+  // Highlight winning cells if there's a winner (not a draw)
+  if (winner == WIN_X || winner == WIN_O) {
+    highlight_winning_cells(g_game_state, winning_cells);
+  }
 
   // Update score based on winner
   switch (winner) {
@@ -223,10 +294,16 @@ static gboolean process_ai_move(gpointer user_data) {
   GameState* g_game_state = (GameState*)user_data;
   if (!g_game_state) return G_SOURCE_REMOVE;
 
+  // Disable buttons during AI move
+  GtkWidget* game_board =
+      GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, "game_board"));
+  if (game_board) gtk_widget_set_sensitive(game_board, FALSE);
+
   Cell ai_move = get_ai_move();
   make_move(&g_game_state->board, &ai_move);
   update_board_display(g_game_state);
   check_game_over(g_game_state);
+  gtk_widget_set_sensitive(game_board, TRUE);
 
   return G_SOURCE_REMOVE;
 }
@@ -267,6 +344,11 @@ static void change_difficulty(GtkDropDown* dropdown,
       break;
   }
 
+  GameState* g_game_state = get_game_state();
+  if (!g_game_state) return;
+
+  // Only reset if difficulty actually changed
+  if (g_game_state->difficulty == difficulty) return;
   set_difficulty(difficulty);
   reset_game_state();
 }
@@ -316,7 +398,7 @@ static void cell_clicked(GtkButton* button G_GNUC_UNUSED, gpointer user_data) {
   if (!g_game_state) return;
 
   // Check if game is already over or it's AI's turn
-  if (check_winner(&g_game_state->board) != ONGOING) return;
+  if (check_winner(&g_game_state->board, NULL) != ONGOING) return;
   if (g_game_state->mode == MODE_1_PLAYER &&
       g_game_state->board.current_player == PLAYER_O)
     return;
@@ -341,18 +423,12 @@ int update_game_state() {
   // Schedule AI move if it's the AI's turn
   if (g_game_state->mode == MODE_1_PLAYER &&
       g_game_state->board.current_player == PLAYER_O &&
-      check_winner(&g_game_state->board) == ONGOING)
+      check_winner(&g_game_state->board, NULL) == ONGOING)
     g_timeout_add(AI_MOVE_DELAY_MS, process_ai_move, g_game_state);
 
   return 0;
 }
 
-/**
- * @brief Initialize the game board UI and connect signals.
- * @param builder Pointer to the GtkBuilder.
- * @param stack Pointer to the GtkStack.
- * @return 0 on success, -1 on failure.
- */
 void game_board(GtkBuilder* builder, GtkStack* stack) {
   GtkButton* back_button =
       GTK_BUTTON(gtk_builder_get_object(builder, "back_button"));

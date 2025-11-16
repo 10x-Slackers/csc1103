@@ -1,10 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.1 -->
 <interface>
+  <!-- interface-name builder.ui -->
   <requires lib="gtk" version="4.0"/>
   <object class="GtkWindow" id="window">
     <property name="default-height">900</property>
     <property name="default-width">600</property>
     <property name="resizable">False</property>
+    <property name="title">Group 3 Tic-Tac-Toe</property>
     <child>
       <object class="GtkStack" id="main_stack">
         <property name="halign">center</property>
@@ -82,7 +85,7 @@
             <property name="child">
               <object class="GtkGrid" id="player_select">
                 <property name="column-spacing">80</property>
-                <property name="row-spacing">100</property>
+                <property name="row-spacing">20</property>
                 <property name="width-request">0</property>
                 <child>
                   <object class="GtkLabel">
@@ -98,8 +101,20 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="player_ai_hint">
+                    <property name="css-classes">h3</property>
+                    <property name="label">Player O is the AI player!</property>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                      <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkBox">
                     <property name="halign">end</property>
+                    <property name="margin-top">80</property>
                     <child>
                       <object class="GtkButton" id="player_x">
                         <property name="css-classes">button-menu
@@ -115,13 +130,14 @@
                     </child>
                     <layout>
                       <property name="column">0</property>
-                      <property name="row">1</property>
+                      <property name="row">2</property>
                     </layout>
                   </object>
                 </child>
                 <child>
                   <object class="GtkBox">
                     <property name="halign">start</property>
+                    <property name="margin-top">80</property>
                     <child>
                       <object class="GtkButton" id="player_o">
                         <property name="css-classes">button-menu
@@ -137,7 +153,7 @@
                     </child>
                     <layout>
                       <property name="column">1</property>
-                      <property name="row">1</property>
+                      <property name="row">2</property>
                     </layout>
                   </object>
                 </child>
@@ -173,7 +189,7 @@
                     <child>
                       <object class="GtkButton" id="diff_easy">
                         <property name="css-classes">button-menu
-                          easy</property>
+easy</property>
                         <property name="hexpand">True</property>
                         <property name="label">Easy</property>
                         <layout>
@@ -185,7 +201,7 @@
                     <child>
                       <object class="GtkButton" id="diff_medium">
                         <property name="css-classes">button-menu
-                          medium</property>
+medium</property>
                         <property name="label">Medium</property>
                         <layout>
                           <property name="column">0</property>
@@ -196,7 +212,7 @@
                     <child>
                       <object class="GtkButton" id="diff_hard">
                         <property name="css-classes">button-menu
-                          hard</property>
+hard</property>
                         <property name="label">Hard</property>
                         <layout>
                           <property name="column">0</property>
@@ -297,7 +313,7 @@ Hard</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkGrid">
+                  <object class="GtkGrid" id="game_board">
                     <property name="column-homogeneous">True</property>
                     <property name="height-request">500</property>
                     <property name="margin-bottom">20</property>
@@ -475,7 +491,8 @@ cell-vertical</property>
                     <property name="halign">center</property>
                     <property name="spacing">30</property>
                     <child>
-                      <object class="GtkImage">
+                      <object class="GtkImage" id="sboard_x">
+                        <property name="css-classes">sboard-player</property>
                         <property name="file">resources/x.png</property>
                         <property name="pixel-size">80</property>
                       </object>
@@ -512,7 +529,8 @@ cell-vertical</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImage">
+                      <object class="GtkImage" id="sboard_o">
+                        <property name="css-classes">sboard-player</property>
                         <property name="file">resources/o.png</property>
                         <property name="pixel-size">80</property>
                       </object>
@@ -535,6 +553,9 @@ cell-vertical</property>
     <style/>
   </object>
   <object class="GtkDialog" id="win_dialog">
+    <property name="modal">True</property>
+    <property name="title">Winner!</property>
+    <property name="transient-for">window</property>
     <child internal-child="action_area">
       <object class="GtkBox">
         <property name="halign">center</property>
