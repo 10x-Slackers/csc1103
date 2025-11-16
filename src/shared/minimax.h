@@ -6,7 +6,7 @@
 #include "board.h"
 
 #define HANDICAP_MAX_DEPTH 2
-#define HANDICAP_MAX_SAMPLES 2
+#define HANDICAP_MAX_SAMPLES 3
 
 /**
  * @brief Selects a move for the AI player using the minimax algorithm.
