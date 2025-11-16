@@ -5,6 +5,9 @@ mathlib = cc.find_library('m', required: true)
 # GTK 4 dependency
 gtk_dep = dependency('gtk4', required: true)
 
+# GStreamer dependency
+gst_dep = dependency('gstreamer-1.0', required: true)
+
 # GResource assets bundle
 gnome = import('gnome')
 gresource = gnome.compile_resources(
@@ -16,7 +19,9 @@ gresource = gnome.compile_resources(
 
 # Naive Bayes model weights
 fs = import('fs')
-nb_weights_exist = fs.exists(meson.current_source_dir() / 'ml' / 'naive_bayes.bin')
+nb_weights_exist = fs.exists(
+    meson.current_source_dir() / 'ml' / 'naive_bayes.bin',
+)
 if nb_weights_exist
     nb_header = custom_target(
         'nb_model.h',
@@ -33,6 +38,7 @@ else
 endif
 
 app_src = files(
+    'app/audio.c',
     'app/board_gui.c',
     'app/game.c',
     'app/main.c',
@@ -48,7 +54,11 @@ if nb_weights_exist
     app_src += [nb_header]
 endif
 
-executable('tictactoe', [app_src, gresource], dependencies: [gtk_dep, mathlib])
+executable(
+    'tictactoe',
+    [app_src, gresource],
+    dependencies: [gtk_dep, mathlib, gst_dep],
+)
 
 ml_src = files(
     'ml/cli.c',

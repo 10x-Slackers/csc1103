@@ -1,5 +1,7 @@
 #include "board_gui.h"
 
+#include "audio.h"
+
 /* Forward Declarations */
 static gboolean process_ai_move(gpointer user_data);
 
@@ -272,6 +274,9 @@ static bool check_game_over(GameState* g_game_state) {
       return false;
   }
 
+  // Play win sound
+  play_sound(SOUND_WIN);
+
   // Show win/draw dialog
   const char* message = get_winner_message(winner);
   if (message) {
@@ -402,6 +407,8 @@ static void cell_clicked(GtkButton* button G_GNUC_UNUSED, gpointer user_data) {
   Cell move = {.row = cell_index / SIZE, .col = cell_index % SIZE};
 
   if (!make_move(&g_game_state->board, &move)) return;
+
+  play_sound(SOUND_CLICK);
   update_board_display(g_game_state);
   if (!check_game_over(g_game_state)) update_game_state();
 }

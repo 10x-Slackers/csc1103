@@ -26,7 +26,7 @@
 int update_game_state();
 
 /**
- * @brief Initialize the game board UI and connect signals.
+ * @brief Initalise the game board UI and connect signals.
  *
  * Sets up the game board UI components including cell buttons, undo button, and
  * difficulty dropdown.
@@ -37,7 +37,7 @@ int update_game_state();
 void game_board(GtkBuilder* builder, GtkStack* stack);
 
 /**
- * @brief Initialize the win dialog UI and connect signals.
+ * @brief Initalise the win dialog UI and connect signals.
  *
  * Sets up the win/draw dialog with play again and go back buttons.
  *

@@ -1,5 +1,6 @@
 #include "main_menu.h"
 
+#include "audio.h"
 #include "game.h"
 #include "option_menu.h"
 
@@ -8,9 +9,8 @@
  * @param builder Pointer to the GtkBuilder.
  */
 static void one_player_clicked(GtkBuilder* builder) {
-  // Set game mode to one player
+  play_sound(SOUND_CLICK);
   set_game_mode(MODE_1_PLAYER);
-  // Update AI hint visibility
   update_ai_hint_visibility(builder);
   // Navigate to difficulty selection
   GtkStack* stack = GTK_STACK(gtk_builder_get_object(builder, "main_stack"));
@@ -22,9 +22,8 @@ static void one_player_clicked(GtkBuilder* builder) {
  * @param builder Pointer to the GtkBuilder.
  */
 static void two_player_clicked(GtkBuilder* builder) {
-  // Set game mode to two player
+  play_sound(SOUND_CLICK);
   set_game_mode(MODE_2_PLAYER);
-  // Update AI hint visibility
   update_ai_hint_visibility(builder);
   // Navigate to player selection
   GtkStack* stack = GTK_STACK(gtk_builder_get_object(builder, "main_stack"));
@@ -41,10 +40,10 @@ static void toggle_audio(GtkToggleButton* toggle_button,
   // Get audio state
   gboolean is_active = gtk_toggle_button_get_active(toggle_button);
   if (is_active) {
-    g_print("Audio Enabled\n");
+    set_audio_enabled(true);
     gtk_button_set_icon_name(GTK_BUTTON(toggle_button), "audio-volume-high");
   } else {
-    g_print("Audio Disabled\n");
+    set_audio_enabled(false);
     gtk_button_set_icon_name(GTK_BUTTON(toggle_button), "audio-volume-muted");
   }
 }

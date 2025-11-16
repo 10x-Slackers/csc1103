@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "audio.h"
 #include "board_gui.h"
 #include "game.h"
 #include "main_menu.h"
@@ -21,7 +22,7 @@ static NaiveBayesModel nb_model;
 /**
  * @brief Callback function triggered when the GTK application is activated.
  *
- * Loads the UI from the builder file, applies CSS styling, initializes the game
+ * Loads the UI from the builder file, applies CSS styling, initalises the game
  * state, sets up all UI components, and displays the main window.
  *
  * @param app Pointer to the GtkApplication instance.
@@ -29,6 +30,11 @@ static NaiveBayesModel nb_model;
  */
 static void gui_activate(GtkApplication* app,
                          gpointer user_data G_GNUC_UNUSED) {
+  if (init_audio() != 0) {
+    g_printerr("Warning: Failed to initalise audio system.\n");
+    return;
+  }
+
   // Load the UI from the builder resource
   GtkBuilder* builder = get_builder(BUILDER_RESOURCE);
   if (!builder) {
@@ -39,9 +45,9 @@ static void gui_activate(GtkApplication* app,
   // Load CSS from resource
   load_css(CSS_RESOURCE);
 
-  // Initialize game state with the builder and Naive Bayes model
+  // Initalise game state with the builder and Naive Bayes model
   if (init_game_state(builder, &nb_model) != 0) {
-    g_printerr("Failed to initialize game state.\n");
+    g_printerr("Failed to initalise game state.\n");
   }
 
   // Get the main stack
@@ -52,7 +58,7 @@ static void gui_activate(GtkApplication* app,
     return;
   }
 
-  // Initialize all UI components
+  // Initalise all UI components
   main_menu(builder, stack);
   player_select(builder, stack);
   difficulty_select(builder, stack);
@@ -71,6 +77,7 @@ static void gui_activate(GtkApplication* app,
   }
   gtk_window_set_application(GTK_WINDOW(window), app);
   gtk_widget_set_visible(window, TRUE);
+  play_sound(SOUND_THEME);
 }
 
 /**
@@ -88,13 +95,13 @@ int main(int argc, char* argv[]) {
   srand((unsigned int)time(NULL));
 
   // Load the Naive Bayes model
-  int res;
-#ifndef EMBED_NB_MODEL
-  res = load_nb_model(&nb_model, NULL) != 0;
+  int nb_err;
+#ifdef EMBED_NB_MODEL
+  nb_err = load_nb_model(&nb_model, NULL) != 0;
 #else
-  res = load_nb_model(&nb_model, DEFAULT_MODEL_PATH) != 0;
+  nb_err = load_nb_model(&nb_model, DEFAULT_MODEL_PATH) != 0;
 #endif
-  if (res != 0) {
+  if (nb_err != 0) {
     fprintf(stderr, "Error: Failed to load Naive Bayes model\n");
     return EXIT_FAILURE;
   }
@@ -108,7 +115,10 @@ int main(int argc, char* argv[]) {
   }
   g_signal_connect(app, "activate", G_CALLBACK(gui_activate), NULL);
   int status = g_application_run(G_APPLICATION(app), argc, argv);
+
+  // Clean up
   g_object_unref(app);
+  cleanup_audio();
 
   return status;
 }

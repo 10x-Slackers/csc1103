@@ -10,7 +10,7 @@
 void update_ai_hint_visibility(GtkBuilder* builder);
 
 /**
- * @brief Initialize player selection UI and connect signals.
+ * @brief Initalise player selection UI and connect signals.
  *
  * Sets up the player selection components for choosing whether to play as X or
  * O.
@@ -21,7 +21,7 @@ void update_ai_hint_visibility(GtkBuilder* builder);
 void player_select(GtkBuilder* builder, GtkStack* stack);
 
 /**
- * @brief Initialize difficulty selection UI and connect signals.
+ * @brief Initalise difficulty selection UI and connect signals.
  *
  * Sets up the difficulty selection components for choosing easy, medium, or
  * hard difficulty.

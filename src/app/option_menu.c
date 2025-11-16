@@ -1,5 +1,6 @@
 #include "option_menu.h"
 
+#include "audio.h"
 #include "board_gui.h"
 #include "game.h"
 
@@ -8,6 +9,7 @@
  * @param stack Pointer to the GtkStack.
  */
 static void x_clicked(GtkStack* stack) {
+  play_sound(SOUND_CLICK);
   set_first_player(PLAYER_X);
   update_game_state();
   gtk_stack_set_visible_child_name(stack, "game");
@@ -18,6 +20,7 @@ static void x_clicked(GtkStack* stack) {
  * @param stack Pointer to the GtkStack.
  */
 static void o_clicked(GtkStack* stack) {
+  play_sound(SOUND_CLICK);
   set_first_player(PLAYER_O);
   update_game_state();
   gtk_stack_set_visible_child_name(stack, "game");
@@ -28,6 +31,7 @@ static void o_clicked(GtkStack* stack) {
  * @param stack Pointer to the GtkStack.
  */
 static void set_diff_easy(GtkStack* stack) {
+  play_sound(SOUND_CLICK);
   set_difficulty(DIFF_EASY);
   gtk_stack_set_visible_child_name(stack, "player_select");
 }
@@ -37,6 +41,7 @@ static void set_diff_easy(GtkStack* stack) {
  * @param stack Pointer to the GtkStack.
  */
 static void set_diff_medium(GtkStack* stack) {
+  play_sound(SOUND_CLICK);
   set_difficulty(DIFF_MEDIUM);
   gtk_stack_set_visible_child_name(stack, "player_select");
 }
@@ -46,6 +51,7 @@ static void set_diff_medium(GtkStack* stack) {
  * @param stack Pointer to the GtkStack.
  */
 static void set_diff_hard(GtkStack* stack) {
+  play_sound(SOUND_CLICK);
   set_difficulty(DIFF_HARD);
   gtk_stack_set_visible_child_name(stack, "player_select");
 }

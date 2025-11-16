@@ -191,7 +191,7 @@ void play_game() {
 }
 
 /**
- * @brief Initializes and starts a single-player game.
+ * @brief Initalises and starts a single-player game.
  */
 void one_player() {
   GameMode mode = MODE_1_PLAYER;
@@ -210,7 +210,7 @@ void one_player() {
 }
 
 /**
- * @brief Initializes and starts a two-player game.
+ * @brief Initalises and starts a two-player game.
  */
 void two_player() {
   GameMode mode = MODE_2_PLAYER;

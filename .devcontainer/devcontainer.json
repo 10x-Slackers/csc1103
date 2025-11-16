@@ -9,7 +9,7 @@
     "ghcr.io/devcontainers-extra/features/apt-get-packages:1": {
       "clean_ppas": true,
       "preserve_apt_list": true,
-      "packages": "clang-format,meson,ninja-build,libgtk-4-dev,libxml2-utils"
+      "packages": "clang-format,meson,ninja-build,libgtk-4-dev,libxml2-utils,libgstreamer1.0-dev"
     }
   },
   // Use 'forwardPorts' to make a list of ports inside the container available locally.

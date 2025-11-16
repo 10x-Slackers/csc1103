@@ -7,5 +7,8 @@
         <file>x.png</file>
         <file>o.png</file>
         <file>blank.png</file>
+        <file>theme.mp3</file>
+        <file>click.mp3</file>
+        <file>win.mp3</file>
     </gresource>
 </gresources>

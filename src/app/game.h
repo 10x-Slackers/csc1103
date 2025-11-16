@@ -30,37 +30,37 @@ typedef struct {
 } GameState;
 
 /**
- * @brief Initialize the global game state with default values.
+ * @brief Initalise the global game state with default values.
  * @param builder Pointer to the GtkBuilder instance.
  * @param model Pointer to the Naive Bayes model.
- * @return 0 on success, -1 if already initialized or invalid parameters.
+ * @return 0 on success, -1 if already initalised or invalid parameters.
  */
 int init_game_state(GtkBuilder* builder, NaiveBayesModel* model);
 
 /**
  * @brief Get the global game state.
- * @return Pointer to the global game state or NULL if not initialized.
+ * @return Pointer to the global game state or NULL if not initalised.
  */
 GameState* get_game_state();
 
 /**
  * @brief Set the game mode.
  * @param mode The game mode to set.
- * @return 0 on success, -1 if game state is not initialized.
+ * @return 0 on success, -1 if game state is not initalised.
  */
 int set_game_mode(GameMode mode);
 
 /**
  * @brief Set the first player.
  * @param player The player to start first.
- * @return 0 on success, -1 if game state is not initialized.
+ * @return 0 on success, -1 if game state is not initalised.
  */
 int set_first_player(Player player);
 
 /**
  * @brief Set the difficulty level.
  * @param difficulty The difficulty level to set.
- * @return 0 on success, -1 if game state is not initialized.
+ * @return 0 on success, -1 if game state is not initalised.
  */
 int set_difficulty(DifficultyLevel difficulty);
 
