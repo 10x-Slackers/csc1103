@@ -52,6 +52,11 @@ static void benchmark(Algorithm algorithm, const char* algorithm_name,
       double elapsed_time =
           (double)(end_time - start_time) * 1000.0 / CLOCKS_PER_SEC;
 
+      if (move.col == -1 || move.row == -1) {
+        fprintf(stderr, "Warning: Invalid move returned by %s\n",
+                algorithm_name);
+        continue;
+      }
       make_move(&board, &move);
 
       // Update result statistics
