@@ -102,9 +102,7 @@ Cell nb_find_move(const Board* board, const NaiveBayesModel* model) {
   Board board_copy;
   copy_board(board, &board_copy);
   // If AI is PLAYER_O, invert the board for evaluation
-  if (ai_player == PLAYER_O) {
-    invert_board(&board_copy);
-  }
+  if (ai_player == PLAYER_O) invert_board(&board_copy);
 
   // Evaluate moves
   for (int m = 0; m < num_moves; m++) {
