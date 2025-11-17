@@ -29,8 +29,8 @@ typedef struct {
 } GameStats;
 
 /**
- * @brief Initalise a game board to an empty state.
- * @param board Pointer to the Board structure to initalise.
+ * @brief Initialise a game board to an empty state.
+ * @param board Pointer to the Board structure to initialise.
  * @param starting_player The player who will make the first move.
  */
 void init_board(Board* board, Player starting_player);

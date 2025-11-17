@@ -75,7 +75,7 @@ static GstElement* get_player(SoundType type) {
 }
 
 int init_audio() {
-  if (g_audio.initalised) return 0;
+  if (g_audio.initialised) return 0;
   gst_init(NULL, NULL);
   // Create audio players
   g_audio.theme = create_player(THEME_MUSIC_PATH, TRUE);
@@ -87,12 +87,12 @@ int init_audio() {
   }
   // Set initial states
   g_audio.enabled = TRUE;
-  g_audio.initalised = TRUE;
+  g_audio.initialised = TRUE;
   return 0;
 }
 
 void cleanup_audio() {
-  if (!g_audio.initalised) return;
+  if (!g_audio.initialised) return;
   // Cleanup audio players
   gst_element_set_state(g_audio.theme, GST_STATE_NULL);
   gst_object_unref(g_audio.theme);
@@ -100,12 +100,12 @@ void cleanup_audio() {
   gst_object_unref(g_audio.click);
   gst_element_set_state(g_audio.win, GST_STATE_NULL);
   gst_object_unref(g_audio.win);
-  // Unset initalised flag
-  g_audio.initalised = FALSE;
+  // Unset initialised flag
+  g_audio.initialised = FALSE;
 }
 
 void play_sound(SoundType type) {
-  if (!g_audio.initalised || !g_audio.enabled) return;
+  if (!g_audio.initialised || !g_audio.enabled) return;
   // Get the appropriate player
   GstElement* player = get_player(type);
   if (!player) return;
@@ -119,7 +119,7 @@ void play_sound(SoundType type) {
 }
 
 void stop_sound(SoundType type) {
-  if (!g_audio.initalised) return;
+  if (!g_audio.initialised) return;
   GstElement* player = get_player(type);
   if (!player) return;
   gst_element_set_state(player, GST_STATE_PAUSED);

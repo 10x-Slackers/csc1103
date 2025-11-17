@@ -4,7 +4,7 @@
 #include <gtk/gtk.h>
 
 /**
- * @brief Initalise main menu UI and connect signals.
+ * @brief Initialise main menu UI and connect signals.
  *
  * Sets up the main menu UI components including one-player and two-player
  * buttons, and audio toggle button.

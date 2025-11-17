@@ -22,7 +22,7 @@ static NaiveBayesModel nb_model;
 /**
  * @brief Callback function triggered when the GTK application is activated.
  *
- * Loads the UI from the builder file, applies CSS styling, initalises the game
+ * Loads the UI from the builder file, applies CSS styling, initialises the game
  * state, sets up all UI components, and displays the main window.
  *
  * @param app Pointer to the GtkApplication instance.
@@ -31,7 +31,7 @@ static NaiveBayesModel nb_model;
 static void gui_activate(GtkApplication* app,
                          gpointer user_data G_GNUC_UNUSED) {
   if (init_audio() != 0) {
-    g_printerr("Warning: Failed to initalise audio system.\n");
+    g_printerr("Warning: Failed to initialise audio system.\n");
     return;
   }
 
@@ -45,9 +45,9 @@ static void gui_activate(GtkApplication* app,
   // Load CSS from resource
   load_css(CSS_RESOURCE);
 
-  // Initalise game state with the builder and Naive Bayes model
+  // Initialise game state with the builder and Naive Bayes model
   if (init_game_state(builder, &nb_model) != 0) {
-    g_printerr("Failed to initalise game state.\n");
+    g_printerr("Failed to initialise game state.\n");
   }
 
   // Get the main stack
@@ -58,7 +58,7 @@ static void gui_activate(GtkApplication* app,
     return;
   }
 
-  // Initalise all UI components
+  // Initialise all UI components
   main_menu(builder, stack);
   player_select(builder, stack);
   difficulty_select(builder, stack);

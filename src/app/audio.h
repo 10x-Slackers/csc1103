@@ -13,13 +13,13 @@ typedef struct {
   GstElement* click;
   GstElement* win;
   gboolean enabled;
-  gboolean initalised;
+  gboolean initialised;
 } AudioState;
 
 typedef enum { SOUND_THEME, SOUND_CLICK, SOUND_WIN } SoundType;
 
 /**
- * @brief Initalise the audio system.
+ * @brief Initialise the audio system.
  * @return 0 on success, -1 on failure.
  */
 int init_audio();
