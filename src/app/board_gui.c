@@ -381,8 +381,9 @@ static void go_back_clicked(GtkBuilder* builder) {
 
 /**
  * @brief Handle undo button click.
+ * @param user_data User data (unused).
  */
-static void undo_move_handler(void*) {
+static void undo_move_handler(gpointer* user_data G_GNUC_UNUSED) {
   GameState* g_game_state = get_game_state();
   if (undo_move(&g_game_state->board)) update_game_state();
 }
