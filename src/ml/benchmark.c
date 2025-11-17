@@ -115,7 +115,7 @@ int run_benchmarks(const char* model_path) {
   BenchmarkResult results[4];
   benchmark(RANDOM, "Random", NULL, &results[0]);
   benchmark(MINIMAX, "Minimax Perfect", NULL, &results[1]);
-  benchmark(MINIMAX_HANDICAP, "Minimax Handicapped", NULL, &results[2]);
+  benchmark(MINIMAX_HANDICAP, "Minimax Imperfect", NULL, &results[2]);
   benchmark(NAIVE_BAYES, "Naive Bayes", &model, &results[3]);
 
   printf("\nBenchmark Results:\n", RUNS);
