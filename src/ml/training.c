@@ -7,11 +7,11 @@
 NaiveBayesModel train_model(const DataEntry* data_entries,
                             const size_t data_entries_size) {
   NaiveBayesModel model;
-  // Initialize the model with zeros
+  // Initialise the model with zeros
   memset(&model, 0, sizeof(NaiveBayesModel));
-  // Initialize outcome counts
+  // Initialise outcome counts
   size_t outcome_count[OUTCOMES] = {0};
-  // Initialize state counts (outcome * row * col * state)
+  // Initialise state counts (outcome * row * col * state)
   size_t state_count[OUTCOMES][SIZE][SIZE][STATE] = {{{{0}}}};
 
   // Count all occurrences

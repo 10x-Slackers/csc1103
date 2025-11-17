@@ -1,0 +1,189 @@
+/* Global Styles */
+window {
+  /* lighter, cheerful background with subtle radial texture feel */
+  background: linear-gradient(45deg, #67bbff, #67ffb6 100%);
+  /* playful but widely-available fallback font stack */
+  font-family: "Comic Neue", "Comic Sans MS", "Chalkboard SE", "Trebuchet MS",
+    sans-serif;
+  line-height: 1.15;
+  color: #21304a; /* general text color */
+}
+
+/* Typography */
+.h1 {
+  font-size: 72px;
+  font-weight: bold;
+  color: #cd5974;
+}
+
+.h2 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #cd5974;
+}
+
+.h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #cd5974;
+}
+
+/* Color Classes */
+.x {
+  color: #499eff;
+}
+
+.o {
+  color: #ff9f6b;
+}
+
+.easy {
+  color: #9ee493;
+}
+
+.medium {
+  color: #ffd97d;
+}
+
+.hard {
+  color: #ff7b95;
+}
+
+/* Animations */
+@keyframes pulsate {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.logo {
+  animation: 1s linear infinite pulsate;
+}
+
+.current-player {
+  animation: 2s ease-in-out infinite glowing;
+}
+
+.winning-cell {
+  animation: 1s ease-in-out infinite rainbow;
+}
+
+/* Buttons */
+.button-normal,
+.button-menu,
+dropdown > button {
+  background: linear-gradient(180deg, #6b8cff 0%, #4d6df7 100%);
+  color: white;
+  border-radius: 20px;
+  padding: 15px;
+  transition: all 200ms;
+  box-shadow: 0 6px 0 #364cae;
+  border: none;
+}
+
+.button-normal > image {
+  padding: 20px;
+  -gtk-icon-transform: scale(2);
+}
+
+.button-normal:hover,
+.button-menu:hover,
+dropdown button:hover {
+  transform: translateY(-4px);
+}
+
+.button-round {
+  border-radius: 50%;
+}
+
+.button-menu {
+  font-size: 44px;
+  font-weight: bold;
+}
+
+.button-player {
+  font-size: 128px;
+  font-weight: bold;
+}
+
+dropdown > button {
+  padding: 10px 20px;
+}
+
+/* Game Board */
+.sboard {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+.sboard-player {
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.cell {
+  border: none;
+  background: none;
+}
+
+.cell-center {
+  border: #ebefff 4px solid;
+}
+
+.cell-vertical {
+  border-left: #ebefff 4px solid;
+  border-right: #ebefff 4px solid;
+}
+
+.cell-horizontal {
+  border-top: #ebefff 4px solid;
+  border-bottom: #ebefff 4px solid;
+}
+
+/* Dropdown Style */
+popover.menu > contents,
+listview {
+  background: linear-gradient(180deg, #6b8cff, #4d6df7);
+  color: #fff;
+}
+
+popover.menu > contents {
+  border-radius: 20px;
+}
+
+listview row {
+  transition: all 200ms;
+}
+
+listview row:hover,
+listview row:selected {
+  background: #5662ca;
+}

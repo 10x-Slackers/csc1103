@@ -29,8 +29,8 @@ typedef struct {
 } GameStats;
 
 /**
- * @brief Initialize a game board to an empty state.
- * @param board Pointer to the Board structure to initialize.
+ * @brief Initialise a game board to an empty state.
+ * @param board Pointer to the Board structure to initialise.
  * @param starting_player The player who will make the first move.
  */
 void init_board(Board* board, Player starting_player);
@@ -80,10 +80,12 @@ bool undo_move(Board* board);
 /**
  * @brief Check if there is a winner or if the game is a draw.
  * @param board Pointer to the Board structure.
+ * @param winning_cells Output array to store the winning cell positions. Can be
+ *                      NULL if not needed.
  * @return Winner Returns WIN_X if player X wins, WIN_O if player O wins,
  *                DRAW if it's a draw, or ONGOING if the game is still ongoing.
  */
-Winner check_winner(const Board* board);
+Winner check_winner(const Board* board, Cell winning_cells[SIZE]);
 
 /**
  * @brief Select a random valid move from the available empty cells.
