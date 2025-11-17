@@ -95,13 +95,13 @@ int main(int argc, char* argv[]) {
   srand((unsigned int)time(NULL));
 
   // Load the Naive Bayes model
-  int nb_err;
+  int nb_res;
 #ifdef EMBED_NB_MODEL
-  nb_err = load_nb_model(&nb_model, NULL) != 0;
+  nb_res = load_nb_model(&nb_model, NULL);
 #else
-  nb_err = load_nb_model(&nb_model, DEFAULT_MODEL_PATH) != 0;
+  nb_res = load_nb_model(&nb_model, DEFAULT_MODEL_PATH);
 #endif
-  if (nb_err != 0) {
+  if (nb_res != 0) {
     fprintf(stderr, "Error: Failed to load Naive Bayes model\n");
     return EXIT_FAILURE;
   }
