@@ -9,6 +9,13 @@
 #include "../shared/minimax.h"
 #include "../shared/naive_bayes.h"
 
+/**
+ * @brief Benchmark a specific algorithm.
+ * @param algorithm Algorithm to benchmark.
+ * @param algorithm_name Name of the algorithm for display.
+ * @param model Pointer to Naive Bayes model (can be NULL for other algorithms).
+ * @param result Pointer to BenchmarkResult structure to store results.
+ */
 static void benchmark(Algorithm algorithm, const char* algorithm_name,
                       const NaiveBayesModel* model, BenchmarkResult* result) {
   // Initialize result values
@@ -118,7 +125,7 @@ int run_benchmarks(const char* model_path) {
   benchmark(MINIMAX_HANDICAP, "Minimax Imperfect", NULL, &results[2]);
   benchmark(NAIVE_BAYES, "Naive Bayes", &model, &results[3]);
 
-  printf("\nBenchmark Results:\n", RUNS);
+  printf("\nBenchmark Results:\n");
   print_results(results, 4);
   return EXIT_SUCCESS;
 }
