@@ -158,8 +158,6 @@ AI-enhanced tic-tac-toe minigame
 
 - Dev Containers
   - Standardised developer environment
-- Ruff
-  - Python code linting and formatting
 - CppCheck
   - C/C++ code linting
 - clang-format
