@@ -4,8 +4,8 @@
   <!-- interface-name builder.ui -->
   <requires lib="gtk" version="4.0"/>
   <object class="GtkWindow" id="window">
-    <property name="default-height">900</property>
-    <property name="default-width">600</property>
+    <property name="default-height">760</property>
+    <property name="default-width">500</property>
     <property name="resizable">False</property>
     <property name="title">Group 3 Tic-Tac-Toe</property>
     <child>
@@ -18,15 +18,15 @@
           <object class="GtkStackPage">
             <property name="child">
               <object class="GtkGrid" id="main_menu">
-                <property name="margin-end">100</property>
-                <property name="margin-start">100</property>
-                <property name="row-spacing">50</property>
+                <property name="margin-end">85</property>
+                <property name="margin-start">85</property>
+                <property name="row-spacing">42</property>
                 <child>
                   <object class="GtkImage" id="logo">
                     <property name="css-classes">logo</property>
                     <property name="margin-bottom">20</property>
-                    <property name="margin-top">40</property>
-                    <property name="pixel-size">300</property>
+                    <property name="margin-top">38</property>
+                    <property name="pixel-size">250</property>
                     <property name="resource">/org/csc1103/tictactoe/logo.png</property>
                     <layout>
                       <property name="column">0</property>
@@ -100,7 +100,7 @@ button-round</property>
           <object class="GtkStackPage">
             <property name="child">
               <object class="GtkGrid" id="player_select">
-                <property name="column-spacing">80</property>
+                <property name="column-spacing">75</property>
                 <property name="row-spacing">20</property>
                 <property name="width-request">0</property>
                 <child>
@@ -109,8 +109,8 @@ button-round</property>
                     <property name="hexpand">True</property>
                     <property name="justify">center</property>
                     <property name="label">Who goes first?</property>
-                    <property name="margin-end">20</property>
-                    <property name="margin-start">20</property>
+                    <property name="margin-end">50</property>
+                    <property name="margin-start">50</property>
                     <property name="wrap">True</property>
                     <layout>
                       <property name="column">0</property>
@@ -134,7 +134,7 @@ button-round</property>
                 <child>
                   <object class="GtkBox">
                     <property name="halign">end</property>
-                    <property name="margin-top">80</property>
+                    <property name="margin-top">75</property>
                     <child>
                       <object class="GtkButton" id="player_x">
                         <property name="css-classes">button-menu
@@ -142,7 +142,7 @@ button-round</property>
                           x</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="pixel-size">150</property>
+                            <property name="pixel-size">125</property>
                             <property name="resource">/org/csc1103/tictactoe/x.png</property>
                           </object>
                         </child>
@@ -157,7 +157,7 @@ button-round</property>
                 <child>
                   <object class="GtkBox">
                     <property name="halign">start</property>
-                    <property name="margin-top">80</property>
+                    <property name="margin-top">75</property>
                     <child>
                       <object class="GtkButton" id="player_o">
                         <property name="css-classes">button-menu
@@ -166,7 +166,7 @@ button-round</property>
                         <child>
                           <object class="GtkImage">
                             <property name="file">resources/o.png</property>
-                            <property name="pixel-size">150</property>
+                            <property name="pixel-size">125</property>
                             <property name="resource">/org/csc1103/tictactoe/o.png</property>
                           </object>
                         </child>
@@ -187,14 +187,14 @@ button-round</property>
           <object class="GtkStackPage">
             <property name="child">
               <object class="GtkGrid" id="diff_select">
-                <property name="row-spacing">50</property>
+                <property name="row-spacing">42</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="css-classes">h1</property>
                     <property name="justify">center</property>
                     <property name="label">Choose the difficulty</property>
-                    <property name="margin-end">50</property>
-                    <property name="margin-start">50</property>
+                    <property name="margin-end">42</property>
+                    <property name="margin-start">42</property>
                     <property name="wrap">True</property>
                     <layout>
                       <property name="column">0</property>
@@ -205,8 +205,8 @@ button-round</property>
                 <child>
                   <object class="GtkGrid">
                     <property name="halign">center</property>
-                    <property name="row-spacing">50</property>
-                    <property name="width-request">350</property>
+                    <property name="row-spacing">42</property>
+                    <property name="width-request">295</property>
                     <child>
                       <object class="GtkButton" id="diff_easy">
                         <property name="css-classes">button-menu
@@ -258,14 +258,14 @@ hard</property>
           <object class="GtkStackPage">
             <property name="child">
               <object class="GtkGrid" id="game">
-                <property name="height-request">800</property>
-                <property name="row-spacing">50</property>
-                <property name="width-request">500</property>
+                <property name="height-request">670</property>
+                <property name="row-spacing">42</property>
+                <property name="width-request">420</property>
                 <child>
                   <object class="GtkBox">
                     <property name="halign">start</property>
                     <property name="hexpand">True</property>
-                    <property name="margin-start">40</property>
+                    <property name="margin-start">38</property>
                     <property name="valign">start</property>
                     <child>
                       <object class="GtkButton" id="back_button">
@@ -285,7 +285,7 @@ hard</property>
                 <child>
                   <object class="GtkBox" id="diff_section">
                     <property name="halign">end</property>
-                    <property name="margin-end">40</property>
+                    <property name="margin-end">38</property>
                     <property name="spacing">10</property>
                     <property name="valign">start</property>
                     <property name="visible">False</property>
@@ -317,7 +317,7 @@ Hard</property>
                 <child>
                   <object class="GtkBox" id="undo_section">
                     <property name="halign">end</property>
-                    <property name="margin-end">40</property>
+                    <property name="margin-end">38</property>
                     <property name="valign">start</property>
                     <property name="visible">False</property>
                     <child>
@@ -336,13 +336,13 @@ Hard</property>
                 <child>
                   <object class="GtkGrid" id="game_board">
                     <property name="column-homogeneous">True</property>
-                    <property name="height-request">500</property>
+                    <property name="height-request">420</property>
                     <property name="margin-bottom">20</property>
                     <property name="margin-end">20</property>
                     <property name="margin-start">20</property>
                     <property name="margin-top">20</property>
                     <property name="row-homogeneous">True</property>
-                    <property name="width-request">500</property>
+                    <property name="width-request">420</property>
                     <child>
                       <object class="GtkButton" id="cell_1">
                         <property name="css-classes">cell</property>
@@ -510,11 +510,11 @@ cell-vertical</property>
                   <object class="GtkBox">
                     <property name="css-classes">sboard</property>
                     <property name="halign">center</property>
-                    <property name="spacing">30</property>
+                    <property name="spacing">26</property>
                     <child>
                       <object class="GtkImage" id="sboard_x">
                         <property name="css-classes">sboard-player</property>
-                        <property name="pixel-size">80</property>
+                        <property name="pixel-size">68</property>
                         <property name="resource">/org/csc1103/tictactoe/x.png</property>
                       </object>
                     </child>
@@ -552,7 +552,7 @@ cell-vertical</property>
                     <child>
                       <object class="GtkImage" id="sboard_o">
                         <property name="css-classes">sboard-player</property>
-                        <property name="pixel-size">80</property>
+                        <property name="pixel-size">68</property>
                         <property name="resource">/org/csc1103/tictactoe/o.png</property>
                       </object>
                     </child>
