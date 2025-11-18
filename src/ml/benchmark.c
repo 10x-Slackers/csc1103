@@ -41,6 +41,7 @@ static void benchmark(Algorithm algorithm, const char* algorithm_name,
 
     // Run until game over
     while (check_winner(&board, NULL) == ONGOING) {
+      moves_left = MAX_MOVES - board.move_count;
       // Measure start time (ms)
       clock_t start_time = clock();
       // Get AI move based on algorithm
@@ -71,7 +72,6 @@ static void benchmark(Algorithm algorithm, const char* algorithm_name,
           (double)(end_time - start_time) * 1000.0 / CLOCKS_PER_SEC;
 
       // Update result statistics
-      moves_left = MAX_MOVES - board.move_count;
       total_moves[moves_left]++;
       MovesLeftResult* mlr = &result->moves_left_result[moves_left];
       mlr->total_time += elapsed_time;
