@@ -46,8 +46,6 @@ void init_board(Board* board, Player starting_player) {
   board->current_player = starting_player;
   board->last_move = (Cell){-1, -1};
   board->move_count = 0;
-  // WIP: Move srand to program initialization
-  srand((unsigned int)time(NULL));
 }
 
 void print_board(const Board* board) {

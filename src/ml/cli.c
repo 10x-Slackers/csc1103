@@ -13,8 +13,9 @@ static void print_usage(const char* progname) {
   printf(
       "Usage:\n"
       "  %s train [-d <dataset path>] [-m <model path>]\n"
-      "  %s stats [-d <dataset path>] [-m <model path>]\n",
-      progname, progname);
+      "  %s stats [-d <dataset path>] [-m <model path>]\n"
+      "  %s benchmark [-m <model path>]\n",
+      progname, progname, progname);
 }
 
 int parse_arguments(int argc, char* argv[], ProgramMode* mode,
@@ -29,6 +30,8 @@ int parse_arguments(int argc, char* argv[], ProgramMode* mode,
     *mode = MODE_TRAIN;
   } else if (strcmp(argv[1], "stats") == 0) {
     *mode = MODE_STATS;
+  } else if (strcmp(argv[1], "benchmark") == 0) {
+    *mode = MODE_BENCHMARK;
   } else {
     fprintf(stderr, "Error: Invalid mode '%s'\n", argv[1]);
     print_usage(argv[0]);

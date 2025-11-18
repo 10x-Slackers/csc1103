@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "benchmark.h"
 #include "cli.h"
 #include "dataset.h"
 #include "statistics.h"
@@ -14,6 +15,14 @@ int main(int argc, char* argv[]) {
   if (parse_arguments(argc, argv, &mode, &dataset_path, &model_path) != 0)
     return EXIT_FAILURE;
 
+  srand(DATASET_SHUFFLE_SEED);
+
+  // Skip dataset processing for benchmark mode
+  if (mode == MODE_BENCHMARK) {
+    printf("===== BENCHMARK MODE =====\n");
+    return run_benchmarks(model_path);
+  }
+
   // Parse dataset
   printf("Processing dataset: %s\n", dataset_path);
   size_t data_entries_size = 0;
@@ -25,7 +34,6 @@ int main(int argc, char* argv[]) {
   printf("Total number of data entries: %zu\n", data_entries_size);
 
   // Shuffle dataset
-  srand(DATASET_SHUFFLE_SEED);
   if (shuffle_dataset(data_entries, data_entries_size) != 0) {
     fprintf(stderr, "Error: Failed to shuffle dataset\n");
     free(data_entries);
