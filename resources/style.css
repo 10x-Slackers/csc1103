@@ -1,50 +1,50 @@
 /* Global Styles */
 window {
-  background: linear-gradient(45deg, #67bbff, #67ffb6 100%);
+  background: linear-gradient(45deg, #ffb6d9, #fff4a3 100%);
   font-family: "Comic Neue", "Comic Sans MS", "Chalkboard SE", "Trebuchet MS",
     sans-serif;
   line-height: 1.15;
-  color: #21304a;
+  color: #5c4033;
 }
 
 /* Typography */
 .h1 {
   font-size: 60px;
   font-weight: bold;
-  color: #cd5974;
+  color: #ff6b9d;
 }
 
 .h2 {
   font-size: 30px;
   font-weight: bold;
-  color: #cd5974;
+  color: #ff6b9d;
 }
 
 .h3 {
   font-size: 17px;
   font-weight: bold;
-  color: #cd5974;
+  color: #ff6b9d;
 }
 
 /* Color Classes */
 .x {
-  color: #499eff;
+  color: #7b68ee;
 }
 
 .o {
-  color: #ff9f6b;
+  color: #ff9f40;
 }
 
 .easy {
-  color: #9ee493;
+  color: #7fd957;
 }
 
 .medium {
-  color: #ffd97d;
+  color: #ffd93d;
 }
 
 .hard {
-  color: #ff7b95;
+  color: #ff6b9d;
 }
 
 /* Animations */
@@ -97,12 +97,12 @@ window {
 .button-normal,
 .button-menu,
 dropdown > button {
-  background: linear-gradient(180deg, #6b8cff 0%, #4d6df7 100%);
-  color: white;
+  background: linear-gradient(180deg, #feee91, #ffc42d 100%);
+  color: #ff6b9d;
   border-radius: 17px;
   padding: 13px;
   transition: all 200ms;
-  box-shadow: 0 5px 0 #364cae;
+  box-shadow: 0 5px 0 #cc9b25;
   border: none;
 }
 
@@ -137,7 +137,7 @@ dropdown > button {
 
 /* Game Board */
 .sboard {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 20px;
   padding: 10px 20px;
 }
@@ -153,23 +153,23 @@ dropdown > button {
 }
 
 .cell-center {
-  border: #ebefff 4px solid;
+  border: #ffffff 4px solid;
 }
 
 .cell-vertical {
-  border-left: #ebefff 4px solid;
-  border-right: #ebefff 4px solid;
+  border-left: #ffffff 4px solid;
+  border-right: #ffffff 4px solid;
 }
 
 .cell-horizontal {
-  border-top: #ebefff 4px solid;
-  border-bottom: #ebefff 4px solid;
+  border-top: #ffffff 4px solid;
+  border-bottom: #ffffff 4px solid;
 }
 
 /* Dropdown Style */
 popover.menu > contents,
 listview {
-  background: linear-gradient(180deg, #6b8cff, #4d6df7);
+  background: linear-gradient(180deg, #ffb347, #ff8c42);
   color: #fff;
 }
 
@@ -183,5 +183,5 @@ listview row {
 
 listview row:hover,
 listview row:selected {
-  background: #5662ca;
+  background: #ff7a3d;
 }
