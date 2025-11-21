@@ -67,9 +67,10 @@ ml_src = files(
     'ml/main.c',
     'ml/statistics.c',
     'ml/training.c',
+    'ml/winrate.c',
     'shared/board.c',
     'shared/naive_bayes.c',
-    'shared/minimax.c',
+    'shared/minimax.c'
 )
 
 executable('ml-cli', ml_src, dependencies: [mathlib])

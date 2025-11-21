@@ -4,7 +4,13 @@
 #define DEFAULT_DATASET_PATH "dataset/tic-tac-toe.data"
 #define DEFAULT_MODEL_PATH "src/ml/naive_bayes.bin"
 
-typedef enum { MODE_NONE, MODE_TRAIN, MODE_STATS, MODE_BENCHMARK } ProgramMode;
+typedef enum {
+  MODE_NONE,
+  MODE_TRAIN,
+  MODE_STATS,
+  MODE_BENCHMARK,
+  MODE_WINRATE
+} ProgramMode;
 
 /**
  * @brief Parse command line arguments for the ML program.
