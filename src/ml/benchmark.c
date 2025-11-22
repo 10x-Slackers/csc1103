@@ -181,10 +181,10 @@ static void benchmark_response(BenchmarkResult* result) {
  */
 static void print_results(const BenchmarkResult results[], size_t num_results) {
   // Win and Draw Rate
-  printf("%-20s %-10s %-10s\n", "Algorithm", "Win Rate (%)", "Draw Rate (%)");
+  printf("%-20s %-15s %-15s\n", "Algorithm", "Win Rate (%)", "Draw Rate (%)");
   for (size_t i = 0; i < num_results; i++) {
     const BenchmarkResult* r = &results[i];
-    printf("%-20s %-10.2f %-10.2f\n", r->algorithm_name, r->win_rate,
+    printf("%-20s %-15.2f %-15.2f\n", r->algorithm_name, r->win_rate,
            r->draw_rate);
   }
 
