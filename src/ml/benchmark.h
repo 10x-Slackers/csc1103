@@ -2,11 +2,17 @@
 #define BENCHMARK_H
 
 #include "../shared/board.h"
+#include "../shared/naive_bayes.h"
 
 #define MAX_MOVES (SIZE * SIZE + 1)
 #define RUNS 5000
 
 typedef enum { RANDOM, MINIMAX, MINIMAX_HANDICAP, NAIVE_BAYES } Algorithm;
+
+typedef struct {
+  const char* name;
+  Algorithm algorithm;
+} BenchmarkAlgorithm;
 
 typedef struct {
   double total_time;
@@ -18,6 +24,8 @@ typedef struct {
 typedef struct {
   Algorithm algorithm;
   const char* algorithm_name;
+  float win_rate;
+  float draw_rate;
   MovesLeftResult moves_left_result[MAX_MOVES];
 } BenchmarkResult;
 

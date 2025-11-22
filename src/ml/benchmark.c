@@ -9,36 +9,129 @@
 #include "../shared/minimax.h"
 #include "../shared/naive_bayes.h"
 
+/* Global Naive Bayes model */
+static NaiveBayesModel model;
+/* Algorithms to benchmark */
+static BenchmarkAlgorithm algorithms[] = {
+    {"Random", RANDOM},
+    {"Minimax Perfect", MINIMAX},
+    {"Minimax Imperfect", MINIMAX_HANDICAP},
+    {"Naive Bayes", NAIVE_BAYES},
+};
+
 /**
- * @brief Benchmark a specific algorithm.
+ * @brief Initialise a BenchmarkResult structure.
  * @param algorithm Algorithm to benchmark.
  * @param algorithm_name Name of the algorithm for display.
- * @param model Pointer to Naive Bayes model (can be NULL for other algorithms).
- * @param result Pointer to BenchmarkResult structure to store results.
+ * @param result Pointer to BenchmarkResult structure to initialise.
  */
-static void benchmark(Algorithm algorithm, const char* algorithm_name,
-                      const NaiveBayesModel* model, BenchmarkResult* result) {
-  // Initialize result values
+static void init_result(Algorithm algorithm, const char* algorithm_name,
+                        BenchmarkResult* result) {
   result->algorithm = algorithm;
   result->algorithm_name = algorithm_name;
+  result->win_rate = 0.0;
+  result->draw_rate = 0.0;
   for (int i = 0; i < MAX_MOVES; i++) {
     result->moves_left_result[i].total_time = 0.0;
     result->moves_left_result[i].avg_time = 0.0;
     result->moves_left_result[i].min_time = DBL_MAX;
     result->moves_left_result[i].max_time = 0.0;
   }
+}
 
+/**
+ * @brief Benchmark the win rate of a specific algorithm against a random
+ * opponent.
+ * @param algorithm Algorithm to benchmark.
+ * @param model Pointer to Naive Bayes model (can be NULL for other algorithms).
+ * @param result Pointer to BenchmarkResult structure to store results.
+ */
+static void benchmark_win(BenchmarkResult* result) {
+  if (!result) return;
+  // Initialise start values
+  Algorithm algorithm = result->algorithm;
+  const char* algorithm_name = result->algorithm_name;
+  Player random_player = PLAYER_X;
+  Player starting_player = PLAYER_X;
+  int wins = 0;
+  int draws = 0;
+
+  // Perform RUNS games
+  for (int i = 0; i < RUNS; i++) {
+    Board board;
+    init_board(&board, starting_player);
+    Winner winner = ONGOING;
+    // Run until game over
+    while (winner == ONGOING) {
+      Cell move;
+      if (board.current_player == random_player) {
+        // Random opponent move
+        move = random_move(&board);
+      } else {
+        // AI move based on algorithm
+        switch (algorithm) {
+          case RANDOM:
+            move = random_move(&board);
+            break;
+          case MINIMAX:
+            move = minimax_find_move(&board, false);
+            break;
+          case MINIMAX_HANDICAP:
+            move = minimax_find_move(&board, true);
+            break;
+          case NAIVE_BAYES:
+            move = nb_find_move(&board, &model);
+            break;
+        }
+      }
+      if (!make_move(&board, &move)) {
+        fprintf(stderr, "Warning: Invalid move returned by %s\n",
+                algorithm_name);
+        break;
+      }
+      winner = check_winner(&board, NULL);
+    }
+
+    // Check result
+    if ((winner == WIN_O && random_player == PLAYER_X) ||
+        (winner == WIN_X && random_player == PLAYER_O)) {
+      wins++;
+    } else if (winner == DRAW) {
+      draws++;
+    }
+    // Alternate starting player
+    starting_player = (starting_player == PLAYER_X) ? PLAYER_O : PLAYER_X;
+  }
+
+  // Calculate win/draw rate percentage
+  result->win_rate = (100.0 * wins) / RUNS;
+  result->draw_rate = (100.0 * draws) / RUNS;
+}
+
+/**
+ * @brief Benchmark the response rate of a specific algorithm.
+ * @param algorithm Algorithm to benchmark.
+ * @param algorithm_name Name of the algorithm for display.
+ * @param model Pointer to Naive Bayes model (can be NULL for other
+ * algorithms).
+ * @param result Pointer to BenchmarkResult structure to store results.
+ */
+static void benchmark_response(BenchmarkResult* result) {
+  if (!result) return;
+  // Initialise start values
+  Algorithm algorithm = result->algorithm;
+  const char* algorithm_name = result->algorithm_name;
+  Player starting_player = PLAYER_X;
   int total_moves[MAX_MOVES] = {0};
   int moves_left;
 
-  printf("Benchmarking %s\n", algorithm_name);
+  // Perform RUNS games
   for (int i = 0; i < RUNS; i++) {
     Board board;
-    init_board(&board, PLAYER_X);
+    init_board(&board, starting_player);
     // Randomise the first move
     Cell move = random_move(&board);
     make_move(&board, &move);
-
     // Run until game over
     while (check_winner(&board, NULL) == ONGOING) {
       moves_left = MAX_MOVES - board.move_count;
@@ -56,7 +149,7 @@ static void benchmark(Algorithm algorithm, const char* algorithm_name,
           move = minimax_find_move(&board, true);
           break;
         case NAIVE_BAYES:
-          move = nb_find_move(&board, model);
+          move = nb_find_move(&board, &model);
           break;
       }
       // Measure end time (ms)
@@ -70,15 +163,15 @@ static void benchmark(Algorithm algorithm, const char* algorithm_name,
       // Calculate elapsed time in milliseconds
       double elapsed_time =
           (double)(end_time - start_time) * 1000.0 / CLOCKS_PER_SEC;
-
       // Update result statistics
       total_moves[moves_left]++;
       MovesLeftResult* mlr = &result->moves_left_result[moves_left];
       mlr->total_time += elapsed_time;
-      // Update min/max times
       if (elapsed_time < mlr->min_time) mlr->min_time = elapsed_time;
       if (elapsed_time > mlr->max_time) mlr->max_time = elapsed_time;
     }
+    // Alternate starting player
+    starting_player = (starting_player == PLAYER_X) ? PLAYER_O : PLAYER_X;
   }
 
   // Calculate averages
@@ -90,13 +183,19 @@ static void benchmark(Algorithm algorithm, const char* algorithm_name,
   }
 }
 
-static void print_results(const BenchmarkResult results[], int num_results) {
-  // Header
-  printf("%-20s %-15s %-15s %-15s %-15s\n", "Algorithm", "Moves Left",
-         "Avg Time (ms)", "Min Time (ms)", "Max Time (ms)");
+static void print_results(const BenchmarkResult results[], size_t num_results) {
+  // Win and Draw Rate
+  printf("%-20s %-10s %-10s\n", "Algorithm", "Win Rate (%)", "Draw Rate (%)");
+  for (size_t i = 0; i < num_results; i++) {
+    const BenchmarkResult* r = &results[i];
+    printf("%-20s %-10.2f %-10.2f\n", r->algorithm_name, r->win_rate,
+           r->draw_rate);
+  }
 
-  // Per algorithm
-  for (int i = 0; i < num_results; i++) {
+  // Response Time
+  printf("\n%-20s %-15s %-15s %-15s %-15s\n", "Algorithm", "Moves Left",
+         "Avg Time (ms)", "Min Time (ms)", "Max Time (ms)");
+  for (size_t i = 0; i < num_results; i++) {
     const BenchmarkResult* r = &results[i];
     // Per moves left
     for (int j = MAX_MOVES - 1; j >= 0; j--) {
@@ -111,21 +210,26 @@ static void print_results(const BenchmarkResult results[], int num_results) {
 
 int run_benchmarks(const char* model_path) {
   printf("Loading Naive Bayes model from %s...\n", model_path);
-  NaiveBayesModel model;
   if (load_nb_model(&model, model_path) != 0) {
     fprintf(stderr, "Error: Failed to load model\n");
     return EXIT_FAILURE;
   }
   printf("Model loaded successfully.\n");
 
+  // Initialize results array
+  size_t num_algorithms = sizeof(algorithms) / sizeof(algorithms[0]);
+  BenchmarkResult results[num_algorithms];
+  for (size_t i = 0; i < num_algorithms; i++) {
+    init_result(algorithms[i].algorithm, algorithms[i].name, &results[i]);
+  }
+
   printf("Starting benchmarks (%d runs per algorithm)...\n", RUNS);
-  BenchmarkResult results[4];
-  benchmark(RANDOM, "Random", NULL, &results[0]);
-  benchmark(MINIMAX, "Minimax Perfect", NULL, &results[1]);
-  benchmark(MINIMAX_HANDICAP, "Minimax Imperfect", NULL, &results[2]);
-  benchmark(NAIVE_BAYES, "Naive Bayes", &model, &results[3]);
+  printf("Benchmarking Win Rates...\n");
+  for (size_t i = 0; i < num_algorithms; i++) benchmark_win(&results[i]);
+  printf("Benchmarking Response Times...\n");
+  for (size_t i = 0; i < num_algorithms; i++) benchmark_response(&results[i]);
 
   printf("\nBenchmark Results:\n");
-  print_results(results, 4);
+  print_results(results, num_algorithms);
   return EXIT_SUCCESS;
 }

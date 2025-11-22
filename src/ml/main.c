@@ -6,7 +6,6 @@
 #include "dataset.h"
 #include "statistics.h"
 #include "training.h"
-#include "winrate.h"
 
 int main(int argc, char* argv[]) {
   ProgramMode mode = MODE_NONE;
@@ -105,10 +104,6 @@ int main(int argc, char* argv[]) {
     printf("Recall: %.4f\n", metrics.recall);
     printf("F1 Score: %.4f\n", metrics.f1_score);
     free((void*)predictions);
-  }
-  if (mode == MODE_WINRATE) {
-    printf("\n===== WIN RATE MODE =====\n");
-    test_models(model_path);
   }
 
   free(data_entries);
