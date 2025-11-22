@@ -51,13 +51,13 @@ static void benchmark_win(BenchmarkResult* result) {
   // Initialise start values
   Algorithm algorithm = result->algorithm;
   const char* algorithm_name = result->algorithm_name;
-  Player random_player = PLAYER_X;
-  Player starting_player = PLAYER_X;
   int wins = 0;
   int draws = 0;
 
-  // Perform RUNS games
   for (int i = 0; i < RUNS; i++) {
+    // Alternate opponent every run and starting player every two runs
+    Player random_player = (i % 2 == 0) ? PLAYER_X : PLAYER_O;
+    Player starting_player = ((i / 2) % 2 == 0) ? PLAYER_X : PLAYER_O;
     Board board;
     init_board(&board, starting_player);
     Winner winner = ONGOING;
@@ -92,15 +92,13 @@ static void benchmark_win(BenchmarkResult* result) {
       winner = check_winner(&board, NULL);
     }
 
-    // Check result
+    // Check result and update statistics
     if ((winner == WIN_O && random_player == PLAYER_X) ||
         (winner == WIN_X && random_player == PLAYER_O)) {
       wins++;
     } else if (winner == DRAW) {
       draws++;
     }
-    // Alternate starting player
-    starting_player = (starting_player == PLAYER_X) ? PLAYER_O : PLAYER_X;
   }
 
   // Calculate win/draw rate percentage
@@ -121,15 +119,16 @@ static void benchmark_response(BenchmarkResult* result) {
   // Initialise start values
   Algorithm algorithm = result->algorithm;
   const char* algorithm_name = result->algorithm_name;
-  Player starting_player = PLAYER_X;
   int total_moves[MAX_MOVES] = {0};
   int moves_left;
 
   // Perform RUNS games
   for (int i = 0; i < RUNS; i++) {
+    // Alternate starting player
+    Player starting_player = (i % 2 == 0) ? PLAYER_X : PLAYER_O;
     Board board;
     init_board(&board, starting_player);
-    // Randomise the first move
+    // Randomise the first move to vary starting positions
     Cell move = random_move(&board);
     make_move(&board, &move);
     // Run until game over
@@ -158,7 +157,7 @@ static void benchmark_response(BenchmarkResult* result) {
       if (!make_move(&board, &move)) {
         fprintf(stderr, "Warning: Invalid move returned by %s\n",
                 algorithm_name);
-        continue;
+        break;
       }
       // Calculate elapsed time in milliseconds
       double elapsed_time =
@@ -170,8 +169,6 @@ static void benchmark_response(BenchmarkResult* result) {
       if (elapsed_time < mlr->min_time) mlr->min_time = elapsed_time;
       if (elapsed_time > mlr->max_time) mlr->max_time = elapsed_time;
     }
-    // Alternate starting player
-    starting_player = (starting_player == PLAYER_X) ? PLAYER_O : PLAYER_X;
   }
 
   // Calculate averages
@@ -209,6 +206,10 @@ static void print_results(const BenchmarkResult results[], size_t num_results) {
 }
 
 int run_benchmarks(const char* model_path) {
+  if (!model_path) {
+    fprintf(stderr, "Error: Model path is not specified\n");
+    return EXIT_FAILURE;
+  }
   printf("Loading Naive Bayes model from %s...\n", model_path);
   if (load_nb_model(&model, model_path) != 0) {
     fprintf(stderr, "Error: Failed to load model\n");
