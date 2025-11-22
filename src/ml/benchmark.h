@@ -2,7 +2,6 @@
 #define BENCHMARK_H
 
 #include "../shared/board.h"
-#include "../shared/naive_bayes.h"
 
 #define MAX_MOVES (SIZE * SIZE + 1)
 #define RUNS 5000

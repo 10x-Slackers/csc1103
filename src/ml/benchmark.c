@@ -42,8 +42,6 @@ static void init_result(Algorithm algorithm, const char* algorithm_name,
 /**
  * @brief Benchmark the win rate of a specific algorithm against a random
  * opponent.
- * @param algorithm Algorithm to benchmark.
- * @param model Pointer to Naive Bayes model (can be NULL for other algorithms).
  * @param result Pointer to BenchmarkResult structure to store results.
  */
 static void benchmark_win(BenchmarkResult* result) {
@@ -107,11 +105,7 @@ static void benchmark_win(BenchmarkResult* result) {
 }
 
 /**
- * @brief Benchmark the response rate of a specific algorithm.
- * @param algorithm Algorithm to benchmark.
- * @param algorithm_name Name of the algorithm for display.
- * @param model Pointer to Naive Bayes model (can be NULL for other
- * algorithms).
+ * @brief Benchmark the response time of a specific algorithm.
  * @param result Pointer to BenchmarkResult structure to store results.
  */
 static void benchmark_response(BenchmarkResult* result) {
@@ -180,6 +174,11 @@ static void benchmark_response(BenchmarkResult* result) {
   }
 }
 
+/**
+ * @brief Print the benchmark results in table format.
+ * @param results Array of BenchmarkResult structures.
+ * @param num_results Number of results in the array.
+ */
 static void print_results(const BenchmarkResult results[], size_t num_results) {
   // Win and Draw Rate
   printf("%-20s %-10s %-10s\n", "Algorithm", "Win Rate (%)", "Draw Rate (%)");
