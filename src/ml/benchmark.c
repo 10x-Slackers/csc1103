@@ -15,7 +15,7 @@ static NaiveBayesModel model;
 static BenchmarkAlgorithm algorithms[] = {
     {"Random", RANDOM},
     {"Minimax Perfect", MINIMAX},
-    {"Minimax Imperfect", MINIMAX_HANDICAP},
+    {"Minimax Imperfect", MINIMAX_IMPERFECT},
     {"Naive Bayes", NAIVE_BAYES},
 };
 
@@ -74,7 +74,7 @@ static void benchmark_win(BenchmarkResult* result) {
           case MINIMAX:
             move = minimax_find_move(&board, false);
             break;
-          case MINIMAX_HANDICAP:
+          case MINIMAX_IMPERFECT:
             move = minimax_find_move(&board, true);
             break;
           case NAIVE_BAYES:
@@ -138,7 +138,7 @@ static void benchmark_response(BenchmarkResult* result) {
         case MINIMAX:
           move = minimax_find_move(&board, false);
           break;
-        case MINIMAX_HANDICAP:
+        case MINIMAX_IMPERFECT:
           move = minimax_find_move(&board, true);
           break;
         case NAIVE_BAYES:

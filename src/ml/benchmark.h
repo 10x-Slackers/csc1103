@@ -6,7 +6,7 @@
 #define MAX_MOVES (SIZE * SIZE + 1)
 #define RUNS 5000
 
-typedef enum { RANDOM, MINIMAX, MINIMAX_HANDICAP, NAIVE_BAYES } Algorithm;
+typedef enum { RANDOM, MINIMAX, MINIMAX_IMPERFECT, NAIVE_BAYES } Algorithm;
 
 typedef struct {
   const char* name;
