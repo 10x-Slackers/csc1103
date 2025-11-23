@@ -5,7 +5,7 @@
 
 #include "board.h"
 
-#define HANDICAP_MAX_DEPTH 3
+#define HANDICAP_MAX_DEPTH 2
 #define HANDICAP_MAX_SAMPLES 4
 
 /**
