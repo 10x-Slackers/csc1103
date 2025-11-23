@@ -3,7 +3,7 @@
 
 #include "../shared/board.h"
 
-#define MAX_MOVES (SIZE * SIZE + 1)
+#define MAX_MOVES (SIZE * SIZE)
 #define RUNS 5000
 
 typedef enum { RANDOM, MINIMAX, MINIMAX_IMPERFECT, NAIVE_BAYES } Algorithm;
