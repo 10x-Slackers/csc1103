@@ -1,23 +1,66 @@
-# CSC1103 Mini Project
+# CSC1103 Programming Methodology Mini Project 2025
 
-AI-enhanced tic-tac-toe minigame
+Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compute limited tablet.
 
 ---
 
 ## Project Scope
 
-- [link_to_source](link_to_source)
-  - scope_description
+- [Tic-Tac-Toe GUI Game](src/app/)
+  - [GUI Application](src/app/main.c)
+    - Developed with GTK 4 for cross-platform compatibility
+    - Supports 2-player mode and 1-player mode against 3 AI difficulties
+    - 4 main screens:
+      - [Main Menu](src/app/screens/main_menu.c)
+      - [Difficulty Selection](src/app/screens/option_menu.c)
+      - [Player Selection](src/app/screens/option_menu.c)
+      - [Game Grid](src/app/screens/board_gui.c)
+  - [Game State Management](src/shared/board.c)
+  - [Audio System](src/shared/audio.c)
+    - Developed with GStreamer
+    - Background music and sound effects
+- [Machine Learning CLI program](src/ml/)
+  - [Training](src/ml/training.c)
+    - Train a Naive Bayes classifier on a dataset of terminal Tic-Tac-Toe boards and outcomes
+  - [Evaluation Metrics](src/ml/statistics.c)
+    - Calculate confusion matrix, accuracy, precision, recall, and F1-score for the trained model
+  - [Benchmarking](src/ml/benchmark.c)
+    - Benchmark various AI algorithms
+    - Calculate win rates against random opponent
+    - Calculate average response time to return a move
+- [Core Tic-Tac-Toe Logic](src/shared/board.c)
+  - Modular board representation
+  - Game state checking (win/draw/ongoing)
+  - Move management with 1-move undo
+  - Random move generation for AI
+- [Minimax Algorithm](src/shared/minimax.c)
+  - Implementation of the minimax algorithm for Tic-Tac-Toe with alpha-beta pruning and imperfection
+  - Highly efficient with tuned sample move and depth limitation
+- [Naive Bayes Classifier](src/shared/naive_bayes.c)
+  - Implementation of a Naive Bayes classifier for Tic-Tac-Toe AI
+  - Trained on a dataset of terminal Tic-Tac-Toe boards and outcomes to predict optimal moves
 
 ## Usage
 
-### runtime_executable
+### Tic-Tac-Toe Game
 
 ```sh
-./runtime_executable <args> [optional]
+./tictactoe
 ```
 
-- runtime_executable_description
+- Add `.exe` suffix on Windows
+- Requires a display output (cannot run in Dev Container)
+
+### ML CLI Program
+
+```sh
+./ml-cli <train/stats/benchmark> [-d <dataset_file>] [-m <model_file>]
+```
+
+- Add `.exe` suffix on Windows
+- Use `train` to train a Naive Bayes model on the dataset file
+- Use `stats` to evaluate the model file on the testing split of the dataset file
+- Use `benchmark` to benchmark win rate and response time of various AI algorithms
 
 ## Getting Started
 
@@ -40,12 +83,13 @@ AI-enhanced tic-tac-toe minigame
 - [Homebrew](https://brew.sh/)
   - [pkgconf](https://formulae.brew.sh/formula/pkgconf)
   - [Meson](https://formulae.brew.sh/formula/meson)
+  - [gstreamer](https://formulae.brew.sh/formula/gstreamer)
   - [gtk+](https://formulae.brew.sh/formula/gtk+)
 
 > [!WARNING]
 > Do not use GitHub Desktop! All interactions (files, git, runtime, etc.) should be done through the Dev Container within VS Code.
 
-### Installation
+### Setting Up
 
 1. Clone the repo
 
@@ -115,7 +159,7 @@ AI-enhanced tic-tac-toe minigame
    ./builddir/src/tictactoe.exe
    ```
 
-7. To run it without using the shell, copy the required DLLs into the same directory as the binary
+7. To run it without using the shell (e.g. using File Explorer), copy the required DLLs into the same directory as the binary
 
    ```sh
    cd builddir/src && \
@@ -147,8 +191,6 @@ AI-enhanced tic-tac-toe minigame
    ```
 
 5. The binary can be found in `builddir/src`
-
-   - You may either run it via the Terminal or Finder
 
    ```sh
    ./builddir/src/tictactoe
