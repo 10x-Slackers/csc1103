@@ -41,15 +41,15 @@ static void gui_activate(GtkApplication* app,
     return;
   }
 
+  // Load CSS from resource
+  load_css(CSS_RESOURCE);
+
   // Load the UI from the builder resource
   GtkBuilder* builder = get_builder(BUILDER_RESOURCE);
   if (!builder) {
     g_printerr("Failed to load UI resource.\n");
     return;
   }
-
-  // Load CSS from resource
-  load_css(CSS_RESOURCE);
 
   // Initialise game state with the builder and Naive Bayes model
   if (init_game_state(builder, &nb_model) != 0) {
