@@ -6,6 +6,8 @@ All third-party assets used in this project are free for educational use under t
 
 - blank.png
   - [1x1.png by User:Ilmari Karonen, Public domain, via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:1x1.png)
+- icons/\*.svg
+  - From [GNOME Icon Library](https://github.com/GNOME/adwaita-icon-theme/)
 - logo.png
   - Self-created with [Sixtyfour font](https://fonts.google.com/specimen/Sixtyfour)
 - o.png

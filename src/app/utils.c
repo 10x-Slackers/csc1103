@@ -16,7 +16,11 @@ void load_css(const char* css_resource) {
   gtk_style_context_add_provider_for_display(
       gdk_display_get_default(), GTK_STYLE_PROVIDER(provider),
       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  GtkIconTheme* theme =
+      gtk_icon_theme_get_for_display(gdk_display_get_default());
+  gtk_icon_theme_add_resource_path(theme, "/org/csc1103/tictactoe/icons");
   g_object_unref(provider);
+  g_object_unref(theme);
 }
 
 /**

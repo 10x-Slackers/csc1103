@@ -47,10 +47,12 @@ static void toggle_audio(GtkToggleButton* toggle_button,
   gboolean is_active = gtk_toggle_button_get_active(toggle_button);
   if (is_active) {
     set_audio_enabled(true);
-    gtk_button_set_icon_name(GTK_BUTTON(toggle_button), "audio-volume-high");
+    gtk_button_set_icon_name(GTK_BUTTON(toggle_button),
+                             "audio-volume-high-symbolic");
   } else {
     set_audio_enabled(false);
-    gtk_button_set_icon_name(GTK_BUTTON(toggle_button), "audio-volume-muted");
+    gtk_button_set_icon_name(GTK_BUTTON(toggle_button),
+                             "audio-volume-muted-symbolic");
   }
 }
 

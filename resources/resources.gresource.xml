@@ -2,6 +2,10 @@
 <gresources>
     <gresource prefix="/org/csc1103/tictactoe">
         <file preprocess="xml-stripblanks">builder.ui</file>
+        <file>icons/application-exit-symbolic.svg</file>
+        <file>icons/audio-volume-high-symbolic.svg</file>
+        <file>icons/audio-volume-muted-symbolic.svg</file>
+        <file>icons/edit-undo-symbolic.svg</file>
         <file>style.css</file>
         <file>logo.png</file>
         <file>x.png</file>
