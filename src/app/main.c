@@ -20,7 +20,7 @@
 #define WINDOW_HEIGHT 900
 #define CSS_RESOURCE "/org/csc1103/tictactoe/style.css"
 #define BUILDER_RESOURCE "/org/csc1103/tictactoe/builder.ui"
-#define DEFAULT_MODEL_PATH "src/ml/naive_bayes.bin"
+#define DEFAULT_MODEL_PATH "artifacts/naive_bayes.bin"
 
 /* Global Naive Bayes model */
 static NaiveBayesModel nb_model;
