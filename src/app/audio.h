@@ -4,9 +4,9 @@
 #include <gst/gst.h>
 #include <stdbool.h>
 
-#define THEME_MUSIC_PATH "/org/csc1103/tictactoe/theme.mp3"
-#define CLICK_SOUND_PATH "/org/csc1103/tictactoe/click.mp3"
-#define WIN_SOUND_PATH "/org/csc1103/tictactoe/win.mp3"
+#define THEME_MUSIC_PATH "/org/csc1103/tictactoe/theme.ogg"
+#define CLICK_SOUND_PATH "/org/csc1103/tictactoe/click.ogg"
+#define WIN_SOUND_PATH "/org/csc1103/tictactoe/win.ogg"
 
 typedef struct {
   GstElement* theme;
