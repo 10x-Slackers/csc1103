@@ -11,12 +11,12 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
     - Developed with GTK 4 for cross-platform compatibility
     - Supports 2-player mode and 1-player mode against 3 AI difficulties
     - 4 main screens:
-      - [Main Menu](src/app/screens/main_menu.c)
-      - [Difficulty Selection](src/app/screens/option_menu.c)
-      - [Player Selection](src/app/screens/option_menu.c)
-      - [Game Grid](src/app/screens/board_gui.c)
-  - [Game State Management](src/shared/board.c)
-  - [Audio System](src/shared/audio.c)
+      - [Main Menu](src/app/main_menu.c)
+      - [Difficulty Selection](src/app/option_menu.c)
+      - [Player Selection](src/app/option_menu.c)
+      - [Game Grid](src/app/board_gui.c)
+  - [Game State Management](src/app/game.c)
+  - [Audio System](src/app/audio.c)
     - Developed with GStreamer
     - Background music and sound effects
 - [Machine Learning CLI program](src/ml/)
