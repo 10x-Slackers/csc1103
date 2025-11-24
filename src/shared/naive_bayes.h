@@ -29,8 +29,7 @@ int load_nb_model(NaiveBayesModel* model, const char* model_path);
  * @param board Pointer to the Board structure.
  * @param model Pointer to the Naive Bayes Model.
  * @return float Positive probability if positive outcome is more likely,
- *               negative probability (as negative value) if negative outcome
- *               is more likely.
+ * negative probability (as negative value) if negative outcome is more likely.
  */
 float naive_bayes(Board* board, const NaiveBayesModel* model);
 

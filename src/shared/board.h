@@ -36,16 +36,6 @@ typedef struct {
 void init_board(Board* board, Player starting_player);
 
 /**
- * @brief Print the current state of the game board.
- *
- * Displays 'X', 'O', or the number of the empty cell (1-9).
- * Cells in a row are separated by '|' and rows by lines.
- *
- * @param board Pointer to the Board structure to print.
- */
-void print_board(const Board* board);
-
-/**
  * @brief Copy the contents of one board to another.
  * @param src Pointer to the source Board structure.
  * @param dest Pointer to the destination Board structure.
@@ -56,7 +46,7 @@ void copy_board(const Board* src, Board* dest);
  * @brief Find all empty cells on the board.
  * @param board Pointer to the Board structure.
  * @param empty_cells Output array to store empty cell positions. Can be NULL to
- *                    just count empty cells.
+ * just count empty cells.
  * @param max_cells Maximum number of cells the array can hold.
  * @return int The number of empty cells found.
  */
@@ -81,9 +71,9 @@ bool undo_move(Board* board);
  * @brief Check if there is a winner or if the game is a draw.
  * @param board Pointer to the Board structure.
  * @param winning_cells Output array to store the winning cell positions. Can be
- *                      NULL if not needed.
- * @return Winner Returns WIN_X if player X wins, WIN_O if player O wins,
- *                DRAW if it's a draw, or ONGOING if the game is still ongoing.
+ * NULL if not needed.
+ * @return Winner WIN_X if player X wins, WIN_O if player O wins,
+ * DRAW if it's a draw, or ONGOING if the game is still ongoing.
  */
 Winner check_winner(const Board* board, Cell winning_cells[SIZE]);
 

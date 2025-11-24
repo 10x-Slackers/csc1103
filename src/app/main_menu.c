@@ -65,7 +65,7 @@ void main_menu(GtkBuilder* builder, GtkStack* stack) {
       GTK_WIDGET(gtk_builder_get_object(builder, "quit_game"));
   GtkWindow* window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
   if (!one_player || !two_player || !audio_toggle || !quit_game || !window) {
-    g_printerr("Error: Could not find main menu buttons.\n");
+    g_printerr("Could not find main menu buttons.\n");
     return;
   }
   // Connect signals for menu buttons

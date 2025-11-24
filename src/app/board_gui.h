@@ -16,14 +16,14 @@
 #define DRAW_MESSAGE "It's a draw!"
 
 /**
- * @brief Update the game state and UI.
+ * @brief Update the game state components.
  *
  * Updates the board display, scoreboard, and top-right UI section.
  * Schedules an AI move if in singleplayer mode and it's the AI's turn.
  *
  * @return 0 on success, -1 on failure.
  */
-int update_game_state();
+int update_game();
 
 /**
  * @brief Initialise the game board UI and connect signals.

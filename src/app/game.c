@@ -10,14 +10,14 @@
 #include <stdlib.h>
 
 /* Global game state */
-static GameState g_game_state;
-static bool g_game_state_initialised = false;
+static GameState game_state;
+static bool game_state_initialised = false;
 
 int init_game_state(GtkBuilder* builder, NaiveBayesModel* model) {
-  if (g_game_state_initialised) return -1;
+  if (game_state_initialised) return -1;
   if (!builder || !model) return -1;
 
-  g_game_state = (GameState){
+  game_state = (GameState){
       .mode = 0,
       .difficulty = 0,
       .starting_player = 0,
@@ -25,57 +25,55 @@ int init_game_state(GtkBuilder* builder, NaiveBayesModel* model) {
       .builder = builder,
       .nb_model = model,
   };
-  init_board(&g_game_state.board, PLAYER_X);
-  g_game_state_initialised = true;
+  init_board(&game_state.board, PLAYER_X);
+  game_state_initialised = true;
 
   return 0;
 }
 
 GameState* get_game_state() {
-  return g_game_state_initialised ? &g_game_state : NULL;
+  return game_state_initialised ? &game_state : NULL;
 }
 
 int set_game_mode(GameMode mode) {
-  if (!g_game_state_initialised) return -1;
-  g_game_state.mode = mode;
+  if (!game_state_initialised) return -1;
+  game_state.mode = mode;
   return 0;
 }
 
 int set_first_player(Player player) {
-  if (!g_game_state_initialised) return -1;
-  g_game_state.starting_player = player;
-  init_board(&g_game_state.board, player);
+  if (!game_state_initialised) return -1;
+  game_state.starting_player = player;
+  init_board(&game_state.board, player);
   return 0;
 }
 
 int set_difficulty(DifficultyLevel difficulty) {
-  if (!g_game_state_initialised) return -1;
-  g_game_state.difficulty = difficulty;
+  if (!game_state_initialised) return -1;
+  game_state.difficulty = difficulty;
   return 0;
 }
 
 Cell get_ai_move() {
-  if (!g_game_state_initialised) return (Cell){-1, -1};
+  if (!game_state_initialised) return (Cell){-1, -1};
 
   // Random move for first turn or easy difficulty
-  if (g_game_state.board.move_count == 0 ||
-      g_game_state.difficulty == DIFF_EASY) {
-    return random_move(&g_game_state.board);
+  if (game_state.board.move_count == 0 || game_state.difficulty == DIFF_EASY) {
+    return random_move(&game_state.board);
   }
 
   // Naive Bayes for medium difficulty
-  if (g_game_state.difficulty == DIFF_MEDIUM) {
-    return nb_find_move(&g_game_state.board, g_game_state.nb_model);
-  }
+  if (game_state.difficulty == DIFF_MEDIUM)
+    return nb_find_move(&game_state.board, game_state.nb_model);
 
-  // Handicapped minimax for hard difficulty and default
-  return minimax_find_move(&g_game_state.board, true);
+  // Imperfect minimax for hard difficulty
+  return minimax_find_move(&game_state.board, true);
 }
 
 int reset_scoreboard() {
-  if (!g_game_state_initialised) return -1;
-  g_game_state.stats.score_X = 0;
-  g_game_state.stats.score_O = 0;
-  g_game_state.stats.score_tie = 0;
+  if (!game_state_initialised) return -1;
+  game_state.stats.score_X = 0;
+  game_state.stats.score_O = 0;
+  game_state.stats.score_tie = 0;
   return 0;
 }

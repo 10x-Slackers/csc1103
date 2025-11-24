@@ -14,7 +14,7 @@
  * @brief Trains a Naive Bayes classifier for Tic-Tac-Toe using the provided
  * dataset.
  * @param data_entries Pointer to an array of DataEntry structs containing the
- *                     training data.
+ * training data.
  * @param data_entries_size Number of entries in the training data.
  * @return NaiveBayesModel The trained model containing prior and likelihood
  *         probabilities.

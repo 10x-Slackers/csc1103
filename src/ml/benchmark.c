@@ -15,8 +15,6 @@
 #include "../shared/minimax.h"
 #include "../shared/naive_bayes.h"
 
-/* Global Naive Bayes model */
-static NaiveBayesModel model;
 /* Algorithms to benchmark */
 static BenchmarkAlgorithm algorithms[] = {
     {"Random", RANDOM},
@@ -24,6 +22,9 @@ static BenchmarkAlgorithm algorithms[] = {
     {"Minimax Imperfect", MINIMAX_IMPERFECT},
     {"Naive Bayes", NAIVE_BAYES},
 };
+
+/* Global Naive Bayes model */
+static NaiveBayesModel model;
 
 /**
  * @brief Initialise a BenchmarkResult structure.
