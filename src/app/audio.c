@@ -1,3 +1,9 @@
+/**
+ * @file audio.c
+ * @brief Audio system using GStreamer for sound effects and theme music.
+ * @authors commit2main
+ * @date 2025-11-15
+ */
 #include "audio.h"
 
 #include <gio/gio.h>

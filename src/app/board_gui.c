@@ -1,3 +1,9 @@
+/**
+ * @file board_gui.c
+ * @brief Handles game board GUI updates and interactions.
+ * @authors commit2main, Jerome
+ * @date 2025-11-13
+ */
 #include "board_gui.h"
 
 #include "audio.h"

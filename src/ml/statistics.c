@@ -1,3 +1,10 @@
+/**
+ * @file statistics.c
+ * @brief Functions for calculating evaluation metrics for machine learning
+ * models.
+ * @authors kitsuneez
+ * @date 2025-11-08
+ */
 #include "statistics.h"
 
 #include <math.h>

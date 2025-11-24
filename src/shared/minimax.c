@@ -1,3 +1,10 @@
+/**
+ * @file minimax.c
+ * @brief Minimax algorithm implementation with alpha-beta pruning and
+ * imperfection for Tic-Tac-Toe.
+ * @authors commit2main
+ * @date 2025-10-31
+ */
 #include "minimax.h"
 
 #include <limits.h>

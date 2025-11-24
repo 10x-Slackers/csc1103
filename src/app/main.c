@@ -1,3 +1,9 @@
+/**
+ * @file main.c
+ * @brief Main entry point for the Tic-Tac-Toe application.
+ * @authors commit2main, Jerome
+ * @date 2025-11-13
+ */
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <time.h>

@@ -1,3 +1,9 @@
+/**
+ * @file option_menu.c
+ * @brief Handles option menu interactions.
+ * @authors commit2main, Jerome
+ * @date 2025-11-13
+ */
 #include "option_menu.h"
 
 #include "audio.h"

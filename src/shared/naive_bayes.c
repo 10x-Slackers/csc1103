@@ -1,3 +1,9 @@
+/**
+ * @file naive_bayes.c
+ * @brief Implementation of Naive Bayes classifier for Tic-Tac-Toe AI.
+ * @authors kitsuneez, commit2main
+ * @date 2025-11-03
+ */
 #include "naive_bayes.h"
 
 #include <math.h>

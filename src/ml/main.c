@@ -1,3 +1,9 @@
+/**
+ * @file main.c
+ * @brief Main entry point for the ml-cli program.
+ * @authors commit2main, kitsuneez
+ * @date 2025-11-08
+ */
 #include <stdio.h>
 #include <stdlib.h>
 

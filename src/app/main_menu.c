@@ -1,3 +1,9 @@
+/**
+ * @file main_menu.c
+ * @brief Handles main menu interactions.
+ * @authors Jerome, commit2main
+ * @date 2025-11-13
+ */
 #include "main_menu.h"
 
 #include "audio.h"

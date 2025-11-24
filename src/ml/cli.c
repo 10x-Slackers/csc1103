@@ -1,3 +1,9 @@
+/**
+ * @file cli.c
+ * @brief Functions to help with command-line interface parsing.
+ * @authors commit2main
+ * @date 2025-11-08
+ */
 #include "cli.h"
 
 #include <getopt.h>

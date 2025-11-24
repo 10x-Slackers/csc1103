@@ -1,3 +1,9 @@
+/**
+ * @file game.c
+ * @brief Manages the global game state.
+ * @authors kaiwenteoo, commit2main
+ * @date 2025-11-11
+ */
 #include "game.h"
 
 #include <stdbool.h>

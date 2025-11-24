@@ -1,3 +1,9 @@
+/**
+ * @file benchmark.c
+ * @brief Benchmarks the win rate and response time of various AI algorithms.
+ * @authors commit2main, kitsuneez
+ * @date 2025-11-19
+ */
 #include "benchmark.h"
 
 #include <float.h>

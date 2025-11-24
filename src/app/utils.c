@@ -1,3 +1,9 @@
+/**
+ * @file utils.c
+ * @brief Shared utility functions for the application.
+ * @authors commit2main
+ * @date 2025-11-13
+ */
 #include "utils.h"
 
 /**
