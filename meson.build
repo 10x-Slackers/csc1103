@@ -25,4 +25,13 @@ else
     )
 endif
 
+# GResource assets bundle
+gnome = import('gnome')
+gresource = gnome.compile_resources(
+    'resources',
+    'resources/resources.gresource.xml',
+    source_dir: 'resources',
+    c_name: 'resources',
+)
+
 subdir('src')

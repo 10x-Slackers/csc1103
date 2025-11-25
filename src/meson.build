@@ -8,15 +8,6 @@ gtk_dep = dependency('gtk4', required: true)
 # GStreamer dependency
 gst_dep = dependency('gstreamer-1.0', required: true)
 
-# GResource assets bundle
-gnome = import('gnome')
-gresource = gnome.compile_resources(
-    'resources',
-    '../resources/resources.gresource.xml',
-    source_dir: '../resources',
-    c_name: 'resources',
-)
-
 app_src = files(
     'app/audio.c',
     'app/board_gui.c',
@@ -50,6 +41,6 @@ endif
 executable(
     'tictactoe',
     [app_src, gresource],
-    dependencies: [gtk_dep, mathlib, gst_dep],
+    dependencies: [mathlib, gst_dep, gtk_dep],
 )
 executable('ml-cli', ml_src, dependencies: [mathlib])
