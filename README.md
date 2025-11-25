@@ -79,7 +79,7 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
   - [gstreamer](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-gstreamer?repo=ucrt64)
   - [gst-plugins-base](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-gst-plugins-base?repo=ucrt64)
   - [gtk4](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-gtk4?repo=ucrt64)
-  - [xxd](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-vim?repo=ucrt64) (part of vim package)
+  - [xxd](https://packages.msys2.org/base/vim) (part of vim package)
 
 #### For building on MacOS (Optional)
 
@@ -135,10 +135,10 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
 1. Launch the MSYS2 UCRT64 shell
    - Ensure that MSYS2 is already installed
    - Try searching from the start menu if you cannot find it
-2. Ensure that gcc, Meson, and GTK4 library are installed
+2. Ensure that required libraries are installed
 
    ```sh
-   pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-gstreamer mingw-w64-ucrt-x86_64-gst-plugins-base mingw-w64-ucrt-x86_64-gtk4
+   pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-gstreamer mingw-w64-ucrt-x86_64-gst-plugins-base mingw-w64-ucrt-x86_64-gtk4 vim
    ```
 
 3. Clone or copy the repository files into a location accessible by the shell

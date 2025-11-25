@@ -3,8 +3,8 @@
 
 #include <gtk/gtk.h>
 
-#define AUDIO_ON_RESOURCE "/org/csc1103/tictactoe/x.png"
-#define AUDIO_OFF_RESOURCE "/org/csc1103/tictactoe/x-muted.png"
+#define AUDIO_ON_RESOURCE "/org/csc1103/tictactoe/volume-up-rounded.svg"
+#define AUDIO_OFF_RESOURCE "/org/csc1103/tictactoe/volume-off-rounded.svg"
 
 /**
  * @brief Initialise main menu UI and connect signals.
