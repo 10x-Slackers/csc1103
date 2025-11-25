@@ -42,9 +42,8 @@ static void gui_activate(GtkApplication* app,
     return;
   }
 
-  // Load CSS and icons from resource
+  // Load CSS from resource
   load_css(CSS_RESOURCE);
-  load_icons(ICONS_RESOURCE);
 
   // Load the UI from the builder resource
   GtkBuilder* builder = get_builder(BUILDER_RESOURCE);

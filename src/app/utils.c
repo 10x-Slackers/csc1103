@@ -15,12 +15,6 @@ void load_css(const char* css_resource) {
   g_object_unref(provider);
 }
 
-void load_icons(const char* resource_path) {
-  GtkIconTheme* theme =
-      gtk_icon_theme_get_for_display(gdk_display_get_default());
-  gtk_icon_theme_add_resource_path(theme, resource_path);
-}
-
 GtkBuilder* get_builder(const char* resource_path) {
   GtkBuilder* builder = gtk_builder_new();
   GError* error = NULL;

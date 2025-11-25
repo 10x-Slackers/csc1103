@@ -74,9 +74,12 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
 #### For building on Windows (Optional)
 
 - [MSYS2](https://msys2.org/)
+  - [cmake](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-cmake?repo=ucrt64)
   - [gcc](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-gcc?repo=ucrt64)
   - [meson](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-meson?repo=ucrt64)
+  - [gstreamer](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-gstreamer?repo=ucrt64)
   - [gtk4](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-gtk4?repo=ucrt64)
+  - [xxd](https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-vim?repo=ucrt64) (part of vim package)
 
 #### For building on MacOS (Optional)
 

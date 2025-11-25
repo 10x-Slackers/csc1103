@@ -45,14 +45,16 @@ static void toggle_audio(GtkToggleButton* toggle_button,
                          gpointer user_data G_GNUC_UNUSED) {
   // Get audio state
   gboolean is_active = gtk_toggle_button_get_active(toggle_button);
+  GtkImage* audio_image =
+      GTK_IMAGE(gtk_button_get_child(GTK_BUTTON(toggle_button)));
   if (is_active) {
     set_audio_enabled(true);
-    gtk_button_set_icon_name(GTK_BUTTON(toggle_button),
-                             "audio-volume-high-symbolic");
+    gtk_image_set_from_resource(
+        audio_image, "/org/csc1103/tictactoe/icons/volume-up-rounded.svg");
   } else {
     set_audio_enabled(false);
-    gtk_button_set_icon_name(GTK_BUTTON(toggle_button),
-                             "audio-volume-muted-symbolic");
+    gtk_image_set_from_resource(
+        audio_image, "/org/csc1103/tictactoe/icons/volume-off-rounded.svg");
   }
 }
 
@@ -70,8 +72,6 @@ void main_menu(GtkBuilder* builder, GtkStack* stack) {
     g_printerr("Could not find main menu buttons.\n");
     return;
   }
-  // Load icons for all buttons as fallback
-  gtk_button_set_icon_name(GTK_BUTTON(quit_game), "application-exit-symbolic");
   // Connect signals for menu buttons
   g_signal_connect_swapped(one_player, "clicked",
                            G_CALLBACK(one_player_clicked), builder);

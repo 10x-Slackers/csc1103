@@ -65,7 +65,12 @@
                       <object class="GtkButton" id="quit_game">
                         <property name="css-classes">button-normal
 button-round</property>
-                        <property name="icon-name">application-exit-symbolic</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="pixel-size">24</property>
+                            <property name="resource">/org/csc1103/tictactoe/icons/exit-to-app-rounded.svg</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <layout>
@@ -82,7 +87,12 @@ button-round</property>
                         <property name="active">True</property>
                         <property name="css-classes">button-normal
 button-round</property>
-                        <property name="icon-name">audio-volume-high-symbolic</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="pixel-size">24</property>
+                            <property name="resource">/org/csc1103/tictactoe/icons/volume-up-rounded.svg</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <layout>
@@ -271,7 +281,12 @@ hard</property>
                       <object class="GtkButton" id="back_button">
                         <property name="css-classes">button-normal
                           button-round</property>
-                        <property name="icon-name">application-exit-symbolic</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="pixel-size">24</property>
+                            <property name="resource">/org/csc1103/tictactoe/icons/exit-to-app-rounded.svg</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <layout>
@@ -326,7 +341,12 @@ hard</property>
                       <object class="GtkButton" id="undo_button">
                         <property name="css-classes">button-normal
                           button-round</property>
-                        <property name="icon-name">edit-undo-symbolic</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="pixel-size">24</property>
+                            <property name="resource">/org/csc1103/tictactoe/icons/undo-rounded.svg</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <layout>
