@@ -2,10 +2,10 @@
 <gresources>
     <gresource prefix="/org/csc1103/tictactoe">
         <file preprocess="xml-stripblanks">builder.ui</file>
-        <file>icons/exit-to-app-rounded.svg</file>
-        <file>icons/undo-rounded.svg</file>
-        <file>icons/volume-off-rounded.svg</file>
-        <file>icons/volume-up-rounded.svg</file>
+        <file>exit-to-app-rounded.png</file>
+        <file>undo-rounded.png</file>
+        <file>volume-off-rounded.png</file>
+        <file>volume-up-rounded.png</file>
         <file>style.css</file>
         <file>logo.png</file>
         <file>x.png</file>

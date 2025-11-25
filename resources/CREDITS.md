@@ -6,7 +6,10 @@ All third-party assets used in this project are free for educational use under t
 
 - blank.png
   - [1x1.png by User:Ilmari Karonen, Public domain, via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:1x1.png)
-- icons/\*.svg
+- exit-to-app-rounded.png
+- volume-off-rounded.png
+- volume-up-rounded.png
+- undo-rounded.png
   - [Material Symbols & Icons](https://fonts.google.com/icons)
 - logo.png
   - Self-created with [Sixtyfour font](https://fonts.google.com/specimen/Sixtyfour)

@@ -68,7 +68,7 @@ button-round</property>
                         <child>
                           <object class="GtkImage">
                             <property name="pixel-size">24</property>
-                            <property name="resource">/org/csc1103/tictactoe/icons/exit-to-app-rounded.svg</property>
+                            <property name="resource">/org/csc1103/tictactoe/exit-to-app-rounded.png</property>
                           </object>
                         </child>
                       </object>
@@ -90,7 +90,7 @@ button-round</property>
                         <child>
                           <object class="GtkImage">
                             <property name="pixel-size">24</property>
-                            <property name="resource">/org/csc1103/tictactoe/icons/volume-up-rounded.svg</property>
+                            <property name="resource">/org/csc1103/tictactoe/volume-up-rounded.png</property>
                           </object>
                         </child>
                       </object>
@@ -284,7 +284,7 @@ hard</property>
                         <child>
                           <object class="GtkImage">
                             <property name="pixel-size">24</property>
-                            <property name="resource">/org/csc1103/tictactoe/icons/exit-to-app-rounded.svg</property>
+                            <property name="resource">/org/csc1103/tictactoe/exit-to-app-rounded.png</property>
                           </object>
                         </child>
                       </object>
@@ -344,7 +344,7 @@ hard</property>
                         <child>
                           <object class="GtkImage">
                             <property name="pixel-size">24</property>
-                            <property name="resource">/org/csc1103/tictactoe/icons/undo-rounded.svg</property>
+                            <property name="resource">/org/csc1103/tictactoe/undo-rounded.png</property>
                           </object>
                         </child>
                       </object>
