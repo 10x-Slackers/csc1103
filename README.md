@@ -49,6 +49,7 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
 ```
 
 - Add `.exe` suffix on Windows
+  - For Windows, ensure required DLLs are in the same directory as the binary (comes with the release build)
 - Requires a display output (cannot run in Dev Container)
 
 ### ML CLI Program
@@ -162,12 +163,8 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
    ./builddir/src/tictactoe.exe
    ```
 
-7. To run it without using the shell (e.g. using File Explorer), copy the required DLLs into the same directory as the binary
-
-   ```sh
-   cd builddir/src && \
-   ldd tictactoe.exe | grep '\/ucrt64.*\.dll' -o | xargs -I{} cp "{}" .
-   ```
+7. To run it without using the shell (e.g. using File Explorer), you need to copy the required DLLs into the same directory as the binary
+   - List of DLLs can be found by using [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) to inspect the running process
 
 #### MacOS
 
@@ -175,7 +172,7 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
 > Due to the lack of a MacOS machine among the project members, we were not able to test building on MacOS.
 
 1. Launch Terminal
-2. Ensure that Homebrew, pkgconf, Meson, and GTK4 library are installed
+2. Ensure that the required packages are installed
 
    ```sh
    brew install pkgconf meson gtk+
