@@ -19,6 +19,7 @@
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 900
 #define CSS_RESOURCE "/org/csc1103/tictactoe/style.css"
+#define ICONS_RESOURCE "/org/csc1103/tictactoe/icons"
 #define BUILDER_RESOURCE "/org/csc1103/tictactoe/builder.ui"
 #define DEFAULT_MODEL_PATH "artifacts/naive_bayes.bin"
 
@@ -41,8 +42,9 @@ static void gui_activate(GtkApplication* app,
     return;
   }
 
-  // Load CSS from resource
+  // Load CSS and icons from resource
   load_css(CSS_RESOURCE);
+  load_icons(ICONS_RESOURCE);
 
   // Load the UI from the builder resource
   GtkBuilder* builder = get_builder(BUILDER_RESOURCE);
