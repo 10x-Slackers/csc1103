@@ -49,12 +49,10 @@ static void toggle_audio(GtkToggleButton* toggle_button,
       GTK_IMAGE(gtk_button_get_child(GTK_BUTTON(toggle_button)));
   if (is_active) {
     set_audio_enabled(true);
-    gtk_image_set_from_resource(
-        audio_image, "/org/csc1103/tictactoe/icons/volume-up-rounded.svg");
+    gtk_image_set_from_resource(audio_image, AUDIO_ON_RESOURCE);
   } else {
     set_audio_enabled(false);
-    gtk_image_set_from_resource(
-        audio_image, "/org/csc1103/tictactoe/icons/volume-off-rounded.svg");
+    gtk_image_set_from_resource(audio_image, AUDIO_OFF_RESOURCE);
   }
 }
 

@@ -19,7 +19,6 @@
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 900
 #define CSS_RESOURCE "/org/csc1103/tictactoe/style.css"
-#define ICONS_RESOURCE "/org/csc1103/tictactoe/icons"
 #define BUILDER_RESOURCE "/org/csc1103/tictactoe/builder.ui"
 #define DEFAULT_MODEL_PATH "artifacts/naive_bayes.bin"
 
