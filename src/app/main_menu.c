@@ -70,6 +70,8 @@ void main_menu(GtkBuilder* builder, GtkStack* stack) {
     g_printerr("Could not find main menu buttons.\n");
     return;
   }
+  // Load icons for all buttons as fallback
+  gtk_button_set_icon_name(GTK_BUTTON(quit_game), "application-exit-symbolic");
   // Connect signals for menu buttons
   g_signal_connect_swapped(one_player, "clicked",
                            G_CALLBACK(one_player_clicked), builder);

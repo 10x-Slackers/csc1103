@@ -443,6 +443,11 @@ void game_board(GtkBuilder* builder, GtkStack* stack) {
     g_printerr("Could not find game board UI components.\n");
     return;
   }
+  // Load icons for all buttons as fallback
+  gtk_button_set_icon_name(GTK_BUTTON(back_button),
+                           "application-exit-symbolic");
+  gtk_button_set_icon_name(GTK_BUTTON(undo_button), "edit-undo-symbolic");
+
   // Connect signals for game board buttons
   g_signal_connect_swapped(back_button, "clicked", G_CALLBACK(to_main_menu),
                            stack);
@@ -450,7 +455,6 @@ void game_board(GtkBuilder* builder, GtkStack* stack) {
                    G_CALLBACK(change_difficulty), NULL);
   g_signal_connect_swapped(undo_button, "clicked",
                            G_CALLBACK(undo_move_handler), NULL);
-
   // Connect all 9 cell buttons
   for (int i = 1; i <= 9; i++) {
     char button_name[BUTTON_NAME_SIZE];
