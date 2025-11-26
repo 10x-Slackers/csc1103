@@ -1,3 +1,9 @@
+/**
+ * @file benchmark.c
+ * @brief Benchmarks the win rate and response time of various AI algorithms.
+ * @authors commit2main, kitsuneez
+ * @date 2025-11-19
+ */
 #include "benchmark.h"
 
 #include <float.h>
@@ -9,8 +15,6 @@
 #include "../shared/minimax.h"
 #include "../shared/naive_bayes.h"
 
-/* Global Naive Bayes model */
-static NaiveBayesModel model;
 /* Algorithms to benchmark */
 static BenchmarkAlgorithm algorithms[] = {
     {"Random", RANDOM},
@@ -18,6 +22,9 @@ static BenchmarkAlgorithm algorithms[] = {
     {"Minimax Imperfect", MINIMAX_IMPERFECT},
     {"Naive Bayes", NAIVE_BAYES},
 };
+
+/* Global Naive Bayes model */
+static NaiveBayesModel model;
 
 /**
  * @brief Initialise a BenchmarkResult structure.

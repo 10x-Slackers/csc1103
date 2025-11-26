@@ -1,3 +1,9 @@
+/**
+ * @file board.c
+ * @brief Functions for managing the game board.
+ * @authors commit2main, kaiwenteoo, kitsuneez
+ * @date 2025-11-03
+ */
 #include "board.h"
 
 #include <stdio.h>
@@ -46,40 +52,6 @@ void init_board(Board* board, Player starting_player) {
   board->current_player = starting_player;
   board->last_move = (Cell){-1, -1};
   board->move_count = 0;
-}
-
-void print_board(const Board* board) {
-  for (int i = 0; i < SIZE; i++) {
-    for (int j = 0; j < SIZE; j++) {
-      char cell;
-      switch (board->cells[i][j]) {
-        case X:
-          cell = 'X';
-          break;
-        case O:
-          cell = 'O';
-          break;
-        case EMPTY:
-        default:
-          // cell = ' ';
-          // ASCII '1' (49) + cell index (0-8)
-          cell = '1' + (i * SIZE + j);
-          break;
-      }
-      printf(" %c ", cell);
-      // Print column separator
-      if (j < SIZE - 1) printf("|");
-    }
-    printf("\n");
-    // Print row separator
-    if (i < SIZE - 1) {
-      for (int col = 0; col < SIZE; ++col) {
-        printf("---");
-        if (col < SIZE - 1) printf("+");
-      }
-      printf("\n");
-    }
-  }
 }
 
 void copy_board(const Board* src, Board* dest) {

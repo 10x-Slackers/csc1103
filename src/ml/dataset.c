@@ -1,3 +1,9 @@
+/**
+ * @file dataset.c
+ * @brief Functions for processing the dataset.
+ * @authors kitsuneez
+ * @date 2025-11-08
+ */
 #include "dataset.h"
 
 #include <stdio.h>

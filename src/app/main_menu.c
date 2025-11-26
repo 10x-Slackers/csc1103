@@ -1,3 +1,9 @@
+/**
+ * @file main_menu.c
+ * @brief Handles main menu interactions.
+ * @authors Jerome, commit2main
+ * @date 2025-11-13
+ */
 #include "main_menu.h"
 
 #include "audio.h"
@@ -39,12 +45,14 @@ static void toggle_audio(GtkToggleButton* toggle_button,
                          gpointer user_data G_GNUC_UNUSED) {
   // Get audio state
   gboolean is_active = gtk_toggle_button_get_active(toggle_button);
+  GtkImage* audio_image =
+      GTK_IMAGE(gtk_button_get_child(GTK_BUTTON(toggle_button)));
   if (is_active) {
     set_audio_enabled(true);
-    gtk_button_set_icon_name(GTK_BUTTON(toggle_button), "audio-volume-high");
+    gtk_image_set_from_resource(audio_image, AUDIO_ON_RESOURCE);
   } else {
     set_audio_enabled(false);
-    gtk_button_set_icon_name(GTK_BUTTON(toggle_button), "audio-volume-muted");
+    gtk_image_set_from_resource(audio_image, AUDIO_OFF_RESOURCE);
   }
 }
 
@@ -59,7 +67,7 @@ void main_menu(GtkBuilder* builder, GtkStack* stack) {
       GTK_WIDGET(gtk_builder_get_object(builder, "quit_game"));
   GtkWindow* window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
   if (!one_player || !two_player || !audio_toggle || !quit_game || !window) {
-    g_printerr("Error: Could not find main menu buttons.\n");
+    g_printerr("Could not find main menu buttons.\n");
     return;
   }
   // Connect signals for menu buttons

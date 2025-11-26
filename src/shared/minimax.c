@@ -1,3 +1,10 @@
+/**
+ * @file minimax.c
+ * @brief Minimax algorithm implementation with alpha-beta pruning and
+ * imperfection for Tic-Tac-Toe.
+ * @authors commit2main
+ * @date 2025-10-31
+ */
 #include "minimax.h"
 
 #include <limits.h>
@@ -5,12 +12,12 @@
 
 /**
  * @brief Evaluates the board state using the minimax algorithm with alpha-beta
- *        pruning.
+ * pruning.
  * @param board Pointer to the Board structure.
  * @param handicap if true, limit depth to improve performance and introduce
- *                 inaccuracy
+ * inaccuracy
  * @param is_max true if the current layer is maximizing player, false if
- *               minimizing
+ * minimizing
  * @param alpha Alpha value for pruning.
  * @param beta Beta value for pruning.
  * @param depth Current depth in the game tree.

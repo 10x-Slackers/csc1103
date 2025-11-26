@@ -1,3 +1,9 @@
+/**
+ * @file training.c
+ * @brief Functions for training the Naive Bayes classifier model.
+ * @authors kitsuneez
+ * @date 2025-11-08
+ */
 #include "training.h"
 
 #include <math.h>

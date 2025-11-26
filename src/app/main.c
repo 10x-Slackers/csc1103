@@ -1,3 +1,9 @@
+/**
+ * @file main.c
+ * @brief Main entry point for the Tic-Tac-Toe application.
+ * @authors commit2main, Jerome
+ * @date 2025-11-13
+ */
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <time.h>
@@ -14,7 +20,7 @@
 #define WINDOW_HEIGHT 900
 #define CSS_RESOURCE "/org/csc1103/tictactoe/style.css"
 #define BUILDER_RESOURCE "/org/csc1103/tictactoe/builder.ui"
-#define DEFAULT_MODEL_PATH "src/ml/naive_bayes.bin"
+#define DEFAULT_MODEL_PATH "artifacts/naive_bayes.bin"
 
 /* Global Naive Bayes model */
 static NaiveBayesModel nb_model;
@@ -31,9 +37,12 @@ static NaiveBayesModel nb_model;
 static void gui_activate(GtkApplication* app,
                          gpointer user_data G_GNUC_UNUSED) {
   if (init_audio() != 0) {
-    g_printerr("Warning: Failed to initialise audio system.\n");
+    g_printerr("Failed to initialise audio system.\n");
     return;
   }
+
+  // Load CSS from resource
+  load_css(CSS_RESOURCE);
 
   // Load the UI from the builder resource
   GtkBuilder* builder = get_builder(BUILDER_RESOURCE);
@@ -41,9 +50,6 @@ static void gui_activate(GtkApplication* app,
     g_printerr("Failed to load UI resource.\n");
     return;
   }
-
-  // Load CSS from resource
-  load_css(CSS_RESOURCE);
 
   // Initialise game state with the builder and Naive Bayes model
   if (init_game_state(builder, &nb_model) != 0) {
@@ -102,7 +108,7 @@ int main(int argc, char* argv[]) {
   nb_res = load_nb_model(&nb_model, DEFAULT_MODEL_PATH);
 #endif
   if (nb_res != 0) {
-    fprintf(stderr, "Error: Failed to load Naive Bayes model\n");
+    fprintf(stderr, "Failed to load Naive Bayes model\n");
     return EXIT_FAILURE;
   }
 
@@ -110,7 +116,7 @@ int main(int argc, char* argv[]) {
   GtkApplication* app =
       GTK_APPLICATION(gtk_application_new(APP_ID, G_APPLICATION_DEFAULT_FLAGS));
   if (!app) {
-    fprintf(stderr, "Error: Failed to create GTK application\n");
+    fprintf(stderr, "Failed to create GTK application\n");
     return EXIT_FAILURE;
   }
   g_signal_connect(app, "activate", G_CALLBACK(gui_activate), NULL);
