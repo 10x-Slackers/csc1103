@@ -576,7 +576,7 @@ cell-vertical</property>
   <object class="GtkDialog" id="win_dialog">
     <property name="decorated">False</property>
     <property name="deletable">False</property>
-    <property name="modal">True</property>
+    <property name="modal">False</property>
     <property name="resizable">False</property>
     <property name="title">Winner!</property>
     <property name="transient-for">window</property>

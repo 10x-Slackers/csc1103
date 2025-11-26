@@ -4,6 +4,8 @@
 
 /* Forward Declarations */
 static gboolean process_ai_move(gpointer user_data);
+static void disable_game_board(GameState* g_game_state);
+static void enable_game_board(GameState* g_game_state);
 
 /**
  * @brief Update a score label with a numeric value.
@@ -168,6 +170,7 @@ static int show_win_dialog(GameState* g_game_state, const char* message) {
   if (!win_label || !dialog) return -1;
 
   gtk_label_set_text(win_label, message);
+  disable_game_board(g_game_state);
   gtk_widget_set_visible(dialog, TRUE);
 
   return 0;
@@ -362,6 +365,9 @@ static void play_again_clicked(GtkBuilder* builder) {
   // Hide the win dialog
   GtkWidget* dialog = GTK_WIDGET(gtk_builder_get_object(builder, "win_dialog"));
   if (dialog) gtk_widget_set_visible(dialog, FALSE);
+
+  GameState* g_game_state = get_game_state();
+  if (g_game_state) enable_game_board(g_game_state);
   // Reset game state for a new game
   reset_game_state();
 }
@@ -374,6 +380,10 @@ static void go_back_clicked(GtkBuilder* builder) {
   // Hide the win dialog
   GtkWidget* dialog = GTK_WIDGET(gtk_builder_get_object(builder, "win_dialog"));
   if (dialog) gtk_widget_set_visible(dialog, FALSE);
+
+  GameState* g_game_state = get_game_state();
+  if (g_game_state) enable_game_board(g_game_state);
+
   // Navigate to main menu
   GtkStack* stack = GTK_STACK(gtk_builder_get_object(builder, "main_stack"));
   if (stack) to_main_menu(stack);
@@ -479,4 +489,68 @@ void win_dialog(GtkBuilder* builder) {
                            G_CALLBACK(play_again_clicked), builder);
   g_signal_connect_swapped(go_back_button, "clicked",
                            G_CALLBACK(go_back_clicked), builder);
+}
+
+// -------------------------------- NEW ADDED CODES
+// -----------------------------------
+/**
+ * @brief Disable all game board interactive elements.
+ * @param g_game_state Pointer to the GameState.
+ */
+static void disable_game_board(GameState* g_game_state) {
+  if (!g_game_state || !g_game_state->builder) return;
+
+  // Disable all cell buttons
+  for (int i = 1; i <= 9; i++) {
+    char button_name[BUTTON_NAME_SIZE];
+    snprintf(button_name, sizeof(button_name), "cell_%d", i);
+    GtkWidget* cell_button =
+        GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, button_name));
+    if (cell_button) {
+      gtk_widget_set_sensitive(cell_button, FALSE);
+    }
+  }
+
+  // Disable back button, undo button, and difficulty dropdown
+  GtkWidget* back_button =
+      GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, "back_button"));
+  GtkWidget* undo_button =
+      GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, "undo_button"));
+  GtkWidget* diff_dropdown = GTK_WIDGET(
+      gtk_builder_get_object(g_game_state->builder, "diff_dropdown"));
+
+  if (back_button) gtk_widget_set_sensitive(back_button, FALSE);
+  if (undo_button) gtk_widget_set_sensitive(undo_button, FALSE);
+  if (diff_dropdown) gtk_widget_set_sensitive(diff_dropdown, FALSE);
+}
+
+/**
+ * @brief Enable all game board interactive elements.
+ * @param g_game_state Pointer to the GameState.
+ */
+static void enable_game_board(GameState* g_game_state) {
+  if (!g_game_state || !g_game_state->builder) return;
+
+  // Enable all cell buttons
+  for (int i = 1; i <= 9; i++) {
+    char button_name[BUTTON_NAME_SIZE];
+    snprintf(button_name, sizeof(button_name), "cell_%d", i);
+    GtkWidget* cell_button =
+        GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, button_name));
+    if (cell_button) {
+      gtk_widget_set_sensitive(cell_button, TRUE);
+    }
+  }
+
+  // Enable back button, undo button, and difficulty dropdown
+  GtkWidget* back_button =
+      GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, "back_button"));
+  GtkWidget* undo_button =
+      GTK_WIDGET(gtk_builder_get_object(g_game_state->builder, "undo_button"));
+  GtkWidget* diff_dropdown = GTK_WIDGET(
+      gtk_builder_get_object(g_game_state->builder, "diff_dropdown"));
+
+  if (back_button) gtk_widget_set_sensitive(back_button, TRUE);
+  if (undo_button) gtk_widget_set_sensitive(undo_button, TRUE);
+  if (diff_dropdown) gtk_widget_set_sensitive(diff_dropdown, TRUE);
 }
