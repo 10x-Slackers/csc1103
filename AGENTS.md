@@ -2,18 +2,10 @@
 
 This project is a university computer science assignment to develop a tic-tac-toe minigame enhanced with rudimentary machine learning (minimax, reinforcement learning, naive bayes) with C and GTK. The goal is to have both two-player and one-player mode, with a user-friendly GUI. The code should be well-documented and follow best practices for each language. Python will be used for easier prototyping.
 
-## Project Structure
-
-- `dataset/` - Dataset files used for ML training and testing
-- `resources/` - Static resources used by the project (images, audio files, GTK 4 builder UI, CSS stylesheet)
-- `src/` - Source code of the project
-  - `app/` - Code used by the main tic-tac-toe application (GTK 4 GUI, business logic)
-  - `ml/` - Code used by the ML CLI program (training, statistics, benchmarking)
-  - `shared/` - Code used across the main application and ML program (board logic, minimax, ML runtime)
-
 ## Libraries and Frameworks
 
 - GTK 4.0
+- GStreamer
 
 ## Coding Standards
 

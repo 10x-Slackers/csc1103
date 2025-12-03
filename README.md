@@ -2,6 +2,8 @@
 
 Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compute limited tablet.
 
+![Tic-Tac-Toe Screenshot](docs/example-output/tictactoe.png)
+
 ---
 
 ## Project Scope
@@ -39,6 +41,8 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
 - [Naive Bayes Classifier](src/shared/naive_bayes.c)
   - Implementation of a Naive Bayes classifier for Tic-Tac-Toe AI
   - Trained on a dataset of terminal Tic-Tac-Toe boards and outcomes to predict optimal moves
+- [Report](docs/report.pdf)
+  - Detailed report discussing design decisions, implementation details, and ML evaluation results
 
 ## Usage
 
@@ -71,6 +75,8 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
 - [Docker/Podman](https://docs.docker.com/engine/install/)
 - [VS Code](https://code.visualstudio.com/download)
   - [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
+- [Tic-Tac-Toe Endgame Dataset](https://archive.ics.uci.edu/dataset/101/tic+tac+toe+endgame)
+  - Download and place `tic-tac-toe.data` in the `dataset/` directory
 
 #### For building on Windows (Optional)
 
@@ -206,3 +212,7 @@ Kid-friendly 3x3 Tic-Tac-Toe game with artificial intelligence in C, for a compu
   - C/C++ code formatting
 - Pre-Commit
   - Run linting and formatting for all files during git commit
+
+## Credits
+
+Refer to [CREDITS.md](resources/CREDITS.md) for a list of third-party assets used in this project.
